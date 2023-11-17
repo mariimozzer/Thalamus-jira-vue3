@@ -50,15 +50,10 @@
         </div>
         <br><br>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-3">
 
-            <button @click="cancelar" class="btn btn-default float-right">Cancelar</button>
-            <b-button aria-hidden="true" class="btn btn-primary float-right mr-2">
-                <i v-if="loading" class="fas fa-spinner fa-spin"></i>
-                <span v-if="!loading">Salvar</span>
-                <span v-if="loading"> &nbsp; Salvando...</span>
-    
-            </b-button>
+            <button @click="cancelar" class="float-right">Cancelar</button>
+            <button @click="adicionarProjeto">Salvar</button>
             </div>
         </div>
     </div>

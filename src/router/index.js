@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ProjetosView from '../views/ProjetosView.vue'
 import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 import BacklogsView from '../views/BacklogsView.vue'
+import PainelKanbanView from '../views/PainelKanban'
 
 
 const routes = [
@@ -27,7 +28,11 @@ const routes = [
     name: 'backlogs',
     component: BacklogsView
   },
-
+  {
+    path: '/painel',
+    name: 'painel',
+    component: PainelKanbanView
+  },
 
   {
     path: '/about',

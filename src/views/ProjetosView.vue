@@ -29,7 +29,6 @@
                             <th scope="col">Data Início</th>
                             <th scope="col">Gerente Responsável</th>
                             <th scope="col">Setor Beneficiário</th>
-    
                             <th scope="col">
                               
                             </th>
