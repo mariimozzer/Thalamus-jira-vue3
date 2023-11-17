@@ -13,7 +13,7 @@
                 <div class="col-sm-12">
     
                     <button @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
-                    
+    
                 </div>
                 <div class="col-sm-12">
                     <button @click="abrirModal()"><i class="fa-regular fa-calendar-plus"></i>&nbsp; Criar Sprint</button>
@@ -56,10 +56,10 @@
     
                                             <th scope="col">
                                                 <select class="form-control">
-                                                                                                <option disabled value="">Selecione</option>
-                                                                                                <option>Tarefa</option>
-                                                                                                 <option>História</option>
-                                                                                                </select>
+                                                                                                        <option disabled value="">Selecione</option>
+                                                                                                        <option>Tarefa</option>
+                                                                                                         <option>História</option>
+                                                                                                        </select>
                                             </th>
                                         </div>
                                         <th scope="col-sm-6">
@@ -70,22 +70,22 @@
                                         </th>
                                         <th scope="col">
                                             <select class="form-control">
-                                                                                        <option disabled>Responsável</option>
-                                                                                        <option>Mariana</option>
-                                                                                        <option>Lucas</option>
-                                                                                        <option>Natalie</option>
-                                                                                        <option>Artur</option>
-                                                                                        <option>Raul</option>
-    
-    
-                                                                                    </select>
+                                                                                                <option disabled>Responsável</option>
+                                                                                                <option>Mariana</option>
+                                                                                                <option>Lucas</option>
+                                                                                                <option>Natalie</option>
+                                                                                                <option>Artur</option>
+                                                                                                <option>Raul</option>
+            
+            
+                                                                                            </select>
                                         </th>
                                         <th scope="col">
                                             <select class="form-control">
-                                                                            <option>Tarefas Pendentes</option>
-                                                                            <option>Em Andamento</option>
-                                                                            <option>Concluido</option>
-                                                                        </select>
+                                                                                    <option>Tarefas Pendentes</option>
+                                                                                    <option>Em Andamento</option>
+                                                                                    <option>Concluido</option>
+                                                                                </select>
                                         </th>
                                     </tr>
                                 </thead>
@@ -102,41 +102,69 @@
             </div>
         </div>
         <!--END MODAL -->
-
-
+    
+    
         <!-- MODAL SPRINT-->
         <div class="modal-mask" v-if="showModalSprint" @click="fecharModalFora">
-                    <div class="modal-container">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5>Iniciar Sprint</h5>
-                            <v-btn class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                                <i class="fa-solid fa-xmark"></i>
-                            </v-btn>
-                        </div>
-    
-                        <div class="col-sm-12">
-                            <br>
-                            <table>
-                               <label for="nome">Nome do Sprint</label>
-                               <input id="nome" type="text">
-                               <label>Duração</label>
-
-                               <label>Data de Início</label>
-
-                               <label>Data de Término</label>
-                               <label>Objetivo</label>
-                            </table>
-                        </div>
-    
-                        <div class="col-sm-12" style="text-align: center;">
-    
-                            <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
-                        </div>
-                    </div>
-    
+            <div class="modal-container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5>Iniciar Sprint</h5>
+                    <v-btn class="mx-2" @click="fecharModal" fab dark x-small color="primary">
+                        <i class="fa-solid fa-xmark"></i>
+                    </v-btn>
                 </div>
-        
-
+    
+                <div class="col-sm-12">
+                    <br>
+                    <table>
+                       
+                            <label for="nome">Nome do Sprint </label>
+                            <input id="nome" type="text" class="form-control">
+    
+                        <br>
+                        <div class="col-sm-6">
+                            <label>Duração</label>
+                            <select class="form-control">
+                                <option>1 Semana</option>
+                                <option>2 Semanas</option>
+                                <option>3 Semanas</option>
+                                <option>Personalizado</option>
+                                </select>
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
+    
+                            <label id="dataInicio">Data de Início</label>
+                            <br>
+                            <input id="dataInicio" class="form-control" type="date">
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
+    
+                            <label id="dataTermino">Data de Término</label>
+                            <br>
+                            <input id="dataTermino" class="form-control" type="date">
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
+    
+                            <label>Objetivo</label>
+                            <br>
+                            <textarea class="form-control"></textarea>
+                        </div>
+    
+                    </table>
+                </div>
+                <br>
+                <div class="col-sm-12" style="text-align: center;">
+    
+                    <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
+                </div>
+            </div>
+    
+        </div>
+    
+    
         <!--END MODAL SPRINT-->
     
     
@@ -144,14 +172,13 @@
         <div class="row">
     
             <table class="table table-hover">
-                
+    
                 <tr style="background-color: rgb(247, 247, 247);">
     
-                    <th >
+                    <th>
                         <br>
                         <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br>
-                        SPRINT #1  
+                        <br><br> SPRINT #1
                     </th>
     
                     <th></th>
@@ -183,17 +210,16 @@
             <!-- TABELA 2 -->
     
             <table class="table table-hover">
-               
+    
                 <br>
                 <tr style="background-color: rgb(247, 247, 247);">
     
                     <th>
                         <br>
                         <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br>
-                        SPRINT #2
+                        <br><br> SPRINT #2
                     </th>
-
+    
                     <th></th>
                     <th></th>
                     <th></th>
@@ -254,8 +280,8 @@ export default {
             this.showModalSprint = false;
 
         },
-        iniciarSprint(){
-this.showModalSprint = true;
+        iniciarSprint() {
+            this.showModalSprint = true;
         }
 
     },
