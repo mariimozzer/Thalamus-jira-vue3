@@ -7,10 +7,10 @@
             </div>
         </div>
         <div class="row sub-container">
-            <div class="col-sm-12">
+            <div class="col-sm-3">
     
                 <button  @click="adicionarProjeto()">
-                    <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar projeto
+                    <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar Projeto
                 </button>
     
     

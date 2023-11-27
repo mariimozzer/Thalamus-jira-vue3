@@ -6,240 +6,113 @@
                 <hr>
     
             </div>
-            <br>
+        </div>
+    
+        <div class="row sub-container">
+            <div class="col-sm-3">
+                <button @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
+            </div>
+    
+            <br><br><br><br><br><br>
+            <table class="table table-hover">
+                <tr style="background-color: rgb(247, 247, 247);">
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descrição</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <th>História</th>
+                        <th>TP-12</th>
+                        <td scope="col">Usuário necessita de opções para personalização de sistema</td>
+                    </tr>
+                </tbody>
+    
+            </table>
     
     
-            <div class="row sub-container">
-                <div class="col-sm-12">
-    
-                    <button @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
-    
-                </div>
-                <div class="col-sm-12">
-                    <button @click="abrirModal()"><i class="fa-regular fa-calendar-plus"></i>&nbsp; Criar Sprint</button>
-                </div>
-                <br><br><br><br><br><br>
-    
-    
-    
-                <!--MODAL -->
-                <div class="modal-mask" v-if="showModal" @click="fecharModalFora">
-                    <div class="modal-container">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5>Novo Backlog</h5>
-                            <v-btn class="mx-2" @click="fecharModal" fab dark x-small color="primary">
+            <!--MODAL BACKLOG -->
+            <div class="modal-mask" v-if="showModal" @click="fecharModalFora">
+                <div class="modal-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5>Novo Backlog</h5>
+                        <b-button class="mx-2" @click="fecharModal" fab dark x-small color="primary">
                                 <i class="fa-solid fa-xmark"></i>
-                            </v-btn>
-                        </div>
-    
-                        <div class="col-sm-12">
-                            <br>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <!-- <th>Sprint </th> -->
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-    
-                                    </tr>
-    
-                                    <tr>
-                                        <div class="d-flex flex-column mb-1">
-    
-                                            <th scope="col"><input type="text" placeholder="TM-1"> </th>
-                                        </div>
-                                        <div class="mb-1 col-6">
-    
-                                            <th scope="col">
-                                                <select class="form-control">
-                                                                                                        <option disabled value="">Selecione</option>
-                                                                                                        <option>Tarefa</option>
-                                                                                                         <option>História</option>
-                                                                                                        </select>
-                                            </th>
-                                        </div>
-                                        <th scope="col-sm-6">
-                                            <input type="text" class="form-control" placeholder="O que precisa ser feito?">
-                                        </th>
-                                        <th scope="col">
-                                            <input type="number" class="form-control" placeholder="Peso">
-                                        </th>
-                                        <th scope="col">
-                                            <select class="form-control">
-                                                                                                <option disabled>Responsável</option>
-                                                                                                <option>Mariana</option>
-                                                                                                <option>Lucas</option>
-                                                                                                <option>Natalie</option>
-                                                                                                <option>Artur</option>
-                                                                                                <option>Raul</option>
-            
-            
-                                                                                            </select>
-                                        </th>
-                                        <th scope="col">
-                                            <select class="form-control">
-                                                                                    <option>Tarefas Pendentes</option>
-                                                                                    <option>Em Andamento</option>
-                                                                                    <option>Concluido</option>
-                                                                                </select>
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-    
-                        <div class="col-sm-12" style="text-align: center;">
-    
-                            <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
-                        </div>
+                            </b-button>
                     </div>
     
-                </div>
-            </div>
-        </div>
-        <!--END MODAL -->
-    
-    
-        <!-- MODAL SPRINT-->
-        <div class="modal-mask" v-if="showModalSprint" @click="fecharModalFora">
-            <div class="modal-container">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5>Iniciar Sprint</h5>
-                    <v-btn class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                        <i class="fa-solid fa-xmark"></i>
-                    </v-btn>
-                </div>
-    
-                <div class="col-sm-12">
                     <br>
-                    <table>
-                       
-                            <label for="nome">Nome do Sprint </label>
-                            <input id="nome" type="text" class="form-control">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <!-- <th>Sprint </th> -->
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
     
-                        <br>
-                        <div class="col-sm-6">
-                            <label>Duração</label>
-                            <select class="form-control">
-                                <option>1 Semana</option>
-                                <option>2 Semanas</option>
-                                <option>3 Semanas</option>
-                                <option>Personalizado</option>
-                                </select>
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
+                            <tr>
+                                <div class="d-flex flex-column mb-1">
+                                    <th scope="col"><input type="text" placeholder="TM-1"> </th>
+                                </div>
+                                <div class="mb-1 col-6">
     
-                            <label id="dataInicio">Data de Início</label>
-                            <br>
-                            <input id="dataInicio" class="form-control" type="date">
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
-    
-                            <label id="dataTermino">Data de Término</label>
-                            <br>
-                            <input id="dataTermino" class="form-control" type="date">
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
-    
-                            <label>Objetivo</label>
-                            <br>
-                            <textarea class="form-control"></textarea>
-                        </div>
-    
+                                    <th scope="col">
+                                        <select class="form-control">
+                                                                                                                                    <option disabled value="">Selecione</option>
+                                                                                                                                    <option>Tarefa</option>
+                                                                                                                                     <option>História</option>
+                                                                                                                                    </select>
+                                    </th>
+                                </div>
+                                <th scope="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="O que precisa ser feito?">
+                                </th>
+                                <th scope="col">
+                                    <input type="number" class="form-control" placeholder="Peso">
+                                </th>
+                                <th scope="col">
+                                    <select class="form-control">
+                                                                                                                            <option disabled>Responsável</option>
+                                                                                                                            <option>Mariana</option>
+                                                                                                                            <option>Lucas</option>
+                                                                                                                            <option>Natalie</option>
+                                                                                                                            <option>Artur</option>
+                                                                                                                            <option>Raul</option>
+                                        
+                                        
+                                                                                                                        </select>
+                                </th>
+                                <th scope="col">
+                                    <select class="form-control">
+                                                                                                                <option>Tarefas Pendentes</option>
+                                                                                                                <option>Em Andamento</option>
+                                                                                                                <option>Concluido</option>
+                                                                                                            </select>
+                                </th>
+                            </tr>
+                        </thead>
                     </table>
-                </div>
-                <br>
-                <div class="col-sm-12" style="text-align: center;">
     
-                    <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
+                    <div class="col-sm-12" style="text-align: center;">
+    
+                        <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
+                    </div>
                 </div>
+    
             </div>
     
-        </div>
+    
+            <!--END MODAL -->
     
     
-        <!--END MODAL SPRINT-->
     
     
-        <!-- TABELA 1 -->
-        <div class="row">
+           
     
-            <table class="table table-hover">
-    
-                <tr style="background-color: rgb(247, 247, 247);">
-    
-                    <th>
-                        <br>
-                        <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br> SPRINT #1
-                    </th>
-    
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-    
-                </tr>
-                <tbody>
-                    <tr>
-    
-                        <td scope="col">TA-1</td>
-                        <td scope="col">Tarefa</td>
-                        <td scope="col">Criar tela de CRUD</td>
-                        <td scope="col">Em andamento</td>
-                        <td scope="col">5</td>
-                        <td scope="col">Mariana</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-    
-            </table>
-            <br>
-    
-            <!-- TABELA 2 -->
-    
-            <table class="table table-hover">
-    
-                <br>
-                <tr style="background-color: rgb(247, 247, 247);">
-    
-                    <th>
-                        <br>
-                        <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br> SPRINT #2
-                    </th>
-    
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tbody>
-                    <tr>
-                        <td scope="col">TA-2</td>
-                        <td scope="col">História</td>
-                        <td scope="col">Criar tela de CRUD</td>
-                        <td scope="col">Em andamento</td>
-                        <td scope="col">21</td>
-                        <td scope="col">Lucas</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-    
-            </table>
         </div>
     </div>
 </template>
@@ -251,7 +124,6 @@ export default {
     data() {
         return {
             showModal: false,
-            showModalSprint: false
 
         }
     },
@@ -266,7 +138,7 @@ export default {
         fecharModalFora(event) {
             if (event.target.classList.contains('modal-mask')) {
                 this.showModal = false;
-                this.showModalSprint = false;
+
             }
         },
 
@@ -275,14 +147,13 @@ export default {
 
         },
 
+
+
         fecharModal() {
             this.showModal = false;
-            this.showModalSprint = false;
 
         },
-        iniciarSprint() {
-            this.showModalSprint = true;
-        }
+     
 
     },
 

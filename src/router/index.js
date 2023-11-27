@@ -4,6 +4,7 @@ import ProjetosView from '../views/ProjetosView.vue'
 import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 import BacklogsView from '../views/BacklogsView.vue'
 import PainelKanbanView from '../views/PainelKanban'
+import SprintsView from '../views/SprintsView'
 
 
 const routes = [
@@ -12,6 +13,14 @@ const routes = [
     name: 'home',
     component: HomeView
   },
+
+  {
+    path: '/sprints',
+    name: 'sprints',
+    component: SprintsView
+  },
+
+
   {
     path: '/projetos',
     name: 'projetos',

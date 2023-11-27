@@ -1,5 +1,7 @@
 <template>
   <nav>
+    <router-link to="/">Home</router-link> |
+
     <router-link to="/projetos">Projetos</router-link> |
     <router-link to="/backlogs">Backlogs</router-link> |
     <router-link to="/sprints">Sprints</router-link> |
@@ -50,5 +52,5 @@ button{
 button:hover{
   background-color: #FBBF77 !important;
 
-}
+} 
 </style>
