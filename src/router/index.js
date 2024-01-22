@@ -5,7 +5,7 @@ import HomeView from '../views/HomeView.vue'
 
 //Projetos
 import ProjetosView from '../views/ProjetosView.vue'
-import ControleDeProjetos from '../views/ProjetosView.vue'
+import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 
 //Backlogs
 import BacklogsView from '../views/BacklogsView.vue'

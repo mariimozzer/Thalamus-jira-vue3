@@ -75,7 +75,7 @@ export default {
 
     methods: {
         cancelar() {
-            this.$router.push({ name: 'projetos' })
+            this.$router.push({ name: 'ControleDeProjetos' })
         }
     }
 
