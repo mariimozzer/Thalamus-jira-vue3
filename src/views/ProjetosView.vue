@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-    
+
             <div class="col-sm-12">
                 <h3 class="titulo">{{modoCadastro ? "Adicionar" : "Editar" }} Projeto </h3>
                 <hr/>
