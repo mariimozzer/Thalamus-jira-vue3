@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="col-sm-12 "  style="width: 300px; " >
-            <button>Concluir Sprint&nbsp;&nbsp;<i class="fa-solid fa-calendar-check"></i></button>
+        <div class="col-sm-12 " style="width: 300px; ">
+            <button class="button-default">Concluir Sprint&nbsp;&nbsp;<i class="fa-solid fa-calendar-check"></i></button>
         </div>
         <br>
         <div class="three-columns" style="justify-content: center; color: white; text-align: center;">
@@ -18,6 +18,7 @@
                     <td></td>
     
                 </div>
+             
                 <div class="bloco">
                     <td scope="col">TA-2</td><br>
                     <td scope="col">História</td><br>
@@ -35,6 +36,7 @@
     
     
             </div>
+
             <div class="column" id="column3">
                 <br><br>
                 <h4>Concluido</h4>
@@ -65,8 +67,6 @@
     cursor: pointer;
     opacity: 0.20;
 } */
-
-.bloco {}
 
 .bloco:hover {
     /* background-color: #ffffff; */

@@ -63,7 +63,7 @@ nav a.router-link-exact-active {
     color: var(--cor-secundaria);
 }
 
-button {
+/* button {
     width: 100%;
     background-color: var(--cor-primaria) !important;
     color: rgb(255, 255, 255) !important;
@@ -72,7 +72,7 @@ button {
     border: none !important;
     border-radius: 4px !important;
     cursor: pointer;
-}
+} */
 
 button:hover {
     background-color: #FBBF77 !important;
@@ -102,7 +102,7 @@ button:hover {
 
 .button-default {
     width: 100%;
-    background-color: var(--botao) !important;
+    background-color: var(--dark-color) !important;
     color: rgb(255, 255, 255) !important;
     padding: 10px !important;
     margin: 6px 0 !important;

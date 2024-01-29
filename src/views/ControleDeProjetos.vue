@@ -12,7 +12,7 @@
         <div class="row sub-container">
             <div class="col-sm-3">
     
-                <button @click="adicionarProjeto">
+                <button class="button-default" @click="adicionarProjeto">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar Projeto
                     </button>
     
@@ -66,7 +66,7 @@
                             <td>Darley</td>
                             <td>Desenvolvimento</td>
                             <td>
-                                <button @click="verBacklogs()">
+                                <button class="button-default" @click="verBacklogs()">
                                         <i class="fa-solid fa-list"></i>&nbsp; Backlogs
                                     </button>
                             </td>

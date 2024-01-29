@@ -10,25 +10,34 @@
     
         <div class="row sub-container">
             <div class="col-sm-3">
-                <button @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
+                <button class="button-default" @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
             </div>
     
             <br><br><br><br><br><br>
-            <table class="table table-hover">
-                <tr style="background-color: rgb(247, 247, 247);">
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Descrição</th>
-                </tr>
-                <tbody>
-                    <tr>
-                        <th>História</th>
-                        <th>TP-12</th>
-                        <td scope="col">Usuário necessita de opções para personalização de sistema</td>
-                    </tr>
-                </tbody>
+            <div class="row">
+                <div class="col-sm-16">
+                    <table class="table table-hover">
+                        <thead>
     
-            </table>
+                            <tr>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Código</th>
+                                <th scope="col">Descrição</th>
+    
+                            </tr>
+                        </thead>
+    
+                        <tbody>
+                            <tr>
+                                <th>História</th>
+                                <th>TP-12</th>
+                                <td scope="col">Usuário necessita de opções para personalização de sistema</td>
+                            </tr>
+                        </tbody>
+    
+                    </table>
+                </div>
+            </div>
     
     
             <!--MODAL BACKLOG -->
@@ -37,8 +46,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5>Novo Backlog</h5>
                         <b-button class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                                <i class="fa-solid fa-xmark"></i>
-                            </b-button>
+                            <i class="fa-solid fa-xmark"></i>
+                        </b-button>
                     </div>
     
                     <br>
@@ -62,10 +71,9 @@
     
                                     <th scope="col">
                                         <select class="form-control">
-                                                                                                                                    <option disabled value="">Selecione</option>
-                                                                                                                                    <option>Tarefa</option>
-                                                                                                                                     <option>História</option>
-                                                                                                                                    </select>
+                                                                                                                                            <option disabled value="">Selecione</option>
+                                                                                                                                            <option>Tarefa</option>                                                                                                                                          <option>História</option>
+                                                                                                                                            </select>
                                     </th>
                                 </div>
                                 <th scope="col-sm-6">
@@ -76,22 +84,22 @@
                                 </th>
                                 <th scope="col">
                                     <select class="form-control">
-                                                                                                                            <option disabled>Responsável</option>
-                                                                                                                            <option>Mariana</option>
-                                                                                                                            <option>Lucas</option>
-                                                                                                                            <option>Natalie</option>
-                                                                                                                            <option>Artur</option>
-                                                                                                                            <option>Raul</option>
-                                        
-                                        
-                                                                                                                        </select>
+                                                                                                                                    <option disabled>Responsável</option>
+                                                                                                                                    <option>Mariana</option>
+                                                                                                                                    <option>Lucas</option>
+                                                                                                                                    <option>Natalie</option>
+                                                                                                                                    <option>Artur</option>
+                                                                                                                                    <option>Raul</option>
+                                                
+                                                
+                                                                                                                                </select>
                                 </th>
                                 <th scope="col">
                                     <select class="form-control">
-                                                                                                                <option>Tarefas Pendentes</option>
-                                                                                                                <option>Em Andamento</option>
-                                                                                                                <option>Concluido</option>
-                                                                                                            </select>
+                                                                                                                        <option>Tarefas Pendentes</option>
+                                                                                                                        <option>Em Andamento</option>
+                                                                                                                        <option>Concluido</option>
+                                                                                                                    </select>
                                 </th>
                             </tr>
                         </thead>
@@ -99,19 +107,12 @@
     
                     <div class="col-sm-12" style="text-align: center;">
     
-                        <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
+                        <button class="button-default"><i class=" fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
                     </div>
                 </div>
     
             </div>
-    
-    
             <!--END MODAL -->
-    
-    
-    
-    
-           
     
         </div>
     </div>
@@ -153,7 +154,7 @@ export default {
             this.showModal = false;
 
         },
-     
+
 
     },
 
@@ -183,7 +184,7 @@ export default {
     border-radius: 8px;
     padding: 100px;
     width: 90%;
-    max-width: 1500px;
+    max-width: 1100px;
     max-height: 80%;
     overflow-y: auto;
     position: relative;

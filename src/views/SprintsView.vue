@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12" style="text-align: center;">
+            <div class="col-sm-12">
                 <h3 class="titulo">Sprints</h3>
                 <hr>
             </div>
@@ -9,12 +9,10 @@
     
         <div class="row sub-container">
             <div class="col-sm-3">
-                <button @click="abrirModalSprint()"><i class="fa-regular fa-calendar-plus"></i>&nbsp; Criar Sprint</button>
+                <button class="button-default" @click="abrirModalSprint()"><i class="fa-regular fa-calendar-plus"></i>&nbsp; Criar Sprint</button>
             </div>
             <br><br><br><br><br><br>
     
-          
-
     
             <!-- MODAL INICIAR SPRINT-->
             <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
@@ -27,49 +25,44 @@
                     </div>
     
                     <div class="col-sm-12">
-                        <table>
     
-                            <label for="nome">Nome do Sprint </label>
-                            <input id="nome" type="text" class="form-control">
+                        <div class="col-sm-6">
+                            <label>Duração</label>
+                            <select class="form-control">
+                                                                            <option>1 Semana</option>
+                                                                            <option>2 Semanas</option>
+                                                                            <option>3 Semanas</option>
+                                                                            <option>Personalizado</option>
+                                                                            </select>
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
     
+                            <label id="dataInicio">Data de Início</label>
                             <br>
-                            <div class="col-sm-6">
-                                <label>Duração</label>
-                                <select class="form-control">
-                                                                    <option>1 Semana</option>
-                                                                    <option>2 Semanas</option>
-                                                                    <option>3 Semanas</option>
-                                                                    <option>Personalizado</option>
-                                                                    </select>
-                            </div>
+                            <input id="dataInicio" class="form-control" type="date">
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
+    
+                            <label id="dataTermino">Data de Término</label>
                             <br>
-                            <div class="col-sm-6">
+                            <input id="dataTermino" class="form-control" type="date">
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
     
-                                <label id="dataInicio">Data de Início</label>
-                                <br>
-                                <input id="dataInicio" class="form-control" type="date">
-                            </div>
+                            <label>Objetivo</label>
                             <br>
-                            <div class="col-sm-6">
+                            <textarea class="form-control"></textarea>
+                        </div>
     
-                                <label id="dataTermino">Data de Término</label>
-                                <br>
-                                <input id="dataTermino" class="form-control" type="date">
-                            </div>
-                            <br>
-                            <div class="col-sm-6">
     
-                                <label>Objetivo</label>
-                                <br>
-                                <textarea class="form-control"></textarea>
-                            </div>
-    
-                        </table>
                     </div>
                     <br>
                     <div class="col-sm-12" style="text-align: center;">
     
-                        <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
+                        <button class="button-default"><i class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
                     </div>
                 </div>
     
@@ -130,7 +123,7 @@
     
                     <div class="col-sm-12" style="text-align: center;">
     
-                        <button><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Sprint</button>
+                        <button class="button-default"><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Sprint</button>
                     </div>
                 </div>
     
@@ -147,7 +140,7 @@
     
                     <th>
                         <br>
-                        <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
+                        <button @click="iniciarSprint()" class="button-default">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
                         <br><br> SPRINT #1
                     </th>
     
@@ -189,7 +182,7 @@
     
                     <th>
                         <br>
-                        <button @click="iniciarSprint()" class="btnSprint">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
+                        <button @click="iniciarSprint()" class="button-default">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
                         <br><br> SPRINT #2
                     </th>
     
