@@ -1,119 +1,87 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12" style="text-align: center;">
-                <h3 class="titulo">Backlogs</h3>
-                <hr>
-    
+
+        <div class="col-sm-12" style="text-align: center;">
+
+            <div style="display: flex;">
+                <div style="width: 100%;">
+                    <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
+                </div>
+                <button style="width: max-content; font-size: 25px;" @click="abrirModal()"> <i
+                        class="bi bi-plus-square"></i></button>
             </div>
         </div>
-    
+        <br>
+
         <div class="row sub-container">
-            <div class="col-sm-3">
-                <button class="button-default" @click="abrirModal()"> <i class="fa-solid fa-list"></i>&nbsp; Criar Backlog</button>
-            </div>
-    
-            <br><br><br><br><br><br>
+
             <div class="row">
                 <div class="col-sm-16">
                     <table class="table table-hover">
                         <thead>
-    
+
                             <tr>
-                                <th scope="col">Tipo</th>
-                                <th scope="col">Código</th>
+                                <th></th>
+                                <th scope="col">Item</th>
                                 <th scope="col">Descrição</th>
-    
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Data do inicio</th>
+                                <th scope="col">Data do fim</th>
+
                             </tr>
                         </thead>
-    
-                        <tbody>
-                            <tr>
-                                <th>História</th>
-                                <th>TP-12</th>
-                                <td scope="col">Usuário necessita de opções para personalização de sistema</td>
+                        <thead>
+                            <tr v-for=" item in backlogs" :key="item">  
+                                <td><button @click="apagarBacklog(item.id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                                <td>{{ item.codigo }}</td>
+                                <td style="text-align: justify; text-justify: center;">{{ item.descricao }}</td>
+                                <td>{{ item.responsavel }}</td>
+                                <td><input type="date"></td>
+                                <td><input type="date"></td>
                             </tr>
-                        </tbody>
-    
+                        </thead>
+
                     </table>
                 </div>
             </div>
-    
-    
+
+
             <!--MODAL BACKLOG -->
             <div class="modal-mask" v-if="showModal" @click="fecharModalFora">
                 <div class="modal-container">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5>Novo Backlog</h5>
-                        <b-button class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                            <i class="fa-solid fa-xmark"></i>
-                        </b-button>
+                        <h2>
+                            {{ 'Tarefa - ' + (parseInt((backlogs[backlogs.length - 1].codigo.slice(9))) + 1) }}
+                        </h2>
+                        <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
                     </div>
-    
-                    <br>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <!-- <th>Sprint </th> -->
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-    
-                            <tr>
-                                <div class="d-flex flex-column mb-1">
-                                    <th scope="col"><input type="text" placeholder="TM-1"> </th>
-                                </div>
-                                <div class="mb-1 col-6">
-    
-                                    <th scope="col">
-                                        <select class="form-control">
-                                                                                                                                            <option disabled value="">Selecione</option>
-                                                                                                                                            <option>Tarefa</option>                                                                                                                                          <option>História</option>
-                                                                                                                                            </select>
-                                    </th>
-                                </div>
-                                <th scope="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="O que precisa ser feito?">
-                                </th>
-                                <th scope="col">
-                                    <input type="number" class="form-control" placeholder="Peso">
-                                </th>
-                                <th scope="col">
-                                    <select class="form-control">
-                                                                                                                                    <option disabled>Responsável</option>
-                                                                                                                                    <option>Mariana</option>
-                                                                                                                                    <option>Lucas</option>
-                                                                                                                                    <option>Natalie</option>
-                                                                                                                                    <option>Artur</option>
-                                                                                                                                    <option>Raul</option>
-                                                
-                                                
-                                                                                                                                </select>
-                                </th>
-                                <th scope="col">
-                                    <select class="form-control">
-                                                                                                                        <option>Tarefas Pendentes</option>
-                                                                                                                        <option>Em Andamento</option>
-                                                                                                                        <option>Concluido</option>
-                                                                                                                    </select>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-    
+
+                    <div style="display: flex;">
+                        <input type="text" class="form-control" placeholder="O que será feito?" style="margin-right: 1rem;"
+                            v-model="novoBacklog.descricao">
+                        <select class="form-control" style="width: 10rem;" v-model="novoBacklog.responsavel">
+                            <option hidden>Responsável</option>
+                            <option>Mariana Mozzer</option>
+                            <option>Lucas Lima</option>
+                            <option>Natalie Costa</option>
+                            <option>Artur Wilson</option>
+                            <option>Raul Wilson</option>
+                        </select>
+                    </div>
+
+
                     <div class="col-sm-12" style="text-align: center;">
-    
-                        <button class="button-default"><i class=" fa-solid fa-circle-plus"></i>&nbsp; Criar Backlog</button>
+                        <button class="button-default" @click="criarBacklog(), fecharModal()"><i
+                                class=" fa-solid fa-circle-plus"></i>&nbsp; Criar Tarefa</button>
                     </div>
                 </div>
-    
+
             </div>
             <!--END MODAL -->
-    
+
         </div>
     </div>
 </template>
@@ -125,6 +93,29 @@ export default {
     data() {
         return {
             showModal: false,
+            backlogs: [{
+                "id": "1",
+                "codigo": "Tarefa - 1",
+                "descricao": "Usuário necessita de opções para personalização de sistema.",
+                "responsavel": "Darley Dias",
+                "dtInicio": "01/12/2023",
+                "dtFim": ""
+            }, {
+                "id": "2",
+                "codigo": "Tarefa - 2",
+                "descricao": "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
+                "responsavel": "Lucas Lima",
+                "dtInicio": "01/02/2024",
+                "dtFim": ""
+            }],
+            novoBacklog: {
+                "id": "",
+                "codigo": "",
+                "descricao": "",
+                "responsavel": "Responsável",
+                "dtInicio": "",
+                "dtFim": ""
+            }
 
         }
     },
@@ -154,6 +145,24 @@ export default {
             this.showModal = false;
 
         },
+
+        criarBacklog() {
+            this.novoBacklog.codigo = 'Tarefa - ' + (parseInt((this.backlogs[this.backlogs.length - 1].codigo.slice(9))) + 1);
+            this.novoBacklog.id = parseInt(this.backlogs[this.backlogs.length - 1].id) + 1
+            this.backlogs.push(this.novoBacklog);
+            this.novoBacklog = {
+                "id": "",
+                "codigo": "",
+                "descricao": "",
+                "responsavel": "Responsável",
+                "dtInicio": "",
+                "dtFim": ""
+            }
+        },
+
+        apagarBacklog(id){
+            this.backlogs = this.backlogs.filter(item => item.id !== id);
+        }
 
 
     },

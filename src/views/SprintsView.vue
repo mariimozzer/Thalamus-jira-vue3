@@ -1,225 +1,112 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <h3 class="titulo">Sprints</h3>
-                <hr>
+
+            <div style="display: flex;">
+                <div style="width: 100%;">
+                    <h3 style="text-align: center; margin: 0;">Ciclos</h3>
+                </div>
+                <button style="width: max-content; font-size: 25px;" @click="criarNovaSprint"> <i
+                        class="bi bi-plus-square"></i></button>
             </div>
+            <br><br>
+            <hr>
+
         </div>
-    
+
         <div class="row sub-container">
-            <div class="col-sm-3">
-                <button class="button-default" @click="abrirModalSprint()"><i class="fa-regular fa-calendar-plus"></i>&nbsp; Criar Sprint</button>
-            </div>
-            <br><br><br><br><br><br>
-    
-    
-            <!-- MODAL INICIAR SPRINT-->
-            <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
-                <div class="modal-container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5>Iniciar Sprint</h5>
-                        <b-button class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                            <i class="fa-solid fa-xmark"></i>
-                        </b-button>
-                    </div>
-    
-                    <div class="col-sm-12">
-    
-                        <div class="col-sm-6">
-                            <label>Duração</label>
-                            <select class="form-control">
-                                                                            <option>1 Semana</option>
-                                                                            <option>2 Semanas</option>
-                                                                            <option>3 Semanas</option>
-                                                                            <option>Personalizado</option>
-                                                                            </select>
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
-    
-                            <label id="dataInicio">Data de Início</label>
-                            <br>
-                            <input id="dataInicio" class="form-control" type="date">
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
-    
-                            <label id="dataTermino">Data de Término</label>
-                            <br>
-                            <input id="dataTermino" class="form-control" type="date">
-                        </div>
-                        <br>
-                        <div class="col-sm-6">
-    
-                            <label>Objetivo</label>
-                            <br>
-                            <textarea class="form-control"></textarea>
-                        </div>
-    
-    
-                    </div>
-                    <br>
-                    <div class="col-sm-12" style="text-align: center;">
-    
-                        <button class="button-default"><i class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
-                    </div>
-                </div>
-    
-            </div>
-    
-    
-            <!--END MODAL SPRINT-->
-    
-    
-    
-    
-            <!--MODAL CRIAR SPRINT-->
-            <div class="modal-mask" v-if="showCriarSprint" @click="fecharModalFora">
-                <div class="modal-container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5>Nova Sprint</h5>
-                        <b-button class="mx-2" @click="fecharModal" fab dark x-small color="primary">
-                            <i class="fa-solid fa-xmark"></i>
-                        </b-button>
-                    </div>
-    
-                    <div class="col-sm-12">
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-    
-                                    <th><input type="text" placeholder="Sprint #1" maxlength="2"></th>
-                                    <th>
-                                        <label>Selecione os backlogs: </label>
-    
-    
-    
-    
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-    
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th> <input type="checkbox" v-model="backlogs">&nbsp;
-                                        <label>Criar Tela de Cadastro</label><br>
-                                        <input type="checkbox" v-model="backlogs">&nbsp;
-                                        <label>Criar estrutura para armazenamento de dados</label>
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-    
-                            </thead>
-                        </table>
-                    </div>
-    
-                    <div class="col-sm-12" style="text-align: center;">
-    
-                        <button class="button-default"><i class="fa-solid fa-circle-plus"></i>&nbsp; Criar Sprint</button>
-                    </div>
-                </div>
-    
-            </div>
-    
-    
-            <!-- END MODAL-->
-    
-    
+
             <!-- TABELA 1 -->
-            <table class="table table-hover">
-    
-                <tr style="background-color: rgb(247, 247, 247);">
-    
-                    <th>
-                        <br>
-                        <button @click="iniciarSprint()" class="button-default">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br> SPRINT #1
-                    </th>
-    
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-    
-                </tr>
-                <tbody>
-                    <tr>
-    
-                        <td scope="col">TA-1</td>
-                        <td scope="col">Tarefa</td>
-                        <td scope="col">Criar tela de CRUD</td>
-                        <td scope="col">Em andamento</td>
-                        <td scope="col">5</td>
-                        <td scope="col">Mariana</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-    
-            </table>
-            <br>
-    
-    
-    
-    
-            <!-- TABELA 2 -->
-    
-            <table class="table table-hover">
-    
-                <br>
-                <tr style="background-color: rgb(247, 247, 247);">
-    
-                    <th>
-                        <br>
-                        <button @click="iniciarSprint()" class="button-default">Iniciar &nbsp;<i class="fa-solid fa-clock"></i></button>
-                        <br><br> SPRINT #2
-                    </th>
-    
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tbody>
-                    <tr>
-                        <td scope="col">TA-2</td>
-                        <td scope="col">História</td>
-                        <td scope="col">Criar tela de CRUD</td>
-                        <td scope="col">Em andamento</td>
-                        <td scope="col">21</td>
-                        <td scope="col">Lucas</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-    
-            </table>
+            <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(247, 247, 247); margin-bottom: 1rem;"
+                v-for="item in sprints" :key="item">
+
+                <div style="display: flex; justify-content: space-between;">
+                    <h3>{{ item.nome }}</h3> <span>{{ item.dtTermino }}</span>
+                    <button style="width: max-content;" @click="abrirModalIniciarSprint(item.id)" class="button-default"><i
+                            class="fa-solid fa-clock"></i>&nbsp;{{item.dtTermino == null ? 'Iniciar' : 'Finalizar'}}</button>
+                </div>
+                <hr>
+                <div>
+                    <table class="table table-hover">
+
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- MODAL INICIAR SPRINT-->
+    <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
+        <div class="modal-container" style="height: min-content; width: 50rem;">
+            <div style="display: flex; justify-content: right;">
+                <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
+            </div>
+
+            <div style="width: 100%;">
+                <div>
+                    <label>Data de Término</label><label style="margin-left: 1rem; font-size: large; color: red; display: none;" id="aviso"><b>Preencha o campo abaixo:</b></label>
+                    <input v-model="dataTermino" id="dataTermino" class="form-control" type="date">
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <label>Objetivo</label>
+                    <textarea class="form-control"></textarea>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="button-default" @click="iniciarSprint()"><i
+                            class="fa-solid fa-circle-plus"></i>&nbsp; Iniciar Sprint</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--END MODAL SPRINT-->
 </template>
 
 <script>
+
 export default {
     name: "SprintsView",
 
     data() {
         return {
             showCriarSprint: false,
-            backlogs: [],
             showIniciarSprint: false,
-
+            backlogs: [{
+                "id": "1",
+                "codigo": "Tarefa - 1",
+                "descricao": "Usuário necessita de opções para personalização de sistema.",
+                "responsavel": "Darley Dias",
+                "dtInicio": "01/12/2023",
+                "dtFim": ""
+            }, {
+                "id": "2",
+                "codigo": "Tarefa - 2",
+                "descricao": "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
+                "responsavel": "Lucas Lima",
+                "dtInicio": "01/02/2024",
+                "dtFim": ""
+            }],
+            sprints: [{
+                "id": 1,
+                "nome": "Ciclo - 1",
+                "backlogs": [1, 2],
+                "dtTermino": null
+            },
+            {
+                "id": 2,
+                "nome": "Ciclo - 2",
+                "backlogs": [],
+                "dtTermino": null
+            }],
+            novaSprint: {
+                "id": null,
+                "nome": "",
+                "backlogs": [],
+                "dtTermino": null
+            },
+            idSprint: null,
+            dataTermino: null,
         }
     },
 
@@ -239,14 +126,44 @@ export default {
         },
 
         fecharModal() {
-            this.showCriarSprint = false
             this.showIniciarSprint = false;
+        },
 
-
+        abrirModalIniciarSprint(id) {
+            this.idSprint = id
+            this.showIniciarSprint = true;
         },
 
         iniciarSprint() {
-            this.showIniciarSprint = true;
+            if(this.dataTermino == null){
+                document.getElementById('dataTermino').style.border = '1px solid red';
+                document.getElementById('aviso').style.display = ''
+                return
+            }
+            const sprint = this.sprints.find(item => item.id === this.idSprint);
+            const dia = this.dataTermino.slice(8);
+            const mes = this.dataTermino.slice(5).slice(0, 2);
+            const ano = this.dataTermino.slice(0, 4);
+            if (sprint) {
+                sprint.dtTermino = `Data de entrega: ${dia}/${mes}/${ano}`
+                this.dataTermino = null;
+                this.idSprint = null;
+                document.getElementById('aviso').style.display = 'none'
+                this.fecharModal()
+            } else {
+                console.error('Sprint não encontrada com o ID:', this.idSprint);
+            }
+        },
+
+        criarNovaSprint() {
+            this.novaSprint.id = (this.sprints[this.sprints.length - 1].id) + 1;
+            this.novaSprint.nome = 'Ciclo - ' + (parseInt((this.sprints[this.sprints.length - 1].nome.slice(8))) + 1);
+            this.sprints.push(this.novaSprint);
+            this.novaSprint = {
+                "id": null,
+                "nome": "",
+                "backlogs": []
+            }
         }
 
     }

@@ -1,20 +1,20 @@
 <template>
-   <div class="estilos">
+    
     <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/projetos">Projetos</router-link> |
-        <router-link to="/backlogs">Backlogs</router-link> |
-        <router-link to="/sprints">Sprints</router-link> |
-        <router-link to="/painel">Painel Kanban</router-link>
+        <router-link to="/">Home</router-link> | 
+        <router-link to="/projetos">Projetos</router-link> | 
+        <router-link to="/backlogs">Plano de ação</router-link> | 
+        <router-link to="/sprints">Ciclos</router-link> | 
+        <router-link to="/painel">Painel Kanban</router-link> | 
     </nav>
-   
-        
-        <div class="router">
-            <router-view/>
+    <div class="estilos">
     
-        </div>
+        <!-- <div class="router"> -->
+            <router-view />
+
+        <!-- </div> -->
         <FooterComponent></FooterComponent>
-    
+
     </div>
 </template>
 
@@ -74,9 +74,9 @@ nav a.router-link-exact-active {
     cursor: pointer;
 } */
 
-button:hover {
+/* button:hover {
     background-color: #FBBF77 !important;
-}
+} */
 
 .estilos {
     font-family: 'montserrat', sans-serif;
@@ -90,11 +90,11 @@ button:hover {
 
 
 
-.router {
+/* .router {
     margin-left: 300px;
     margin-bottom: 100px;
     margin-top: 0px;
-}
+} */
 
 .footer {
     position: absolute;
@@ -142,7 +142,7 @@ button:hover {
 
 .button-cancelar {
     color: white !important;
-    background-color: var( --botao-secondary) !important;
+    background-color: var(--botao-secondary) !important;
 }
 
 .button-cancelar:hover {
@@ -163,7 +163,7 @@ button:hover {
 header {
     width: 100vw;
     margin-top: 0;
-    background-color: var( --dark-color);
+    background-color: var(--dark-color);
     padding: 0px;
 }
 
@@ -171,10 +171,14 @@ thead {
     text-align: center;
 }
 
-.menu {
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* .menu {
     z-index: 1;
     position: absolute;
     width: 100%;
     margin-top: 0;
-}
+} */
 </style>

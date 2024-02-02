@@ -23,7 +23,8 @@ const routes = [
   {
     path: '/sprints',
     name: 'sprints',
-    component: SprintsView
+    component: SprintsView,
+    props: { sharedVariable: 'backlogs' }
   },
 
 
@@ -47,7 +48,8 @@ const routes = [
   {
     path: '/backlogs',
     name: 'backlogs',
-    component: BacklogsView
+    component: BacklogsView,
+    props: { sharedVariable: 'backlogs' }
   },
 
   {
