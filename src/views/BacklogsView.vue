@@ -7,8 +7,7 @@
                 <div style="width: 100%;">
                     <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                 </div>
-                <button style="width: max-content; font-size: 25px;" @click="abrirModal()"> <i
-                        class="bi bi-plus-square"></i></button>
+
             </div>
         </div>
         <br>
@@ -31,59 +30,72 @@
                             </tr>
                         </thead>
                         <thead>
-                            <tr v-for=" item in backlogs" :key="item">  
-                                <td><button @click="apagarBacklog(item.id)">
+                            <tr v-for=" item in backlogs" :key="item">
+                                <td> 
+                                    <button @click="apagarBacklog(item.id)">
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </td>
                                 <td>{{ item.codigo }}</td>
-                                <td style="text-align: justify; text-justify: center;">{{ item.descricao }}</td>
-                                <td>{{ item.responsavel }}</td>
-                                <td><input type="date"></td>
-                                <td><input type="date"></td>
+                                <td><input type="text" v-model="item.descricao" style="width:35rem; outline: none;"></td>
+                                <!-- <td>{{ item.responsavel }}</td> -->
+                                <td><select v-model="item.responsavel"
+                                        style="width: min-content; outline: none; text-align: center;">
+                                        <option hidden>--</option>
+                                        <option>Darley Dias</option>
+                                        <option>Mariana Mozzer</option>
+                                        <option>Lucas Lima</option>
+                                        <option>Natalie Costa</option>
+                                        <option>Artur Wilson</option>
+                                        <option>Raul Wilson</option>
+                                    </select></td>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="item.dtInicio"></td>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="item.dtFim"></td>
                             </tr>
+                            <!-- <tr style="border-top: 1px solid black;" @keyup.enter="criarBacklog(), fecharModal()">
+                                <td></td>
+                                <td><input style="width: 4.5rem;" type="text" disabled
+                                        :placeholder="'Tarefa - ' + (parseInt((backlogs[backlogs.length - 1].codigo.slice(9))) + 1)">
+                                </td>
+                                <td><input v-model="novoBacklog.descricao" type="text" placeholder="O que será feito?"
+                                        style="width: 100%; border: 1px solid black; border-radius: 5px; padding: 0.1rem; padding-left: 0.5rem;">
+                                </td>
+                                <td> <select v-model="novoBacklog.responsavel"
+                                        style="width: min-content; border: 1px solid black; border-radius: 5px; padding: 0.1rem; padding-left: 0.5rem; ">
+                                        <option hidden>Responsável</option>
+                                        <option>Mariana Mozzer</option>
+                                        <option>Lucas Lima</option>
+                                        <option>Natalie Costa</option>
+                                        <option>Artur Wilson</option>
+                                        <option>Raul Wilson</option>
+                                    </select></td>
+                                <td><input v-model="novoBacklog.dtInicio"
+                                        style="width: 7.5rem; border: 1px solid black; border-radius: 5px; padding: 0.1rem; padding-left: 0.5rem; "
+                                        type="date"></td>
+                                <td><input v-model="novoBacklog.dtFim"
+                                        style="width: 7.5rem; border: 1px solid black; border-radius: 5px; padding: 0.1rem; padding-left: 0.5rem; "
+                                        type="date"></td>
+                            </tr> -->
+
                         </thead>
-
                     </table>
-                </div>
-            </div>
-
-
-            <!--MODAL BACKLOG -->
-            <div class="modal-mask" v-if="showModal" @click="fecharModalFora">
-                <div class="modal-container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2>
-                            {{ 'Tarefa - ' + (parseInt((backlogs[backlogs.length - 1].codigo.slice(9))) + 1) }}
-                        </h2>
-                        <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
-                    </div>
-
-                    <div style="display: flex;">
-                        <input type="text" class="form-control" placeholder="O que será feito?" style="margin-right: 1rem;"
-                            v-model="novoBacklog.descricao">
-                        <select class="form-control" style="width: 10rem;" v-model="novoBacklog.responsavel">
-                            <option hidden>Responsável</option>
-                            <option>Mariana Mozzer</option>
-                            <option>Lucas Lima</option>
-                            <option>Natalie Costa</option>
-                            <option>Artur Wilson</option>
-                            <option>Raul Wilson</option>
-                        </select>
-                    </div>
-
-
-                    <div class="col-sm-12" style="text-align: center;">
-                        <button class="button-default" @click="criarBacklog(), fecharModal()"><i
-                                class=" fa-solid fa-circle-plus"></i>&nbsp; Criar Tarefa</button>
+                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;">
+                        <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
+                            <input style="width: 4.5rem;" type="text" disabled
+                                :placeholder="'Tarefa - ' + (parseInt((backlogs[backlogs.length - 1].codigo.slice(9))) + 1)">
+                        </div>
+                        <div
+                            style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
+                            <input v-model="novoBacklog.descricao" type="text" placeholder="O que será feito?"
+                                @keyup.enter="criarBacklog()"
+                                style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;">
+                        </div>
                     </div>
                 </div>
-
             </div>
-            <!--END MODAL -->
-
         </div>
     </div>
+    <br><br><br>
 </template>
 
 <script>
@@ -92,27 +104,26 @@ export default {
 
     data() {
         return {
-            showModal: false,
             backlogs: [{
                 "id": "1",
                 "codigo": "Tarefa - 1",
                 "descricao": "Usuário necessita de opções para personalização de sistema.",
                 "responsavel": "Darley Dias",
-                "dtInicio": "01/12/2023",
-                "dtFim": ""
+                "dtInicio": "2023-12-01",
+                "dtFim": "2023-12-05"
             }, {
                 "id": "2",
                 "codigo": "Tarefa - 2",
                 "descricao": "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
                 "responsavel": "Lucas Lima",
-                "dtInicio": "01/02/2024",
-                "dtFim": ""
+                "dtInicio": "2024-02-01",
+                "dtFim": "2024-02-29"
             }],
             novoBacklog: {
                 "id": "",
                 "codigo": "",
                 "descricao": "",
-                "responsavel": "Responsável",
+                "responsavel": "--",
                 "dtInicio": "",
                 "dtFim": ""
             }
@@ -134,18 +145,6 @@ export default {
             }
         },
 
-        abrirModal() {
-            this.showModal = true;
-
-        },
-
-
-
-        fecharModal() {
-            this.showModal = false;
-
-        },
-
         criarBacklog() {
             this.novoBacklog.codigo = 'Tarefa - ' + (parseInt((this.backlogs[this.backlogs.length - 1].codigo.slice(9))) + 1);
             this.novoBacklog.id = parseInt(this.backlogs[this.backlogs.length - 1].id) + 1
@@ -154,13 +153,13 @@ export default {
                 "id": "",
                 "codigo": "",
                 "descricao": "",
-                "responsavel": "Responsável",
+                "responsavel": "--",
                 "dtInicio": "",
                 "dtFim": ""
             }
         },
 
-        apagarBacklog(id){
+        apagarBacklog(id) {
             this.backlogs = this.backlogs.filter(item => item.id !== id);
         }
 
