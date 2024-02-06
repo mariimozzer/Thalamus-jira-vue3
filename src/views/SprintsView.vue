@@ -22,21 +22,32 @@
                 v-for="item in sprints" :key="item">
 
                 <div style="display: flex; justify-content: space-between;">
-                    <h3>{{ item.nome }}</h3> <span>{{ item.dtTermino }}</span>
+                    <h3>
+                        {{ item.nome }}
+                        <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
+                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
+                        </button>
+                    </h3>
+
+                    <span>{{ item.dtTermino }}</span>
+
                     <button v-if="item.id == 0" @click="desativarEdicao = !desativarEdicao" style="width: 2rem;"
                         :class="{ 'custom-select-disabled': desativarEdicao == false }">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
+
                     <button v-if="item.id != 0" style="width: max-content;" @click="abrirModalIniciarSprint(item.id)"
                         class="button-default"><i class="fa-solid fa-clock"></i>&nbsp;{{ item.dtTermino == null ? 'Iniciar'
                             :
-                            'Finalizar' }}</button>
+                            'Finalizar' }}
+                    </button>
 
                 </div>
                 <h5>
                     Pontos de história: {{ somarHP(item) }}
                 </h5>
-                <div>
+
+                <div :id="item.id">
                     <table class="table table-hover" style="border-radius: 5px;">
                         <thead>
                             <tr>
@@ -88,11 +99,11 @@
                                         <option>Artur Wilson</option>
                                         <option>Raul Wilson</option>
                                     </select></td>
-                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="backlog.dtInicio" class="data"
-                                        :disabled="desativarEdicao">
+                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="backlog.dtInicio"
+                                        class="data" :disabled="desativarEdicao">
                                 </td>
-                                <td><input style="width: 6.9rem; outline: none;" type="date" class="data" v-model="backlog.dtFim"
-                                        :disabled="desativarEdicao"></td>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" class="data"
+                                        v-model="backlog.dtFim" :disabled="desativarEdicao"></td>
                                 <td><button v-if="desativarEdicao == false" class="apagar"
                                         @click="apagarBacklog(backlog.id, item.id)">
                                         <i class="bi bi-trash-fill"></i>
@@ -101,7 +112,7 @@
 
                         </thead>
                     </table>
-                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;">
+                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
                             <input style="width: 4.5rem;" type="text" disabled
                                 :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'">
@@ -113,6 +124,9 @@
                                 style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;">
                         </div>
                     </div>
+                </div>
+                <div style="text-align: center; display: none;" id="pontos" @click="ocultarPlano" class="ocultar">
+                    <i class="bi bi-grip-horizontal"></i>
                 </div>
             </div>
         </div>
@@ -193,10 +207,24 @@ export default {
             },
             idSprint: null,
             dataTermino: null,
+            mostrarPlano: true,
         }
     },
 
     methods: {
+        ocultarPlano() {
+            if (this.mostrarPlano == true) {
+                document.getElementById("botaoOcultar").className = "bi bi-eye";
+                document.getElementById(0).style.display = "none";
+                document.getElementById('pontos').style.display = "";
+                this.mostrarPlano = false
+            } else {
+                document.getElementById("botaoOcultar").className = "bi bi-eye-slash";
+                document.getElementById(0).style.display = "";
+                document.getElementById('pontos').style.display = "none";
+                this.mostrarPlano = true
+            }
+        },
 
         moverBacklog(idBacklog) {
             if (this.sprints.length > 1) {
@@ -329,6 +357,10 @@ export default {
 </script>
 
 <style>
+.ocultar:hover {
+    cursor: pointer;
+}
+
 .shake {
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     transform: translate3d(0, 0, 0);
