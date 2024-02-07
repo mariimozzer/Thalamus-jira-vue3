@@ -15,7 +15,7 @@
 
         <!-- TABELA 1 -->
         {{ teste }}
-        <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(247, 247, 247); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px;"
+        <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(247, 247, 247); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; "
             v-for="item in sprints" :key="item">
 
             <div>
@@ -48,7 +48,7 @@
             </div>
 
             <div :id="item.id">
-                <table class="table table-hover" style="border-radius: 5px; ">
+                <table class="table table-hover" style="border-radius: 5px;">
                     <thead>
                         <tr>
                             <th></th>
@@ -71,7 +71,7 @@
                             </td>
 
                             <td>
-                                <div style="width: ">{{ backlog.codigo }}</div>
+                                <label style="width: max-content; max-width: 100px;">{{ backlog.codigo }}</label>
                             </td>
 
                             <td><input :disabled="desativarEdicao" type="text" v-model="backlog.descricao"
@@ -162,7 +162,7 @@
                 </table>
                 <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;" :id="item.id">
                     <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
-                        <input style="width: 4.5rem;" type="text" disabled
+                        <input style="width: 5rem;" type="text" disabled
                             :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'">
                     </div>
                     <div
