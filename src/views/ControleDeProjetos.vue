@@ -92,7 +92,7 @@ export default {
         },
 
         verBacklogs() {
-            this.$router.push({ name: "backlogs" })
+            this.$router.push({ name: "sprints" })
         },
 
         obterProjetoId(id) {
