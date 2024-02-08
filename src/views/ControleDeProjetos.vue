@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
 
 
         <div class="col-sm-12" style="text-align: center;">
@@ -40,6 +40,10 @@
                                     <button style="font-size: larger;" @click="verBacklogs()">
                                         <i class="fa-solid fa-list"></i>
                                     </button>
+                                    <button style="font-size: larger; margin-left: 1rem;" @click="verPainel()">
+                                        <i class="bi bi-kanban"></i>
+                                    </button>
+                                    
                                 </td>
                             </tr>
                         </thead>
@@ -93,6 +97,10 @@ export default {
 
         verBacklogs() {
             this.$router.push({ name: "sprints" })
+        },
+
+        verPainel() {
+            this.$router.push({ name: "painel" })
         },
 
         obterProjetoId(id) {

@@ -1,180 +1,181 @@
 <template>
-    <div style="width: 100%; padding: 2rem;">
-        <div class="row" style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px;">
-
-            <div style="display: flex;">
-                <div style="width: 100%;">
-                    <h3 style="text-align: center; margin: 0;">Sprints</h3>
-                </div>
-                <button style="width: max-content; font-size: 25px; display: flex;" @click="criarNovaSprint">
-                    <i class="bi bi-plus-square" :class="{ shake: disabled }"></i></button>
-            </div>
-            <br><br>
-        </div>
-
-
+    <div style="width: 100%; padding: 1rem; height: 100%;">
         <!-- TABELA 1 -->
         {{ teste }}
-        <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(247, 247, 247); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; "
-            v-for="item in sprints" :key="item">
+        <div v-for="item in sprints" :key="item">
 
-            <div>
+            <div
+                style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
 
-                <div style="display: flex; justify-content: space-between;">
-                    <h3>
-                        <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
-                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
-                        </button>
-                        <input type="text" v-model="item.nome" style="width: min-content; margin-left: 0.5rem;">
-                    </h3>
-
-                    <span>{{ item.dtTermino }}</span>
-
-                    <!-- <button v-if="item.id == 0" @click="desativarEdicao = !desativarEdicao" style="width: 2rem;"
-                        :class="{ 'custom-select-disabled': desativarEdicao == false }">
-                        <i class="bi bi-pencil-fill"></i>
-                    </button>  -->
-
-                    <button v-if="item.id != 0" style="width: max-content;" @click="abrirModalIniciarSprint(item.id)"
-                        class="button-default"><i class="fa-solid fa-clock"></i>&nbsp;{{ item.dtTermino == null ? 'Iniciar'
-                            :
-                            'Finalizar' }}
-                    </button>
-
+                <div>
+                    <div class="row">
+                        <div style="width: 20%;">
+                            <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
+                                <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
+                            </button>
+                            <h5>
+                                Pontos de história: {{ somarHP(item) }}
+                            </h5>
+                        </div>
+                        <div style="width: 60%; text-align: center;">
+                            <h2><input type="text" v-model="item.nome" style="width: 13rem; margin-left: 0.5rem;">
+                            </h2>
+                        </div>
+                        <div style="width: 20%; text-align: right;">
+                            <span>{{ item.dtTermino }}</span>
+                            <button v-if="item.id != 0" style="width: max-content; justify-self: right; "
+                                @click="abrirModalIniciarSprint(item.id)" class="button-default"><i
+                                    class="fa-solid fa-clock"></i>&nbsp;{{ item.dtTermino == null ?
+                                        'Iniciar'
+                                        :
+                                        'Finalizar' }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <h5>
-                    Pontos de história: {{ somarHP(item) }}
-                </h5>
-            </div>
 
-            <div :id="item.id">
-                <table class="table table-hover" style="border-radius: 5px;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th scope="col">Item</th>
-                            <th style="width:35rem" scope="col">Descrição</th>
-                            <th scope="col">H.P.</th>
-                            <th scope="col">Responsável</th>
-                            <th scope="col">Inicio Previsto</th>
-                            <th scope="col">Final Previsto</th>
-                            <th>Status<i class="bi bi-caret-down"></i></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr v-for=" backlog in item.backlogs" :key="backlog">
-                            <td>
-                                <button @click="moverBacklog(backlog.id)" v-if="item.id == 0" class="apagar">
-                                    <i class="bi bi-arrow-down-square-fill"></i>
-                                </button>
-                            </td>
+                <div :id="item.id">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th scope="col">Item</th>
+                                <th style="width:35rem" scope="col">Descrição</th>
+                                <th scope="col">H.P.</th>
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Inicio Previsto</th>
+                                <th scope="col">Final Previsto</th>
+                                <th>Status<i class="bi bi-caret-down"></i></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr v-for=" backlog in item.backlogs" :key="backlog">
+                                <td>
+                                    <button @click="moverBacklog(backlog.id)" v-if="item.id == 0" class="apagar">
+                                        <i class="bi bi-arrow-down-square-fill"></i>
+                                    </button>
+                                </td>
 
-                            <td>
-                                <label style="width: max-content; max-width: 100px;">{{ backlog.codigo }}</label>
-                            </td>
+                                <td>
+                                    <label style="width: max-content; max-width: 100px;">{{ backlog.codigo }}</label>
+                                </td>
 
-                            <td><input :disabled="desativarEdicao" type="text" v-model="backlog.descricao"
-                                    style="width:35rem; outline: none;"></td>
+                                <td><input :disabled="desativarEdicao" type="text" v-model="backlog.descricao"
+                                        style="width:35rem; outline: none;"></td>
 
-                            <td><select v-model="backlog.HP"
-                                    style="width: min-content; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
-                                    <option hidden>0</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>5</option>
-                                    <option>8</option>
-                                    <option>13</option>
-                                    <option>21</option>
-                                    <option>34</option>
-                                    <option>55</option>
-                                    <option>89</option>
-                                    <option>144</option>
-                                    <option>233</option>
-                                </select></td>
+                                <td><select v-model="backlog.HP"
+                                        style="width: min-content; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
+                                        <option hidden>0</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>5</option>
+                                        <option>8</option>
+                                        <option>13</option>
+                                        <option>21</option>
+                                        <option>34</option>
+                                        <option>55</option>
+                                        <option>89</option>
+                                        <option>144</option>
+                                        <option>233</option>
+                                    </select></td>
 
-                            <td><select v-model="backlog.responsavel"
-                                    style="width: min-content; outline: none; text-align: center;">
-                                    <option hidden>--</option>
-                                    <option>Darley Dias</option>
-                                    <option>Mariana Mozzer</option>
-                                    <option>Lucas Lima</option>
-                                    <option>Natalie Costa</option>
-                                    <option>Artur Wilson</option>
-                                    <option>Raul Wilson</option>
-                                </select></td>
+                                <td><select v-model="backlog.responsavel"
+                                        style="width: min-content; outline: none; text-align: center;">
+                                        <option hidden>--</option>
+                                        <option>Darley Dias</option>
+                                        <option>Mariana Mozzer</option>
+                                        <option>Lucas Lima</option>
+                                        <option>Natalie Costa</option>
+                                        <option>Artur Wilson</option>
+                                        <option>Raul Wilson</option>
+                                    </select></td>
 
-                            <td><input style="width: 6.9rem; outline: none;" type="date" v-model="backlog.dtInicio"
-                                    class="data">
-                            </td>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="backlog.dtInicio"
+                                        class="data">
+                                </td>
 
-                            <td><input style="width: 6.9rem; outline: none;" type="date" class="data"
-                                    v-model="backlog.dtFim"></td>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" class="data"
+                                        v-model="backlog.dtFim"></td>
 
-                            <td><select style="width: min-content; outline: none; text-align: center;"
-                                    @change="definirInicioFimReal(backlog.id, item.id, $event.target.value)"
-                                    v-model="backlog.status">
-                                    <option>Pendente</option>
-                                    <option>Em andamento</option>
-                                    <option>Concluído</option>
-                                </select></td>
+                                <td><select style="width: min-content; outline: none; text-align: center;"
+                                        @change="definirInicioFimReal(backlog.id, item.id, $event.target.value)"
+                                        v-model="backlog.status">
+                                        <option>Pendente</option>
+                                        <option>Em andamento</option>
+                                        <option>Concluído</option>
+                                    </select></td>
 
-                            <td>
-                                <v-menu>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
-                                            v-bind="props"></v-btn>
-                                    </template>
+                                <td>
+                                    <v-menu>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
+                                                v-bind="props"></v-btn>
+                                        </template>
 
-                                    <v-list>
-                                        <v-list-item>
-                                            <button style="margin: 0.2rem;"
-                                                @click="editarBacklog(backlog.id, item.id, false)">Editar
-                                                Tarefa</button><br />
-                                            <v-menu>
-                                                <template v-slot:activator="{ props }">
-                                                    <button style="color: red;margin: 0.2rem;" v-bind="props">Excluir
-                                                        Tarefa</button>
-                                                </template>
+                                        <v-list>
+                                            <v-list-item>
+                                                <button style="margin: 0.2rem;"
+                                                    @click="editarBacklog(backlog.id, item.id, false)">Editar
+                                                    Tarefa</button><br />
+                                                <v-menu>
+                                                    <template v-slot:activator="{ props }">
+                                                        <button style="color: red;margin: 0.2rem;" v-bind="props">Excluir
+                                                            Tarefa</button>
+                                                    </template>
 
-                                                <v-list>
-                                                    <v-list-item>
-                                                        <div>
-                                                            <h4>Tem certeza?</h4>
-                                                            <div style="display: flex; width: 100%;">
-                                                                <Button @click="apagarBacklog(backlog.id, item.id)"
-                                                                    style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
-                                                                <button
-                                                                    style="border: 1px solid black; width: 50%; margin-left: 0.5rem; background-color: green; color: white;">Cancelar</button>
+                                                    <v-list>
+                                                        <v-list-item>
+                                                            <div>
+                                                                <h4>Tem certeza?</h4>
+                                                                <div style="display: flex; width: 100%;">
+                                                                    <Button @click="apagarBacklog(backlog.id, item.id)"
+                                                                        style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
+                                                                    <button
+                                                                        style="border: 1px solid black; width: 50%; margin-left: 0.5rem; background-color: green; color: white;">Cancelar</button>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-menu>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
-                            </td>
-                        </tr>
+                                                        </v-list-item>
+                                                    </v-list>
+                                                </v-menu>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </td>
+                            </tr>
 
-                    </thead>
-                </table>
-                <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;" :id="item.id">
-                    <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
-                        <input style="width: 5rem;" type="text" disabled
-                            :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'">
-                    </div>
-                    <div
-                        style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
-                        <input type="text" placeholder="O que será feito?"
-                            @keyup.enter="criarBacklog(item.id, $event.target.value), $event.target.value = ''"
-                            style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;">
+                        </thead>
+                    </table>
+                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;" :id="item.id">
+                        <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
+                            <input style="width: 5rem;" type="text" disabled
+                                :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'">
+                        </div>
+                        <div
+                            style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
+                            <input type="text" placeholder="O que será feito?"
+                                @keyup.enter="criarBacklog(item.id, $event.target.value), $event.target.value = ''"
+                                style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;">
+                        </div>
                     </div>
                 </div>
+                <div style="text-align: center; display: none;" id="pontos" @click="ocultarPlano" class="ocultar">
+                    <i class="bi bi-grip-horizontal"></i>
+                </div>
             </div>
-            <div style="text-align: center; display: none;" id="pontos" @click="ocultarPlano" class="ocultar">
-                <i class="bi bi-grip-horizontal"></i>
+
+            <div v-if="item.nome == 'Plano de ação'" class="row"
+                style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px;">
+
+                <div style="display: flex;">
+                    <button style="width: max-content; font-size: 25px; display: flex;" @click="criarNovaSprint">
+                        <i class="bi bi-plus-square" :class="{ shake: disabled }"></i></button>
+                    <div style="width: 100%;">
+                        <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

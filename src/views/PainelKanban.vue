@@ -12,8 +12,8 @@
                     <template #item="{ element }">
                         <div class="list-group-item card">
 
-                            <label>
-                                <div>
+                            <label class="subcard">
+                                <div >
 
                                     <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
 
@@ -39,7 +39,7 @@
                     <template #item="{ element }">
                         <div class="list-group-item card">
 
-                            <label>
+                            <label class="subcard">
                                 <div>
 
                                     <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
@@ -66,7 +66,7 @@
                     <template #item="{ element }">
                         <div class="list-group-item card">
 
-                            <label>
+                            <label class="subcard">
                                 <div>
 
                                     <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
@@ -106,7 +106,7 @@ export default {
                 backlogs: [{
                     id: 1,
                     codigo: "Tarefa - 1",
-                    descricao: "Usuário necessita de opções para personalização de sistema.",
+                    descricao: "Usuário necessita de opções para personalização do sistema.",
                     HP: 8,
                     responsavel: "Darley Dias",
                     status: "Pendente",
@@ -120,7 +120,7 @@ export default {
                     descricao: "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
                     HP: 5,
                     responsavel: "Lucas Lima",
-                    status: "Em andamento",
+                    status: "Pendente",
                     dtInicio: "2024-02-01",
                     dtFim: "2024-02-29",
                     dtInicioReal: "0000-00-00",
@@ -129,10 +129,10 @@ export default {
                 {
                     id: 3,
                     codigo: "Tarefa - 3",
-                    descricao: "Teste.",
+                    descricao: "Realizar testes de funcionalidade do novo painel.",
                     HP: 5,
                     responsavel: "Mariana Mozzer",
-                    status: "Concluído",
+                    status: "Em andamento",
                     dtInicio: "2024-02-01",
                     dtFim: "2024-02-29",
                     dtInicioReal: "0000-00-00",
@@ -140,10 +140,10 @@ export default {
                 }, {
                     id: 4,
                     codigo: "Tarefa - 4",
-                    descricao: "Teste 2.",
+                    descricao: "Validar ajustes e proporção dos cards",
                     HP: 5,
                     responsavel: "Natalie ",
-                    status: "Pendente",
+                    status: "Concluído",
                     dtInicio: "2024-02-01",
                     dtFim: "2024-02-29",
                     dtInicioReal: "0000-00-00",
@@ -207,6 +207,7 @@ export default {
     margin: 0.3rem;
     border-radius: 10px;
 }
+
 
 .bloco {
     background-color: rgb(247, 247, 247);

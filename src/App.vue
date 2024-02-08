@@ -1,16 +1,17 @@
-<template>
-    <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/projetos">Projetos</router-link> |
-        <router-link to="/backlogs">Plano de ação</router-link> |
-        <router-link to="/sprints">Sprints</router-link> |
-        <router-link to="/painel">Painel Kanban</router-link> |
-    </nav>
-    <div class="estilos">
-        <router-view />
+<template >
+    <body style="background-color: #F8F8F8; min-height: 4000px;">
 
-        <FooterComponent></FooterComponent>
-    </div>
+        <nav>
+            <router-link to="/projetos">Projetos</router-link> |
+            <router-link to="/sprints">Plano de ação</router-link> |
+            <router-link to="/painel">Painel Kanban</router-link> |
+        </nav>
+        <div class="estilos">
+            <router-view />
+
+            <FooterComponent></FooterComponent>
+        </div>
+    </body>
 </template>
 
 <script>
