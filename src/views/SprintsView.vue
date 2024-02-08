@@ -45,7 +45,7 @@
                                 <th scope="col">Responsável</th>
                                 <th scope="col">Inicio Previsto</th>
                                 <th scope="col">Final Previsto</th>
-                                <th>Status<i class="bi bi-caret-down"></i></th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
