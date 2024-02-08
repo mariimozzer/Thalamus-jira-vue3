@@ -38,15 +38,15 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th scope="col"></th>
                                 <th scope="col">Item</th>
                                 <th style="width:35rem" scope="col">Descrição</th>
                                 <th scope="col">H.P.</th>
                                 <th scope="col">Responsável</th>
                                 <th scope="col">Inicio Previsto</th>
                                 <th scope="col">Final Previsto</th>
-                                <th>Status</th>
-                                <th></th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <thead>
