@@ -1,119 +1,222 @@
 <template>
+    <!-- {{ backlogsPendentes.map((item) => item.codigo) }} /
+    {{ backlogsEmAndamento.map((item) => item.codigo) }} /
+    {{ backlogsConcluidos.map((item) => item.codigo) }} -->
+
     <div>
-        <div class="col-sm-12 " style="width: 300px; ">
-            <button class="button-default">Concluir Sprint&nbsp;&nbsp;<i class="fa-solid fa-calendar-check"></i></button>
-        </div>
-        <br>
-        <div class="three-columns" style="justify-content: center; color: white; text-align: center;">
-            <div class="column" id="column1">
-    
-                <br><br>
-                <h4>Não Iniciado</h4>
-                <hr>
-                <div class="bloco">
-                    <td scope="col">TA-3</td><br>
-                    <td scope="col">Tarefa</td><br>
-                    <td scope="col">Criar tela de CRUD</td><br>
-                    <td scope="col">Lucas</td><br>
-                    <td></td>
-    
-                </div>
-             
-                <div class="bloco">
-                    <td scope="col">TA-2</td><br>
-                    <td scope="col">História</td><br>
-                    <td scope="col">Criação de backlog</td><br>
-                    <td scope="col">Natalie</td><br>
-                    <td></td>
-    
-                </div>
-    
-            </div>
-            <div class="column" id="column2">
-                <br><br>
-                <h4>Em Progresso</h4>
-                <hr>
-    
-    
+
+        <div style="display: flex; flex-flow: row; justify-content: center;">
+            <div class="colunas">
+                <h3 style="text-align: center;">Pendente</h3>
+                <draggableVue class="list-group bloco" :list="backlogsPendentes" group="backlogs" itemKey="codigo">
+                    <template #item="{ element }">
+                        <div class="list-group-item card">
+
+                            <label>
+                                <div>
+
+                                    <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
+
+                                    <i style="color: rgb(255, 0, 0); font-size: 20px; position: absolute; top: 0; right: 0; margin-right: 0.5rem;"
+                                        class="bi bi-stop-circle-fill"></i><br>
+
+                                </div>
+
+                                <b> Fim previsto: <input style="outline: none;" type="date" v-model="element.dtFim"
+                                        disabled></b><br><b>Responsável:</b>
+                                {{ element.responsavel }}
+                            </label>
+                            <br>
+                            {{ element.descricao }}
+                        </div>
+                    </template>
+                </draggableVue>
             </div>
 
-            <div class="column" id="column3">
-                <br><br>
-                <h4>Concluido</h4>
-    
-                <hr>
-                <div class="bloco">
-                    <td scope="col">TA-1</td><br>
-                    <td scope="col">Tarefa</td><br>
-                    <td scope="col">Criar Projeto Vue</td><br>
-                    <td scope="col">Mariana</td><br>
-                    <td></td>
-    
-                </div>
-    
+            <div class="colunas">
+                <h3 style="text-align: center;">Em andamento</h3>
+                <draggableVue class="list-group bloco" :list="backlogsEmAndamento" group="backlogs" itemKey="codigo">
+                    <template #item="{ element }">
+                        <div class="list-group-item card">
+
+                            <label>
+                                <div>
+
+                                    <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
+
+                                    <i style="color: rgb(0, 47, 255); font-size: 20px; position: absolute; top: 0; right: 0; margin-right: 0.5rem;"
+                                        class="bi bi-fast-forward-circle-fill"></i><br>
+
+                                </div>
+
+                                <b>Fim previsto: <input style="outline: none;" type="date" v-model="element.dtFim"
+                                        disabled></b><br><b>Responsável:</b>
+                                {{ element.responsavel }}
+                            </label>
+                            <br>
+                            {{ element.descricao }}
+                        </div>
+                    </template>
+                </draggableVue>
+            </div>
+
+            <div class="colunas">
+                <h3 style="text-align: center;">Concluído</h3>
+                <draggableVue class="list-group bloco" :list="backlogsConcluidos" group="backlogs" itemKey="codigo">
+                    <template #item="{ element }">
+                        <div class="list-group-item card">
+
+                            <label>
+                                <div>
+
+                                    <b>{{ element.nomeSprint }}: {{ element.codigo }}</b>
+
+                                    <i style="color: rgb(0, 255, 0); font-size: 20px; position: absolute; top: 0; right: 0; margin-right: 0.5rem;"
+                                        class="bi bi-check-circle-fill"></i><br>
+
+                                </div>
+
+                                <b>Fim previsto: <input style="outline: none;" type="date" v-model="element.dtFim"
+                                        disabled></b><br><b>Responsável:</b>
+                                {{ element.responsavel }}
+                            </label>
+                            <br>
+                            {{ element.descricao }}
+                        </div>
+                    </template>
+                </draggableVue>
             </div>
         </div>
+
     </div>
+    <br><br><br><br><br>
 </template>
-
 <script>
+import draggableVue from "@/vuedraggableVue";
 
+export default {
+    components: {
+        draggableVue
+    },
+    data() {
+        return {
+            sprints: [{
+                id: 0,
+                nome: "Plano de ação",
+                backlogs: [{
+                    id: 1,
+                    codigo: "Tarefa - 1",
+                    descricao: "Usuário necessita de opções para personalização de sistema.",
+                    HP: 8,
+                    responsavel: "Darley Dias",
+                    status: "Pendente",
+                    dtInicio: "2023-12-01",
+                    dtFim: "2023-12-05",
+                    dtInicioReal: "0000-00-00",
+                    dtFimReal: "0000-00-00",
+                }, {
+                    id: 2,
+                    codigo: "Tarefa - 2",
+                    descricao: "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
+                    HP: 5,
+                    responsavel: "Lucas Lima",
+                    status: "Em andamento",
+                    dtInicio: "2024-02-01",
+                    dtFim: "2024-02-29",
+                    dtInicioReal: "0000-00-00",
+                    dtFimReal: "0000-00-00",
+                },
+                {
+                    id: 3,
+                    codigo: "Tarefa - 3",
+                    descricao: "Teste.",
+                    HP: 5,
+                    responsavel: "Mariana Mozzer",
+                    status: "Concluído",
+                    dtInicio: "2024-02-01",
+                    dtFim: "2024-02-29",
+                    dtInicioReal: "0000-00-00",
+                    dtFimReal: "0000-00-00",
+                }, {
+                    id: 4,
+                    codigo: "Tarefa - 4",
+                    descricao: "Teste 2.",
+                    HP: 5,
+                    responsavel: "Natalie ",
+                    status: "Pendente",
+                    dtInicio: "2024-02-01",
+                    dtFim: "2024-02-29",
+                    dtInicioReal: "0000-00-00",
+                    dtFimReal: "0000-00-00",
+                }],
+                dtTermino: null
+            }],
+
+            backlogsPendentes: [],
+            backlogsEmAndamento: [],
+            backlogsConcluidos: [],
+        };
+    },
+    mounted() {
+        this.getBacklogs()
+    },
+    methods: {
+        getBacklogs() {
+
+            this.sprints.forEach((item) => {
+                item.backlogs.forEach((backlog) => {
+                    backlog.nomeSprint = item.nome;
+                });
+            });
+            this.backlogs = this.sprints.map((item) => item.backlogs);
+            this.backlogs = this.backlogs[0];
+
+            const pendentes = [];
+            const emAndamento = [];
+            const concluidos = [];
+
+            this.backlogs.forEach((item) => {
+                switch (item.status) {
+                    case 'Pendente':
+                        pendentes.push(item);
+                        break;
+                    case 'Em andamento':
+                        emAndamento.push(item);
+                        break;
+                    case 'Concluído':
+                        concluidos.push(item);
+                        break;
+                    default:
+                        console.error(`Status desconhecido: ${item.status}`);
+                }
+            });
+
+            this.backlogsPendentes = pendentes;
+            this.backlogsConcluidos = concluidos;
+            this.backlogsEmAndamento = emAndamento
+
+        },
+    }
+};
 </script>
 
-<style scoped>
-/* .column:hover {
-    background-color: #000000;
-    box-shadow: 0 0 100px rgb(0, 0, 0);
-    cursor: pointer;
-    opacity: 0.20;
-} */
-
-.bloco:hover {
-    /* background-color: #ffffff; */
-    box-shadow: 0 0 5px rgb(160, 160, 160);
-    cursor: pointer;
-    color: rgb(59, 59, 59);
-    border: 0.5px solid;
+<style>
+.card {
+    background-color: white;
+    border: 1px solid black;
+    margin: 0.3rem;
+    border-radius: 10px;
 }
 
-.three-columns {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    justify-content: space-between center;
-    align-items: center;
-}
-
-#column1 {
-    border: 10px solid none;
-    background-color: rgb(243, 243, 243);
-    background-repeat: no-repeat;
-    margin: 20px;
-    color: rgb(100, 100, 100);
-    /* opacity: 0.2; */
-}
-
-.column {
-    flex: 1;
+.bloco {
+    background-color: rgb(247, 247, 247);
+    border: 1px solid black;
     height: 100%;
-    margin: 0px;
 }
 
-#column2 {
-    border: 10px solid none;
-    background-color: rgb(243, 243, 243);
-    background-repeat: no-repeat;
-    margin: 20px;
-    color: rgb(100, 100, 100);
-    /* opacity: 0.2; */
-}
-
-#column3 {
-    border: 10px solid none;
-    background-color: rgb(243, 243, 243);
-    background-repeat: no-repeat;
-    margin: 20px;
-    color: rgb(100, 100, 100);
-    /* opacity: 0.2; */
+.colunas {
+    width: 30%;
+    margin-left: 1rem;
 }
 </style>
+  
