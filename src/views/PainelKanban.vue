@@ -196,6 +196,8 @@ export default {
             this.backlogsEmAndamento = emAndamento
 
         },
+
+        
     }
 };
 </script>

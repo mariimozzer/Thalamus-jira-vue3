@@ -1,10 +1,10 @@
 <template>
     <div style="width: 100%; padding: 1rem; height: 100%;">
         <!-- TABELA 1 -->
-        <div v-for="item in sprints" :key="item" style="display: flex; flex-flow: column; align-items: center;">
+        <div v-for="item in sprints" :key="item">
 
-            <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255);
-             margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%;">
+            <div
+                style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
 
                 <div>
                     <div class="row">
@@ -32,116 +32,39 @@
                         </div>
                     </div>
                 </div>
-                <div :id="item.id" style="width: 100%; display: flex; flex-flow: column; padding-right: 0.5rem;">
-                    <div
-                        style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
 
-                        <div style="width:10%; text-align: center;">
-                            <strong>
-                                <label style="width: 100%">Item</label>
-                            </strong>
-                        </div>
+                <div :id="item.id">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Item</th>
+                                <th style="width:35rem" scope="col">Descrição</th>
+                                <th scope="col">H.P.</th>
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Inicio Previsto</th>
+                                <th scope="col">Final Previsto</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr v-for=" backlog in item.backlogs" :key="backlog" @dblclick="moverBacklog(backlog.id)">
+                                <td>
+                                    <button @click="moverBacklog(backlog.id)" v-if="item.id == 0" class="apagar">
+                                        <i class="bi bi-arrow-down-square-fill"></i>
+                                    </button>
+                                </td>
 
-                        <div style="width: 45%; padding-left: 0.5rem; padding-right: 1rem">
-                            <strong>
-                                <input type="text" style="width:100%; outline: none; text-align: center;" value="Descrição">
-                            </strong>
-                        </div>
+                                <td>
+                                    <label style="width: max-content; max-width: 100px;">{{ backlog.codigo }}</label>
+                                </td>
 
-                        <div style="width: 3rem; text-align: center;">
-                            <strong>
-                                <select
-                                style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;">
-                                <option selected>H.P.</option>
-                            </select>
-                        </strong>
-                        </div>
+                                <td><input :disabled="desativarEdicao" type="text" v-model="backlog.descricao"
+                                        style="width:35rem; outline: none;"></td>
 
-                        <div style="width: 10%;">
-                            <strong>
-                                <select style="width: 100%; outline: none; text-align: center;">
-                                    <option selected>Responsável</option>
-                                </select>
-                            </strong>
-                        </div>
-
-                        <div style="width:10%;">
-                            <strong>
-                                <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
-                                value="Inicio Previsto">
-                            </strong>
-                        </div>
-
-                        <div style="width: 10%;">
-                            <strong>
-                                <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
-                                value="Fim Previsto">
-                            </strong>
-                        </div>
-
-                        <div style="width: 10%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                            <strong>
-                                <select style="width:100%; outline: none; text-align: center;">
-                                    <option selected>Status</option>
-                                </select>
-                            </strong>
-                        </div>
-
-                        <div style="width: 1.5rem; height: 1.5rem;">
-
-                        </div>
-
-                    </div>
-
-                    <!-- <div
-                        style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
-
-                        <div style="width:10%; text-align: center;">
-                            <strong>Item</strong>
-                        </div>
-
-                        <div style="width: 45%; padding-left: 0.5rem; text-align: center;">
-                            <strong>Descrição</strong>
-                        </div>
-
-                        <div style="width: 5%;text-align: center; ">
-                            <strong>H.P.</strong>
-                        </div>
-
-                        <div style="width: 15%;text-align: center;">
-                            <strong>Responsável</strong>
-                        </div>
-                        <div style="width:10%;text-align: center;">
-                            <strong>Inicio Previsto</strong>
-                        </div>
-                        <div style="width: 10%;text-align: center;">
-                            <strong>Fim Previsto</strong>
-                        </div>
-                        <div style="width: 10%;text-align: center;">
-                            <strong>Status</strong>
-                        </div>
-                        <div style="width: 1.5rem;">
-
-                        </div>
-
-                    </div> -->
-                    <draggable :list=item.backlogs group="backlogs" itemKey="id">
-                        <template #item="{ element }">
-                            <div
-                                style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
-
-                                <div style="width:10%; text-align: center;">
-                                    <label style="width: 100%">{{ element.codigo }}</label>
-                                </div>
-
-                                <div style="width: 45%; padding-left: 0.5rem; padding-right: 1rem">
-                                    <input :disabled="desativarEdicao" type="text" v-model="element.descricao"
-                                        style="width:100%; outline: none;">
-                                </div>
-
-                                <div style="width: 3rem; text-align: center;">
-                                    <select v-model="element.HP"
-                                        style="width: 5rem%; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
+                                <td><select v-model="backlog.HP"
+                                        style="width: min-content; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
                                         <option hidden>0</option>
                                         <option>1</option>
                                         <option>2</option>
@@ -155,12 +78,10 @@
                                         <option>89</option>
                                         <option>144</option>
                                         <option>233</option>
-                                    </select>
-                                </div>
+                                    </select></td>
 
-                                <div style="width: 10%;">
-                                    <select v-model="element.responsavel"
-                                        style="width: 100%; outline: none; text-align: center;">
+                                <td><select v-model="backlog.responsavel"
+                                        style="width: min-content; outline: none; text-align: center;">
                                         <option hidden>--</option>
                                         <option>Darley Dias</option>
                                         <option>Mariana Mozzer</option>
@@ -168,30 +89,24 @@
                                         <option>Natalie Costa</option>
                                         <option>Artur Wilson</option>
                                         <option>Raul Wilson</option>
-                                    </select>
-                                </div>
+                                    </select></td>
 
-                                <div style="width:10%;">
-                                    <input style="width: 100%; outline: none; text-align: center;" type="date"
-                                        v-model="element.dtInicio" class="data">
-                                </div>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" v-model="backlog.dtInicio"
+                                        class="data">
+                                </td>
 
-                                <div style="width: 10%;">
-                                    <input style="width: 100%; outline: none; text-align: center;" type="date" class="data"
-                                        v-model="element.dtFim">
-                                </div>
+                                <td><input style="width: 6.9rem; outline: none;" type="date" class="data"
+                                        v-model="backlog.dtFim"></td>
 
-                                <div style="width: 10%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                                    <select style="width:100%; outline: none; text-align: center;"
-                                        @change="definirInicioFimReal(element.id, item.id, $event.target.value)"
-                                        v-model="element.status">
+                                <td><select style="width: min-content; outline: none; text-align: center;"
+                                        @change="definirInicioFimReal(backlog.id, item.id, $event.target.value)"
+                                        v-model="backlog.status">
                                         <option>Pendente</option>
                                         <option>Em andamento</option>
                                         <option>Concluído</option>
-                                    </select>
-                                </div>
+                                    </select></td>
 
-                                <div style="width: max-content;">
+                                <td>
                                     <v-menu>
                                         <template v-slot:activator="{ props }">
                                             <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
@@ -201,7 +116,7 @@
                                         <v-list>
                                             <v-list-item>
                                                 <button style="margin: 0.2rem;"
-                                                    @click="editarBacklog(element.id, item.id, false)">Editar
+                                                    @click="editarBacklog(backlog.id, item.id, false)">Editar
                                                     Tarefa</button><br />
                                                 <v-menu>
                                                     <template v-slot:activator="{ props }">
@@ -214,7 +129,7 @@
                                                             <div>
                                                                 <h4>Tem certeza?</h4>
                                                                 <div style="display: flex; width: 100%;">
-                                                                    <Button @click="apagarBacklog(element.id, item.id)"
+                                                                    <Button @click="apagarBacklog(backlog.id, item.id)"
                                                                         style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
                                                                     <button
                                                                         style="border: 1px solid black; width: 50%; margin-left: 0.5rem; background-color: green; color: white;">Cancelar</button>
@@ -226,18 +141,16 @@
                                             </v-list-item>
                                         </v-list>
                                     </v-menu>
-                                </div>
+                                </td>
+                            </tr>
 
-                            </div>
-                        </template>
-                    </draggable>
-
-                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px; width: 100%;" :id="item.id">
+                        </thead>
+                    </table>
+                    <div style="display: flex; padding-left: 0.2rem; border-radius: 5px;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
                             <input style="width: 5rem;" type="text" disabled
-                                :placeholder="'Tarefa - ' + (this.sprints[0].ultimoBacklog + 1)">
+                                :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'">
                         </div>
-                        <!-- :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'"> -->
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
                             <input type="text" placeholder="O que será feito?"
@@ -252,12 +165,19 @@
             </div>
 
             <div v-if="item.nome == 'Plano de ação'" class="row"
-                style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px; width: 100%;display: flex;flex-flow: row; align-items: center;">
-                <button :class="{ shake: disabled }" style="width: max-content; font-size: 25px; position: absolute;"
-                    @click="criarNovaSprint">
-                    <i class="bi bi-plus-square"></i></button>
+                style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px;">
 
-                <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
+                <div style="display: flex;">
+                    <div :class="{ shake: disabled }" style="display: flex;">
+                        <button style="width: max-content; font-size: 25px; display: flex;" @click="criarNovaSprint">
+                            <i class="bi bi-plus-square"></i></button>
+                    </div>
+
+                    <div style="width: 100%;">
+                        <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -355,13 +275,8 @@
 </template>
 
 <script>
-import draggable from "@/vuedraggableVue";
 
 export default {
-    components: {
-        draggable
-    },
-
     name: "SprintsView",
 
     data() {
@@ -398,10 +313,8 @@ export default {
                     dtInicioReal: "0000-00-00",
                     dtFimReal: "0000-00-00",
                 }],
-                ultimoBacklog: 2,
                 dtTermino: null
-            }
-            ],
+            }],
             novaSprint: {
                 id: null,
                 nome: "",
@@ -565,20 +478,19 @@ export default {
             }
             this.sprints.push(this.novaSprint);
             this.novaSprint = {
-                id: 0,
-                nome: "",
-                backlogs: [],
-                dtTermino: null
-            },
-                this.sprints.sort((a, b) => {
-                    if (a.nome === "Plano de ação") {
-                        return -1; // Move "Plano de ação" para o início
-                    } else if (b.nome === "Plano de ação") {
-                        return 1; // Move "Plano de ação" para o início
-                    } else {
-                        return b.id - a.id; // Ordena os demais elementos pelo id de forma descendente
-                    }
-                });
+                "id": null,
+                "nome": "",
+                "backlogs": []
+            }
+            this.sprints.sort((a, b) => {
+                if (a.nome === "Plano de ação") {
+                    return -1; // Move "Plano de ação" para o início
+                } else if (b.nome === "Plano de ação") {
+                    return 1; // Move "Plano de ação" para o início
+                } else {
+                    return b.id - a.id; // Ordena os demais elementos pelo id de forma descendente
+                }
+            });
         },
 
         criarBacklog(id, descricao) {
@@ -595,13 +507,15 @@ export default {
                 dtInicioReal: "0000-00-00",
                 dtFimReal: "0000-00-00",
             };
-
-            novoBacklog.codigo = 'Tarefa - ' + (this.sprints[0].ultimoBacklog + 1);
-            novoBacklog.id = this.sprints[0].ultimoBacklog + 1
+            if (sprint.backlogs.length != 0) {
+                novoBacklog.codigo = 'Tarefa - ' + (parseInt((sprint.backlogs[sprint.backlogs.length - 1].codigo.slice(9))) + 1);
+                novoBacklog.id = parseInt(sprint.backlogs[sprint.backlogs.length - 1].id) + 1
+            } else {
+                novoBacklog.codigo = "Tarefa - 1";
+                novoBacklog.id = 1;
+            }
             novoBacklog.descricao = descricao;
             sprint.backlogs.push(novoBacklog);
-
-            this.sprints[0].ultimoBacklog = this.sprints[0].ultimoBacklog + 1
 
         },
 
