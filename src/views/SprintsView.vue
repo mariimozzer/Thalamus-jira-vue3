@@ -51,10 +51,10 @@
                         <div style="width: 3rem; text-align: center;">
                             <strong>
                                 <select
-                                style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;">
-                                <option selected>H.P.</option>
-                            </select>
-                        </strong>
+                                    style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;">
+                                    <option selected>H.P.</option>
+                                </select>
+                            </strong>
                         </div>
 
                         <div style="width: 10%;">
@@ -68,14 +68,14 @@
                         <div style="width:10%;">
                             <strong>
                                 <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
-                                value="Inicio Previsto">
+                                    value="Inicio Previsto">
                             </strong>
                         </div>
 
                         <div style="width: 10%;">
                             <strong>
                                 <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
-                                value="Fim Previsto">
+                                    value="Fim Previsto">
                             </strong>
                         </div>
 
@@ -253,8 +253,7 @@
 
             <div v-if="item.nome == 'Plano de ação'" class="row"
                 style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px; width: 100%;display: flex;flex-flow: row; align-items: center;">
-                <button :class="{ shake: disabled }" style="width: max-content; font-size: 25px; position: absolute;"
-                    @click="criarNovaSprint">
+                <button style="width: max-content; font-size: 25px; position: absolute;" @click="criarNovaSprint">
                     <i class="bi bi-plus-square"></i></button>
 
                 <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
@@ -272,10 +271,9 @@
 
             <div style="width: 100%;">
                 <div>
-                    <label>Data de Entrega</label><label
-                        style="margin-left: 1rem; font-size: large; color: red; display: none;" id="aviso"><b>Preencha o
-                            campo abaixo:</b></label>
-                    <input v-model="dataTermino" id="dataTermino" class="form-control" type="date">
+                    <label>Data de Entrega</label>
+                    <input :class="{ shake: disabled }" v-model="dataTermino" id="dataTermino" class="form-control"
+                        type="date">
                 </div>
 
                 <div style="margin-top: 1rem;">
@@ -537,22 +535,22 @@ export default {
         iniciarSprint() {
             if (this.dataTermino == null) {
                 document.getElementById('dataTermino').style.border = '1px solid red';
-                document.getElementById('aviso').style.display = ''
+                this.disabled = true
+                setTimeout(() => {
+                    this.disabled = false
+                }, 1500)
                 return
             }
             const sprint = this.sprints.find(item => item.id == this.idSprint);
             const dia = this.dataTermino.slice(8);
             const mes = this.dataTermino.slice(5).slice(0, 2);
             const ano = this.dataTermino.slice(0, 4);
-            if (sprint) {
-                sprint.dtTermino = `Data de entrega: ${dia}/${mes}/${ano}`
-                this.dataTermino = null;
-                this.idSprint = null;
-                document.getElementById('aviso').style.display = 'none'
-                this.fecharModal()
-            } else {
-                console.error('Sprint não encontrada com o ID:', this.idSprint);
-            }
+
+            sprint.dtTermino = `Fim previsto: ${dia}/${mes}/${ano}`
+            this.dataTermino = null;
+            this.idSprint = null;
+            this.fecharModal()
+
         },
 
         criarNovaSprint() {
