@@ -373,30 +373,8 @@ export default {
             sprints: [{
                 id: 0,
                 nome: "Plano de ação",
-                backlogs: [{
-                    id: 1,
-                    codigo: "Tarefa - 1",
-                    descricao: "Usuário necessita de opções para personalização de sistema.",
-                    HP: 8,
-                    responsavel: "Darley Dias",
-                    status: "Pendente",
-                    dtInicio: "2023-12-01",
-                    dtFim: "2023-12-05",
-                    dtInicioReal: "0000-00-00",
-                    dtFimReal: "0000-00-00",
-                }, {
-                    id: 2,
-                    codigo: "Tarefa - 2",
-                    descricao: "Criar tela de personalização que permita alterar tema e tamanho da fonte.",
-                    HP: 5,
-                    responsavel: "Lucas Lima",
-                    status: "Em andamento",
-                    dtInicio: "2024-02-01",
-                    dtFim: "2024-02-29",
-                    dtInicioReal: "0000-00-00",
-                    dtFimReal: "0000-00-00",
-                }],
-                ultimoBacklog: 2,
+                backlogs: [],
+                ultimoBacklog: 0,
                 dtTermino: null
             }
             ],
@@ -413,8 +391,32 @@ export default {
             idSprintBacklogEditado: null,
         }
     },
-
+    mounted() {
+        this.getBacklogs()
+    },
+    watch: {
+        sprints: {
+            handler: 'atualizarLocalStore',  // Chama a função atualizarLocalStore quando sprints é alterado
+            deep: true,  // Observa mudanças profundas no array (necessário se houver alterações nos elementos do array)
+        },
+    },
     methods: {
+        getBacklogs() {
+            if (localStorage.getItem('sprints') == null) {
+                var localData = JSON.stringify(this.sprints);
+                localStorage.setItem('sprints', localData)
+            } else {
+                this.sprints = JSON.parse(localStorage.getItem('sprints'))
+            }
+
+        },
+
+        atualizarLocalStore() {
+            localStorage.clear()
+            var localData = JSON.stringify(this.sprints)
+            localStorage.setItem('sprints', localData)
+        },
+
         definirInicioFimReal(idBacklog, idSprint, status) {
             let sprint = this.sprints.find(sprint => sprint.id === idSprint);
             let backlog = sprint.backlogs.find(backlog => backlog.id === idBacklog);
@@ -441,6 +443,8 @@ export default {
                     }
                 }
             }
+
+            this.atualizarLocalStore()
         },
 
         salvarBacklogEditado(idBacklogEditado) {
@@ -450,6 +454,8 @@ export default {
             sprint.backlogs.push(this.backlogeditado);
             sprint.backlogs.sort((a, b) => a.id - b.id);
             this.showEditarBacklog = false
+
+            this.atualizarLocalStore()
         },
 
         editarBacklog(idBacklog, idSprint) {
@@ -459,6 +465,8 @@ export default {
 
             this.backlogeditado = sprint.backlogs.find(backlog => backlog.id === idBacklog);
             this.idSprintBacklogEditado = sprint.id
+
+            this.atualizarLocalStore()
         },
 
         ocultarPlano() {
@@ -493,6 +501,7 @@ export default {
                     this.disabled = false
                 }, 1500)
             }
+            this.atualizarLocalStore()
         },
 
         somarHP(dados) {
@@ -577,6 +586,8 @@ export default {
                         return b.id - a.id; // Ordena os demais elementos pelo id de forma descendente
                     }
                 });
+
+                this.atualizarLocalStore()
         },
 
         criarBacklog(id, descricao) {
@@ -601,6 +612,7 @@ export default {
 
             this.sprints[0].ultimoBacklog = this.sprints[0].ultimoBacklog + 1
 
+            this.atualizarLocalStore()
         },
 
         apagarBacklog(idBacklog, idSprint) {
@@ -608,6 +620,7 @@ export default {
 
             sprint.backlogs = sprint.backlogs.filter(item => item.id !== idBacklog);
 
+            this.atualizarLocalStore()
         }
 
     }
