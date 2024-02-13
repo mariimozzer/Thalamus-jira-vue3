@@ -92,39 +92,6 @@
                         </div>
 
                     </div>
-
-                    <!-- <div
-                        style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
-
-                        <div style="width:10%; text-align: center;">
-                            <strong>Item</strong>
-                        </div>
-
-                        <div style="width: 45%; padding-left: 0.5rem; text-align: center;">
-                            <strong>Descrição</strong>
-                        </div>
-
-                        <div style="width: 5%;text-align: center; ">
-                            <strong>H.P.</strong>
-                        </div>
-
-                        <div style="width: 15%;text-align: center;">
-                            <strong>Responsável</strong>
-                        </div>
-                        <div style="width:10%;text-align: center;">
-                            <strong>Inicio Previsto</strong>
-                        </div>
-                        <div style="width: 10%;text-align: center;">
-                            <strong>Fim Previsto</strong>
-                        </div>
-                        <div style="width: 10%;text-align: center;">
-                            <strong>Status</strong>
-                        </div>
-                        <div style="width: 1.5rem;">
-
-                        </div>
-
-                    </div> -->
                     <draggable :list=item.backlogs group="backlogs" itemKey="id">
                         <template #item="{ element }">
                             <div
@@ -237,7 +204,6 @@
                             <input style="width: 5rem;" type="text" disabled
                                 :placeholder="'Tarefa - ' + (this.sprints[0].ultimoBacklog + 1)">
                         </div>
-                        <!-- :placeholder="item.backlogs.length != 0 ? 'Tarefa - ' + (parseInt((item.backlogs[item.backlogs.length - 1].codigo.slice(9))) + 1) : 'Tarefa - 1'"> -->
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
                             <input type="text" placeholder="O que será feito?"
@@ -628,6 +594,10 @@ export default {
 </script>
 
 <style>
+.data:hover{
+    cursor: pointer;
+}
+
 .ocultar:hover {
     cursor: pointer;
 }

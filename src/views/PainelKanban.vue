@@ -1,9 +1,19 @@
 <template>
-    <!-- {{ backlogsPendentes.map((item) => item.codigo) }} /
-    {{ backlogsEmAndamento.map((item) => item.codigo) }} /
-    {{ backlogsConcluidos.map((item) => item.codigo) }} -->
 
     <div>
+        <div style="border-bottom: 1px solid black;">
+            Filtrar por: <select>
+                <option>Responsável</option>
+                <option>Sprint</option>
+            </select>
+            valor: 
+            <select style="border: 1px solid black; width: 4rem;">
+
+            </select>
+
+
+        </div>
+
 
         <div style="display: flex; flex-flow: row; justify-content: center;">
             <div class="colunas">
