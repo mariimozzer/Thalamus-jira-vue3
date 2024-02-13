@@ -2,14 +2,20 @@
 
     <div>
         <div style="border-bottom: 1px solid black;">
-            Filtrar por: <select>
+            Filtrar por: <select v-model="filtro">
                 <option>Responsável</option>
                 <option>Sprint</option>
             </select>
-            valor: 
-            <select style="border: 1px solid black; width: 4rem;">
+            
+            igual a 
+            
+                <select v-if="filtro == 'Responsável'" style="border: 1px solid black; width: fit-content;">
+                    <option v-for="backlog in sprints.map((item) => item.backlogs).flat()" :key="backlog">{{ backlog.responsavel }}</option>
+                </select>
 
-            </select>
+                <select v-if="filtro == 'Sprint'" style="border: 1px solid black; width: fit-content;">
+                    <option v-for="backlog in sprints.map((item) => item.backlogs).flat()" :key="backlog">{{ backlog.nomeSprint }}</option>
+                </select>
 
 
         </div>
@@ -109,6 +115,8 @@ export default {
     },
     data() {
         return {
+            filtro: null,
+            valorFiltro: null,
             teste: null,
             sprints: [{
                 id: 0,
