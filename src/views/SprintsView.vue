@@ -1,10 +1,9 @@
 <template>
     <div style="width: 100%; padding: 1rem; height: 100%;">
         <!-- TABELA 1 -->
-        <div v-for="item in sprints" :key="item" style="display: flex; flex-flow: column; align-items: center;">
+        <div v-for="item in sprints" :key="item" class="divPaiTabela">
 
-            <div style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255);
-             margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%;">
+            <div class="divFundoTabela">
 
                 <div>
                     <div class="row">
@@ -92,6 +91,10 @@
                         </div>
 
                     </div>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                     <draggable :list=item.backlogs group="backlogs" itemKey="id">
                         <template #item="{ element }">
                             <div
@@ -553,7 +556,7 @@ export default {
                     }
                 });
 
-                this.atualizarLocalStore()
+            this.atualizarLocalStore()
         },
 
         criarBacklog(id, descricao) {
@@ -594,8 +597,24 @@ export default {
 </script>
 
 <style>
+<<<<<<< Updated upstream
 .data:hover{
     cursor: pointer;
+=======
+.divFundoTabela {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.divPaiTabela {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+>>>>>>> Stashed changes
 }
 
 .ocultar:hover {
@@ -687,5 +706,4 @@ input:disabled {
     max-height: 80%;
     overflow-y: auto;
     position: relative;
-}
-</style>
+}</style>
