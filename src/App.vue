@@ -1,21 +1,30 @@
-<template >
-    <body style="background-color: #d6d6d6; min-height: 1920px;">
+<template>
+     <div class="estilos">
+    <div class="menu">
+          <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
+      </div>
+    <!-- <body style="background-color: #d6d6d6; min-height: 1920px;"> -->
 
-        <nav>
+        <!-- <nav>
             <router-link to="/projetos">Projetos</router-link> |
             <router-link to="/sprints">Plano de ação</router-link> |
             <router-link to="/painel">Painel Kanban</router-link> |
-        </nav>
-        <div class="estilos">
-            <router-view />
-
+        </nav> -->
+       
+        <div class="router">
+          <br><br><br><br>
+          <router-view />
+  
+      </div>
             <FooterComponent></FooterComponent>
         </div>
-    </body>
+    
+    <!-- </body> -->
 </template>
 
 <script>
 import FooterComponent from "@/components/footer/FooterComponent"
+import MenuComponent from "./components/menu/MenuComponent.vue";
 
 export default {
     data() {
@@ -26,13 +35,22 @@ export default {
     },
 
     components: {
-        FooterComponent: FooterComponent,
-    }
+    FooterComponent: FooterComponent,
+    MenuComponent: MenuComponent
+}
 }
 </script>
 
 
 <style>
+.menu {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  margin-top: 0;
+}
+
+
 :root {
     --cor-primaria: #343537;
     --cor-secundaria: #F89E31;
@@ -171,10 +189,11 @@ thead {
     width: 0px;
 }
 
-/* .menu {
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    margin-top: 0;
-} */
+
+
+.router {
+  /* margin-left: 300px;
+  margin-bottom: 100px;
+  margin-top: 0px; */
+}
 </style>

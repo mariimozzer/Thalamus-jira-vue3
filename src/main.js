@@ -9,9 +9,10 @@ import * as directives from 'vuetify/directives'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+import store from './store'
 
 
-const app = createApp(App)
+const app = createApp(App).use(store)
 const vuetify = createVuetify({
     components,
     directives,

@@ -40,7 +40,7 @@
                                             <v-list-item>
                                                 <div>
                                                     <h4>Tem certeza? Esta ação é Irreversível!</h4>
-                                                    <p>Ao excluir esta sprints, todos os backlogs contidos nela também
+                                                    <p>Ao excluir esta sprint, todos os backlogs contidos nela também
                                                         serão excluídos.</p>
                                                     <div style="display: flex; width: 100%;">
                                                         <Button @click="apagarSprint(item.id)"

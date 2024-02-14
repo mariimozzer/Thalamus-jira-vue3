@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+
 //Home
 import HomeView from '../views/HomeView.vue'
 
@@ -14,6 +15,9 @@ import SprintsView from '../views/SprintsView'
 
 
 const routes = [
+
+
+
   {
     path: '/',
     name: 'home',
