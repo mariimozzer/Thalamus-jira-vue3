@@ -3,28 +3,26 @@
     <div class="menu">
           <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
       </div>
-    <!-- <body style="background-color: #d6d6d6; min-height: 1920px;"> -->
-
-        <!-- <nav>
+      <menuLateral></menuLateral>
+        <div class="router">
+          <br><br><br><br>
+          <nav>
             <router-link to="/projetos">Projetos</router-link> |
             <router-link to="/sprints">Plano de ação</router-link> |
             <router-link to="/painel">Painel Kanban</router-link> |
-        </nav> -->
-       
-        <div class="router">
-          <br><br><br><br>
+        </nav>
           <router-view />
   
       </div>
             <FooterComponent></FooterComponent>
         </div>
     
-    <!-- </body> -->
 </template>
 
 <script>
 import FooterComponent from "@/components/footer/FooterComponent"
 import MenuComponent from "./components/menu/MenuComponent.vue";
+import menuLateral from './components/menuLateral/MenuLateral'
 
 export default {
     data() {
@@ -36,7 +34,8 @@ export default {
 
     components: {
     FooterComponent: FooterComponent,
-    MenuComponent: MenuComponent
+    MenuComponent: MenuComponent,
+    menuLateral: menuLateral
 }
 }
 </script>
@@ -192,8 +191,8 @@ thead {
 
 
 .router {
-  /* margin-left: 300px;
+  margin-left: 300px;
   margin-bottom: 100px;
-  margin-top: 0px; */
+  margin-top: 0px;
 }
 </style>

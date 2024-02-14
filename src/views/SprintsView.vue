@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%; padding: 1rem; height: 100%;">
+    <div style="width: 100%; padding: 1rem; height: 100%;" class="container">
         <!-- TABELA 1 -->
         <div v-for="item in sprints" :key="item" class="divPaiTabela">
             <div class="divFundoTabela">

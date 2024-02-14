@@ -1,33 +1,35 @@
 <template>
-    <div class="container" style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
+    <div style="padding: 1rem;">
+        <div class="container"
+            style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
 
 
-        <div class="col-sm-12" style="text-align: center;">
+            <div class="col-sm-12" style="text-align: center;">
 
-            <div style="display: flex;">
-                <div style="width: 100%;">
-                    <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
+                <div style="display: flex;">
+                    <div style="width: 100%;">
+                        <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
+                    </div>
+                    <button style="width: max-content; font-size: 25px;" @click="adicionarProjeto">
+                        <i class="bi bi-plus-square"></i>
+                    </button>
                 </div>
-                <button style="width: max-content; font-size: 25px;" @click="adicionarProjeto">
-                    <i class="bi bi-plus-square"></i>
-                </button>
-            </div>
 
-            <hr>
-        </div>
-        <br>
-        <div>
+                <hr>
+            </div>
+            <br>
             <div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nome do Projeto </th>
-                            <th scope="col">Data Início</th>
-                            <th scope="col">Gerente Responsável</th>
-                            <th scope="col">Setor Beneficiário</th>
-                            <th scope="col"></th>
-                        </tr>
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nome do Projeto </th>
+                                <th scope="col">Data Início</th>
+                                <th scope="col">Gerente Responsável</th>
+                                <th scope="col">Setor Beneficiário</th>
+                                <th scope="col"></th>
+                            </tr>
                         </thead>
                         <thead>
                             <tr v-for="item in projetos" :key="item.id">
@@ -43,12 +45,13 @@
                                     <button style="font-size: larger; margin-left: 1rem;" @click="verPainel()">
                                         <i class="bi bi-kanban"></i>
                                     </button>
-                                    
+
                                 </td>
                             </tr>
                         </thead>
-                            
-                </table>
+
+                    </table>
+                </div>
             </div>
         </div>
     </div>

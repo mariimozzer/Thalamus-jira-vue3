@@ -9,7 +9,6 @@ import ProjetosView from '../views/ProjetosView.vue'
 import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 
 //Backlogs
-import BacklogsView from '../views/BacklogsView.vue'
 import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
 
@@ -49,12 +48,12 @@ const routes = [
     component: ProjetosView
   },
 
-  {
-    path: '/backlogs',
-    name: 'backlogs',
-    component: BacklogsView,
-    props: { sharedVariable: 'backlogs' }
-  },
+  // {
+  //   path: '/backlogs',
+  //   name: 'backlogs',
+  //   component: BacklogsView,
+  //   props: { sharedVariable: 'backlogs' }
+  // },
 
   {
     path: '/painel',

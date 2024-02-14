@@ -1,4 +1,6 @@
 <template>
+
+
     <div>
 
         <div class="divFiltro">
@@ -158,7 +160,8 @@ import draggableVue from "@/vuedraggableVue";
 
 export default {
     components: {
-        draggableVue
+        draggableVue,
+        
     },
     data() {
         return {
