@@ -1,5 +1,5 @@
 <template >
-    <body style="background-color: #F8F8F8; min-height: 4000px;">
+    <body style="background-color: #d6d6d6; min-height: 1920px;">
 
         <nav>
             <router-link to="/projetos">Projetos</router-link> |

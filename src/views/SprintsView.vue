@@ -2,33 +2,59 @@
     <div style="width: 100%; padding: 1rem; height: 100%;">
         <!-- TABELA 1 -->
         <div v-for="item in sprints" :key="item" class="divPaiTabela">
-
             <div class="divFundoTabela">
+                <div class="row">
+                    <div style="width: 20%;">
+                        <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
+                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
+                        </button>
+                        <h5>
+                            Pontos de história: {{ somarHP(item) }}
+                        </h5>
+                    </div>
+                    <div style="width: 60%; text-align: center;">
+                        <h2><input type="text" v-model="item.nome"
+                                style="width: max-content; margin-left: 0.5rem; text-align: center;">
+                        </h2>
+                    </div>
+                    <div style="width: 20%; text-align: right; justify-items: right;">
+                        <span style="margin-right: 1rem;">{{ item.dtTermino }}</span>
+                        <v-menu v-if="item.id != 0">
+                            <template v-slot:activator="{ props }">
+                                <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
+                                    v-bind="props"></v-btn>
+                            </template>
 
-                <div>
-                    <div class="row">
-                        <div style="width: 20%;">
-                            <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
-                                <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
-                            </button>
-                            <h5>
-                                Pontos de história: {{ somarHP(item) }}
-                            </h5>
-                        </div>
-                        <div style="width: 60%; text-align: center;">
-                            <h2><input type="text" v-model="item.nome" style="width: 13rem; margin-left: 0.5rem;">
-                            </h2>
-                        </div>
-                        <div style="width: 20%; text-align: right;">
-                            <span>{{ item.dtTermino }}</span>
-                            <button v-if="item.id != 0" style="width: max-content; justify-self: right; "
-                                @click="abrirModalIniciarSprint(item.id)" class="button-default"><i
-                                    class="fa-solid fa-clock"></i>&nbsp;{{ item.dtTermino == null ?
-                                        'Iniciar'
-                                        :
-                                        'Finalizar' }}
-                            </button>
-                        </div>
+                            <v-list>
+                                <v-list-item>
+                                    <button style="margin: 0.2rem;" @click="abrirModalIniciarSprint(item.id)">{{
+                                        item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
+                                    </button><br />
+                                    <v-menu>
+                                        <template v-slot:activator="{ props }">
+                                            <button style="color: red;margin: 0.2rem;" v-bind="props">Excluir
+                                                Sprint</button>
+                                        </template>
+
+                                        <v-list>
+                                            <v-list-item>
+                                                <div>
+                                                    <h4>Tem certeza? Esta ação é Irreversível!</h4>
+                                                    <p>Ao excluir esta sprints, todos os backlogs contidos nela também
+                                                        serão excluídos.</p>
+                                                    <div style="display: flex; width: 100%;">
+                                                        <Button @click="apagarSprint(item.id)"
+                                                            style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
+                                                        <button
+                                                            style="border: 1px solid black; width: 50%; margin-left: 0.5rem; background-color: green; color: white;">Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
                     </div>
                 </div>
                 <div :id="item.id" style="width: 100%; display: flex; flex-flow: column; padding-right: 0.5rem;">
@@ -91,13 +117,9 @@
                         </div>
 
                     </div>
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
                     <draggable :list=item.backlogs group="backlogs" itemKey="id">
                         <template #item="{ element }">
-                            <div
+                            <div @mouseover="mostrarBotao(element.id, true)" @mouseleave="mostrarBotao(element.id, false)"
                                 style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
 
                                 <div style="width:10%; text-align: center;">
@@ -143,16 +165,16 @@
 
                                 <div style="width:10%;">
                                     <input style="width: 100%; outline: none; text-align: center;" type="date"
-                                        v-model="element.dtInicio" class="data">
+                                        v-model="element.dtInicio">
                                 </div>
 
                                 <div style="width: 10%;">
-                                    <input style="width: 100%; outline: none; text-align: center;" type="date" class="data"
+                                    <input style="width: 100%; outline: none; text-align: center;" type="date"
                                         v-model="element.dtFim">
                                 </div>
 
                                 <div style="width: 10%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                                    <select style="width:100%; outline: none; text-align: center;"
+                                    <select style="width: 100%; outline: none; text-align: center;"
                                         @change="definirInicioFimReal(element.id, item.id, $event.target.value)"
                                         v-model="element.status">
                                         <option>Pendente</option>
@@ -161,7 +183,7 @@
                                     </select>
                                 </div>
 
-                                <div style="width: max-content;">
+                                <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + element.id">
                                     <v-menu>
                                         <template v-slot:activator="{ props }">
                                             <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
@@ -182,7 +204,7 @@
                                                     <v-list>
                                                         <v-list-item>
                                                             <div>
-                                                                <h4>Tem certeza?</h4>
+                                                                <h4>Tem certeza? Esta ação é Irreversível!</h4>
                                                                 <div style="display: flex; width: 100%;">
                                                                     <Button @click="apagarBacklog(element.id, item.id)"
                                                                         style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
@@ -228,6 +250,8 @@
                 <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
             </div>
         </div>
+
+
     </div>
 
 
@@ -245,10 +269,11 @@
                         type="date">
                 </div>
 
-                <div style="margin-top: 1rem;">
+                <!-- <div style="margin-top: 1rem;">
                     <label>Objetivo</label>
                     <textarea class="form-control"></textarea>
-                </div>
+                </div> -->
+
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="iniciarSprint()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
                         Iniciar Sprint</button>
@@ -337,7 +362,7 @@ export default {
             showEditarBacklog: false,
             showIniciarSprint: false,
             showConfirmação: false,
-            teste: null,
+            teste: ".",
             desativarEdicao: true,
             sprints: [{
                 id: 0,
@@ -370,6 +395,15 @@ export default {
         },
     },
     methods: {
+        mostrarBotao(id, mostrar) {
+            if (mostrar == true) {
+                document.getElementById('botaoEdicao' + id).style.visibility = ''
+            }
+            if (mostrar == false) {
+                document.getElementById('botaoEdicao' + id).style.visibility = 'hidden'
+            }
+        },
+
         getBacklogs() {
             if (localStorage.getItem('sprints') == null) {
                 var localData = JSON.stringify(this.sprints);
@@ -590,6 +624,11 @@ export default {
             sprint.backlogs = sprint.backlogs.filter(item => item.id !== idBacklog);
 
             this.atualizarLocalStore()
+        },
+
+        apagarSprint(id) {
+            this.sprints = this.sprints.filter(item => item.id !== id);
+            this.atualizarLocalStore()
         }
 
     }
@@ -597,10 +636,6 @@ export default {
 </script>
 
 <style>
-<<<<<<< Updated upstream
-.data:hover{
-    cursor: pointer;
-=======
 .divFundoTabela {
     border: 1px solid black;
     border-radius: 5px;
@@ -614,7 +649,6 @@ export default {
     display: flex;
     flex-flow: column;
     align-items: center;
->>>>>>> Stashed changes
 }
 
 .ocultar:hover {
@@ -706,4 +740,5 @@ input:disabled {
     max-height: 80%;
     overflow-y: auto;
     position: relative;
-}</style>
+}
+</style>
