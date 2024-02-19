@@ -1,28 +1,28 @@
 <template>
-     <div class="estilos">
-    <div class="menu">
-          <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
-      </div>
-      <menuLateral></menuLateral>
-        <div class="router">
-          <br><br><br><br>
-          <nav>
-            <router-link to="/projetos">Projetos</router-link> |
-            <router-link to="/sprints">Plano de ação</router-link> |
-            <router-link to="/painel">Painel Kanban</router-link> |
-        </nav>
-          <router-view />
-  
-      </div>
-            <FooterComponent></FooterComponent>
+    <div class="estilos">
+        <div class="menu">
+            <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
         </div>
-    
+        <!-- <menuLateral></menuLateral> -->
+        <div class="router">
+            <br><br><br><br>
+            <nav>
+                <router-link to="/projetos">Projetos</router-link> |
+                <router-link to="/sprints">Plano de ação</router-link> |
+                <router-link to="/painel">Painel Kanban</router-link> |
+            </nav>
+
+            <router-view />
+            <br><br><br><br>
+        </div>
+        <FooterComponent></FooterComponent>
+    </div>
 </template>
 
 <script>
 import FooterComponent from "@/components/footer/FooterComponent"
 import MenuComponent from "./components/menu/MenuComponent.vue";
-import menuLateral from './components/menuLateral/MenuLateral'
+// import menuLateral from './components/menuLateral/MenuLateral'
 
 export default {
     data() {
@@ -33,20 +33,20 @@ export default {
     },
 
     components: {
-    FooterComponent: FooterComponent,
-    MenuComponent: MenuComponent,
-    menuLateral: menuLateral
-}
+        FooterComponent: FooterComponent,
+        MenuComponent: MenuComponent,
+        // menuLateral: menuLateral
+    }
 }
 </script>
 
 
 <style>
 .menu {
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  margin-top: 0;
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    margin-top: 0;
 }
 
 
@@ -188,11 +188,9 @@ thead {
     width: 0px;
 }
 
-
-
-.router {
-  margin-left: 300px;
-  margin-bottom: 100px;
-  margin-top: 0px;
-}
+/* .router {
+    margin-left: 300px;
+    margin-bottom: 100px;
+    margin-top: 0px;
+} */
 </style>

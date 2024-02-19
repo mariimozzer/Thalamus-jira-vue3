@@ -6,7 +6,6 @@
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">{{ modoCadastro ? "Cadastrar" : "Editar" }} Projeto </h3>
                     <button type="button" class="btn-close" aria-label="Close" @click="cancelar"></button>
-
                 </div>
                 <hr>
                 <br>
@@ -44,19 +43,6 @@
                 <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2"
                     @click="adicionarProjeto">Salvar</button>
             </div>
-            <!-- <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="tempo">Tempo da Sprint</label>
-                    <input id="tempo" type="number" v-model="projeto" class="form-control">
-                    <select type="combo" class="form-control" for="tempo">
-                                <option>Selecione uma opção</option>
-                                <option value="dias">Dia(s)</option>
-                                <option value="semanas">Semana(s)</option>
-                                <option value="meses">Mes(es)</option>
-                            </select>
-                </div>
-    
-            </div> -->
 
         </div>
     </div>
@@ -75,7 +61,8 @@ export default {
 
             projeto: new Projeto(),
             modoCadastro: true,
-            setores: []
+            setores: [],
+            dtInicio: null
 
         }
     },
@@ -95,6 +82,10 @@ export default {
     },
 
     methods: {
+        adicionarProjeto() {
+
+        },
+        
         cancelar() {
             this.$router.push({ name: 'ControleDeProjetos' })
         },
@@ -108,6 +99,7 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+            this.dataAtual()
         },
 
         dataAtual() {

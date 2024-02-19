@@ -67,7 +67,7 @@
                             </strong>
                         </div>
 
-                        <div style="width: 45%; padding-left: 0.5rem; padding-right: 1rem">
+                        <div style="width: 40%; padding-left: 0.5rem; padding-right: 1rem">
                             <strong>
                                 <input type="text" style="width:100%; outline: none; text-align: center;" value="Descrição">
                             </strong>
@@ -82,7 +82,7 @@
                             </strong>
                         </div>
 
-                        <div style="width: 10%;">
+                        <div style="width: 12%; margin-inline: ">
                             <strong>
                                 <select style="width: 100%; outline: none; text-align: center;">
                                     <option selected>Responsável</option>
@@ -90,21 +90,21 @@
                             </strong>
                         </div>
 
-                        <div style="width:10%;">
+                        <div style="width:10%;margin-inline: 0.5rem;">
                             <strong>
-                                <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
+                                <input style="width: 100%; outline: none; text-align: center; width: 7rem;" type="text" class="data"
                                     value="Inicio Previsto">
                             </strong>
                         </div>
 
-                        <div style="width: 10%;">
+                        <div style="width: 10%; margin-inline: 0.5rem;">
                             <strong>
-                                <input style="width: 100%; outline: none; text-align: center;" type="text" class="data"
+                                <input style="width: 100%; outline: none; text-align: center;width: 7rem;" type="text" class="data"
                                     value="Fim Previsto">
                             </strong>
                         </div>
 
-                        <div style="width: 10%; margin-right: 0.3rem; margin-left: 0.3rem;">
+                        <div style="width: 12%; margin-right: 0.3rem; margin-left: 0.3rem;">
                             <strong>
                                 <select style="width:100%; outline: none; text-align: center;">
                                     <option selected>Status</option>
@@ -126,7 +126,7 @@
                                     <label style="width: 100%">{{ element.codigo }}</label>
                                 </div>
 
-                                <div style="width: 45%; padding-left: 0.5rem; padding-right: 1rem">
+                                <div style="width: 40%; padding-left: 0.5rem; padding-right: 1rem">
                                     <input :disabled="desativarEdicao" type="text" v-model="element.descricao"
                                         style="width:100%; outline: none;">
                                 </div>
@@ -150,7 +150,7 @@
                                     </select>
                                 </div>
 
-                                <div style="width: 10%;">
+                                <div style="width: 12%; margin-inline;">
                                     <select v-model="element.responsavel"
                                         style="width: 100%; outline: none; text-align: center;">
                                         <option hidden>--</option>
@@ -163,17 +163,17 @@
                                     </select>
                                 </div>
 
-                                <div style="width:10%;">
-                                    <input style="width: 100%; outline: none; text-align: center;" type="date"
+                                <div style="width:10%; margin-inline: 0.5rem;">
+                                    <input style="width: 7rem; outline: none; text-align: center;" type="date"
                                         v-model="element.dtInicio">
                                 </div>
 
-                                <div style="width: 10%;">
-                                    <input style="width: 100%; outline: none; text-align: center;" type="date"
+                                <div style="width: 10%; margin-inline: 0.5rem;">
+                                    <input style="width: 7rem; outline: none; text-align: center;" type="date"
                                         v-model="element.dtFim">
                                 </div>
 
-                                <div style="width: 10%; margin-right: 0.3rem; margin-left: 0.3rem;">
+                                <div style="width: 12%; margin-right: 0.3rem; margin-left: 0.3rem;">
                                     <select style="width: 100%; outline: none; text-align: center;"
                                         @change="definirInicioFimReal(element.id, item.id, $event.target.value)"
                                         v-model="element.status">
@@ -342,8 +342,6 @@
         </div>
     </div>
     <!--END MODAL EDTIRAR-->
-
-    <br><br><br><br>
 </template>
 
 <script>
