@@ -23,8 +23,8 @@
                         <thead>
                             <tr>
                                 <th scope="col">Nome do Projeto </th>
-                                <th scope="col">Data Início</th>
-                                <th scope="col">Data Termino</th>
+                                <th scope="col">Data de Início</th>
+                                <th scope="col">Data de Termino</th>
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Beneficiário</th>
                                 <th scope="col"></th>
@@ -62,6 +62,14 @@
                                                     <button style="margin: 0.2rem;"
                                                         @click="modalEditarProjeto = true, this.idProjetoEditado = item.id">Editar
                                                         Projeto</button><br />
+                                                </v-list-item>
+                                                <v-list-item>
+                                                    <button style="margin: 0.2rem;"
+                                                        :disabled="item.dtTermino"
+                                                        :style="{ 'cursor': (item.dtTermino) ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
+                                                        @click="modalFinalizarProjeto = true, this.idProjetoEditado =
+                                                        item.id">
+                                                        Finalizar Projeto</button><br />
                                                 </v-list-item>
                                             </v-list>
                                         </v-menu>
@@ -134,7 +142,7 @@
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Editar Projeto </h3>
                     <button type="button" class="btn-close" aria-label="Close"
-                        @click="this.getProjetos,this.modalEditarProjeto = false"></button>
+                        @click="this.getProjetos, this.modalEditarProjeto = false"></button>
                 </div>
                 <hr>
                 <br>
@@ -180,6 +188,28 @@
         </div>
     </div>
     <!-- fim modal -->
+    <!-- MODAL INICIAR SPRINT-->
+    <div class="modal-mask" v-if="modalFinalizarProjeto" @click="fecharModalFora">
+        <div class="modal-container" style="height: min-content; width: 50rem;">
+            <div style="display: flex; justify-content: right;">
+                <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
+            </div>
+
+            <div style="width: 100%;">
+                <div>
+                    <label>Data de termino do projeto:</label>
+                    <input :class="{ shake: disabled }" v-model="dataTerminoProjeto" id="dataTermino"
+                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="button-default" @click="finalizarProjeto()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
+                        Finalizar Projeto</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--END MODAL SPRINT-->
 </template>
 
 
@@ -191,10 +221,12 @@ export default {
 
     data() {
         return {
+            dataTerminoProjeto: null,
             teste: null,
             projetos: [],
             modalNovoProjeto: false,
             modalEditarProjeto: false,
+            modalFinalizarProjeto: false,
             novoProjeto: {
                 "nome": "",
                 "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
@@ -202,6 +234,7 @@ export default {
                 "setor_id": "",
             },
             gerente: [],
+            disabled: false,
             setores: [],
             idProjetoEditado: null
         }
@@ -213,6 +246,25 @@ export default {
     },
 
     methods: {
+        finalizarProjeto() {
+            if (this.dataTerminoProjeto == null) {
+                document.getElementById('dataTermino').style.border = '1px solid red';
+                this.disabled = true
+                setTimeout(() => {
+                    this.disabled = false
+                }, 1500)
+                return
+            }
+            axios.put(`http://192.168.0.6:8000/api/projeto/atualizar/${this.idProjetoEditado}`, {
+                dtTermino: this.dataTerminoProjeto,
+            })
+            this.modalFinalizarProjeto = false;
+            setTimeout(() => {
+                this.getProjetos();
+            }, 500)
+
+        },
+
         mostrarBotao(id, mostrar) {
             if (mostrar == true) {
                 document.getElementById('botaoEdicao' + id).style.visibility = ''
@@ -265,6 +317,7 @@ export default {
             if (event.target.classList.contains('modal-mask')) {
                 this.modalNovoProjeto = false;
                 this.modalEditarProjeto = false
+                this.modalFinalizarProjeto = false
                 return this.getProjetos()
             }
         },
@@ -305,4 +358,33 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+.shake {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+</style>
