@@ -1,5 +1,5 @@
 <template>
-    <div class="estilos">
+    <div class="estilos" style="background-color: #FAF9F6; height: 1090px;">
         <div class="menu">
             <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
         </div>
@@ -7,12 +7,12 @@
         <div class="router">
             <br><br><br><br>
             <nav>
-                <router-link to="/projetos">Projetos</router-link> |
+                <router-link to="/">Projetos</router-link> |
                 <router-link to="/sprints">Plano de ação</router-link> |
                 <router-link to="/painel">Painel Kanban</router-link> |
             </nav>
-
             <router-view />
+
             <br><br><br><br>
         </div>
         <FooterComponent></FooterComponent>
@@ -193,4 +193,5 @@ thead {
     margin-bottom: 100px;
     margin-top: 0px;
 } */
+
 </style>

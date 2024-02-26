@@ -85,7 +85,8 @@ const draggableVueComponent = defineComponent({
 
   data() {
     return {
-      error: false
+      error: false,
+      teste: 'nada'
     };
   },
 
@@ -234,6 +235,7 @@ const draggableVueComponent = defineComponent({
     onDragStart(evt) {
       this.context = this.getUnderlyingVm(evt.item);
       evt.item._underlying_vm_ = this.clone(this.context.element);
+      // sessionStorage.setItem('tarefaMovida', JSON.stringify(this.context.element));      
       draggingElement = evt.item;
     },
 
@@ -242,8 +244,10 @@ const draggableVueComponent = defineComponent({
       if (element === undefined) {
         return;
       }
+      sessionStorage.setItem('tarefaMovida', JSON.stringify(element));
       removeNode(evt.item);
       const newIndex = this.getVmIndexFromDomIndex(evt.newIndex);
+
       // @ts-ignore
       this.spliceList(newIndex, 0, element);
       const added = { element, newIndex };
@@ -285,6 +289,7 @@ const draggableVueComponent = defineComponent({
         currentDomIndex
       );
       const draggedInList = domChildren.indexOf(draggingElement) !== -1;
+
       return draggedInList || !evt.willInsertAfter
         ? currentIndex
         : currentIndex + 1;
@@ -298,21 +303,30 @@ const draggableVueComponent = defineComponent({
 
       const relatedContext = this.getRelatedContextFromMoveEvent(evt);
       const futureIndex = this.computeFutureIndex(relatedContext, evt);
+      // Adicionando a informação sobre a array de destino ao contexto
       const draggedContext = {
         ...this.context,
-        futureIndex
+        futureIndex,
+        relatedContext
       };
+
+
       const sendEvent = {
         ...evt,
         relatedContext,
         draggedContext
       };
+
       return move(sendEvent, originalEvent);
     },
+    // .__draggable_context.element
 
     onDragEnd() {
+      // sessionStorage.setItem('tarefaMovida', JSON.stringify(draggingElement.__draggable_context.element));      
+
       draggingElement = null;
-    }
+    },
+
   }
 });
 

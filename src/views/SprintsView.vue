@@ -1,11 +1,11 @@
 <template>
-    <div style="width: 100%; padding: 1rem; height: 100%;" class="container">
+    <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
-        <div v-for="item in sprints" :key="item" class="divPaiTabela">
+        <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">
                     <div style="width: 20%;">
-                        <button @click="ocultarPlano" v-if="item.id == 0 && sprints.length > 1">
+                        <button @click="ocultarPlano" v-if="item.nome == 'Plano de ação'">
                             <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
                         </button>
                         <h5>
@@ -13,13 +13,30 @@
                         </h5>
                     </div>
                     <div style="width: 60%; text-align: center;">
-                        <h2><input type="text" v-model="item.nome"
+                        <h2><input type="text" v-model="item.nome" @change="editarSprint('nome', item.id, item.nome)"
+                                :disabled="item.nome == 'Plano de ação'"
                                 style="width: max-content; margin-left: 0.5rem; text-align: center;">
                         </h2>
                     </div>
-                    <div style="width: 20%; text-align: right; justify-items: right;">
-                        <span style="margin-right: 1rem;">{{ item.dtTermino }}</span>
-                        <v-menu v-if="item.id != 0">
+
+                    <div style="width: 20%; display: flex; text-align: right; justify-content: right;" v-if="index !== 0">
+                        <div style="text-align: center;" v-if="item.dtTermino !== null">
+                            <strong style="margin-right: 1rem;" v-if="item.dtInicio !== null && item.dtTermino !== null">
+                                {{ abreviarMes(item.dtInicio) }} <i :id="item.id" style="font-size: 20px;"
+                                    class="bi bi-dash"></i> {{
+                                        abreviarMes(item.dtTermino) }}
+                            </strong>
+                            <div v-if="item.dtInicio == null && item.dtTermino !== null"
+                                style="border: 2px rgb(21, 218, 21) solid; margin: 0.5rem; border-radius: 10px;">
+                                <strong>
+                                    Sprint Finalizada <i style=" color: rgb(21, 218, 21); font-size: 22px;"
+                                        class="bi bi-bookmark-check-fill"></i>
+                                    {{ abreviarMes(item.dtTermino) }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <v-menu>
                             <template v-slot:activator="{ props }">
                                 <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
                                     v-bind="props"></v-btn>
@@ -27,8 +44,10 @@
 
                             <v-list>
                                 <v-list-item>
-                                    <button style="margin: 0.2rem;" @click="abrirModalIniciarSprint(item.id)">{{
-                                        item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
+                                    <button style="margin: 0.2rem;" @click="abrirModalIniciarSprint(item.id)"
+                                        :disabled="item.dtInicio == null && item.dtTermino !== null"
+                                        :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null) ? 'grey' : 'black' }">{{
+                                            item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
                                     </button><br />
                                     <v-menu>
                                         <template v-slot:activator="{ props }">
@@ -57,7 +76,7 @@
                         </v-menu>
                     </div>
                 </div>
-                <div :id="item.id" style="width: 100%; display: flex; flex-flow: column; padding-right: 0.5rem;">
+                <div :id="item.nome" style="width: 100%; display: flex; flex-flow: column; padding-right: 0.5rem;">
                     <div
                         style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
 
@@ -67,7 +86,7 @@
                             </strong>
                         </div>
 
-                        <div style="width: 40%; padding-left: 0.5rem; padding-right: 1rem">
+                        <div style="width: 30%; padding-left: 0.5rem; padding-right: 1rem">
                             <strong>
                                 <input type="text" style="width:100%; outline: none; text-align: center;" value="Descrição">
                             </strong>
@@ -76,15 +95,16 @@
                         <div style="width: 3rem; text-align: center;">
                             <strong>
                                 <select
-                                    style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;">
+                                    style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
+                                    disabled>
                                     <option selected>H.P.</option>
                                 </select>
                             </strong>
                         </div>
 
-                        <div style="width: 12%; margin-inline: ">
+                        <div style="width: 15%; margin-inline: ">
                             <strong>
-                                <select style="width: 100%; outline: none; text-align: center;">
+                                <select style="width: 100%; outline: none; text-align: left; margin-left: 1rem;" disabled>
                                     <option selected>Responsável</option>
                                 </select>
                             </strong>
@@ -92,21 +112,21 @@
 
                         <div style="width:10%;margin-inline: 0.5rem;">
                             <strong>
-                                <input style="width: 100%; outline: none; text-align: center; width: 7rem;" type="text" class="data"
-                                    value="Inicio Previsto">
+                                <input style="width: 100%; outline: none; text-align: center; width: 7rem;" type="text"
+                                    class="data" value="Inicio Previsto">
                             </strong>
                         </div>
 
                         <div style="width: 10%; margin-inline: 0.5rem;">
                             <strong>
-                                <input style="width: 100%; outline: none; text-align: center;width: 7rem;" type="text" class="data"
-                                    value="Fim Previsto">
+                                <input style="width: 100%; outline: none; text-align: center;width: 7rem;" type="text"
+                                    class="data" value="Fim Previsto">
                             </strong>
                         </div>
 
-                        <div style="width: 12%; margin-right: 0.3rem; margin-left: 0.3rem;">
+                        <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
                             <strong>
-                                <select style="width:100%; outline: none; text-align: center;">
+                                <select style="width:100%; outline: none; text-align: center;" disabled>
                                     <option selected>Status</option>
                                 </select>
                             </strong>
@@ -126,13 +146,13 @@
                                     <label style="width: 100%">{{ element.codigo }}</label>
                                 </div>
 
-                                <div style="width: 40%; padding-left: 0.5rem; padding-right: 1rem">
+                                <div style="width: 30%; padding-left: 0.5rem; padding-right: 1rem">
                                     <input :disabled="desativarEdicao" type="text" v-model="element.descricao"
                                         style="width:100%; outline: none;">
                                 </div>
 
                                 <div style="width: 3rem; text-align: center;">
-                                    <select v-model="element.HP"
+                                    <select v-model="element.HP" @change="editarBacklog('HP', element.id, element.HP)"
                                         style="width: 5rem%; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
                                         <option hidden>0</option>
                                         <option>1</option>
@@ -150,32 +170,31 @@
                                     </select>
                                 </div>
 
-                                <div style="width: 12%; margin-inline;">
-                                    <select v-model="element.responsavel"
-                                        style="width: 100%; outline: none; text-align: center;">
-                                        <option hidden>--</option>
-                                        <option>Darley Dias</option>
-                                        <option>Mariana Mozzer</option>
-                                        <option>Lucas Lima</option>
-                                        <option>Natalie Costa</option>
-                                        <option>Artur Wilson</option>
-                                        <option>Raul Wilson</option>
+                                <div style="width: 15%; margin-inline;">
+                                    <select v-model="element.responsavel_id" class="form-select"
+                                        @change="editarBacklog('responsavel_id', element.id, element.responsavel_id)"
+                                        style="width: 100%; outline: none; text-align: left; padding: 0.5rem; border: none;">
+                                        <option v-for=" item  in  gerente " :key="item.id" :value="item.id">
+                                            {{ nomeEsobrenome(item.nomeCompleto) }}
+                                        </option>
                                     </select>
                                 </div>
 
                                 <div style="width:10%; margin-inline: 0.5rem;">
                                     <input style="width: 7rem; outline: none; text-align: center;" type="date"
+                                        @change="editarBacklog('dtInicio', element.id, element.dtInicio)"
                                         v-model="element.dtInicio">
                                 </div>
 
                                 <div style="width: 10%; margin-inline: 0.5rem;">
                                     <input style="width: 7rem; outline: none; text-align: center;" type="date"
+                                        :min="element.dtInicio" @change="editarBacklog('dtFim', element.id, element.dtFim)"
                                         v-model="element.dtFim">
                                 </div>
 
-                                <div style="width: 12%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                                    <select style="width: 100%; outline: none; text-align: center;"
-                                        @change="definirInicioFimReal(element.id, item.id, $event.target.value)"
+                                <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
+                                    <select style="width: 100%; outline: none; text-align: center; border: none;"
+                                        class="form-select" @change="editarBacklog('status', element.id, element.status)"
                                         v-model="element.status">
                                         <option>Pendente</option>
                                         <option>Em andamento</option>
@@ -186,14 +205,14 @@
                                 <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + element.id">
                                     <v-menu>
                                         <template v-slot:activator="{ props }">
-                                            <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
-                                                v-bind="props"></v-btn>
+                                            <v-btn style="width: 2rem; height: 2rem; border: 1px solid black;"
+                                                icon="mdi-dots-horizontal" v-bind="props"></v-btn>
                                         </template>
 
                                         <v-list>
                                             <v-list-item>
                                                 <button style="margin: 0.2rem;"
-                                                    @click="editarBacklog(element.id, item.id, false)">Editar
+                                                    @click="abrirModalEditarBacklog(element.id, item.id, false)">Editar
                                                     Tarefa</button><br />
                                                 <v-menu>
                                                     <template v-slot:activator="{ props }">
@@ -206,7 +225,7 @@
                                                             <div>
                                                                 <h4>Tem certeza? Esta ação é Irreversível!</h4>
                                                                 <div style="display: flex; width: 100%;">
-                                                                    <Button @click="apagarBacklog(element.id, item.id)"
+                                                                    <Button @click="apagarBacklog(element.id)"
                                                                         style="border: 1px solid black; width: 50%; background-color: red; color: white;">Excluir</Button>
                                                                     <button
                                                                         style="border: 1px solid black; width: 50%; margin-left: 0.5rem; background-color: green; color: white;">Cancelar</button>
@@ -223,11 +242,10 @@
                             </div>
                         </template>
                     </draggable>
-
                     <div style="display: flex; padding-left: 0.2rem; border-radius: 5px; width: 100%;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
                             <input style="width: 5rem;" type="text" disabled
-                                :placeholder="'Tarefa - ' + (this.sprints[0].ultimoBacklog + 1)">
+                                :placeholder="'Tarefa - ' + (this.sprints.map((item) => item.backlogs).flat().length + 1)">
                         </div>
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
@@ -250,11 +268,7 @@
                 <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
             </div>
         </div>
-
-
     </div>
-
-
     <!-- MODAL INICIAR SPRINT-->
     <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
@@ -264,16 +278,10 @@
 
             <div style="width: 100%;">
                 <div>
-                    <label>Data de Entrega</label>
-                    <input :class="{ shake: disabled }" v-model="dataTermino" id="dataTermino" class="form-control"
-                        type="date">
+                    <label>Data prevista de termino:</label>
+                    <input :class="{ shake: disabled }" v-model="dataTerminoSprint" id="dataTermino"
+                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
                 </div>
-
-                <!-- <div style="margin-top: 1rem;">
-                    <label>Objetivo</label>
-                    <textarea class="form-control"></textarea>
-                </div> -->
-
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="iniciarSprint()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
                         Iniciar Sprint</button>
@@ -293,21 +301,20 @@
                     <h2>
                         {{ backlogeditado.codigo }}
                     </h2>
-                    <textarea class="form-control" v-model="backlogeditado.descricao" style="width: 30rem;"></textarea>
+                    <textarea class="form-control" v-model="backlogeditado.descricao" style="width: 25rem;"
+                        @focusout="editarBacklog('descricao', backlogeditado.id, backlogeditado.descricao)"></textarea>
                 </div>
                 <div style="width: min-content;margin-top: 1rem;">
                     <h4>
                         Responsável:
                     </h4>
-                    <select v-model="backlogeditado.responsavel"
-                        style="width: max-content; text-align: center; border: 1px solid; border-radius: 5px; font-size: larger;">
-                        <option hidden>--</option>
-                        <option>Darley Dias</option>
-                        <option>Mariana Mozzer</option>
-                        <option>Lucas Lima</option>
-                        <option>Natalie Costa</option>
-                        <option>Artur Wilson</option>
-                        <option>Raul Wilson</option>
+
+                    <select v-model="backlogeditado.responsavel_id" class="form-select"
+                        @change="editarBacklog('responsavel_id', backlogeditado.id, backlogeditado.responsavel_id)"
+                        style="width: 20rem; text-align: left; border: 1px solid; border-radius: 5px; font-size: larger; ">
+                        <option v-for=" item  in  gerente " :key="item.id" :value="item.id">
+                            {{ item.nomeCompleto }}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -315,11 +322,13 @@
             <div style="display: flex; margin-top: 1rem;">
                 <div>
                     <label>Inicio Previsto:</label>
-                    <input v-model="backlogeditado.dtInicio" class="form-control" type="date" style="width: min-content;">
+                    <input v-model="backlogeditado.dtInicio" class="form-control" type="date" style="width: min-content;"
+                        @change="editarBacklog('dtInicio', backlogeditado.id, backlogeditado.dtInicio)">
                 </div>
                 <div style="margin-left: 1rem;">
                     <label>Fim Previsto:</label>
-                    <input v-model="backlogeditado.dtFim" class="form-control" type="date" style="width: min-content;">
+                    <input v-model="backlogeditado.dtFim" class="form-control" type="date" style="width: min-content;"
+                        @change="editarBacklog('dtFim', backlogeditado.id, backlogeditado.dtFim)">
                 </div>
             </div>
 
@@ -327,16 +336,14 @@
                 <div>
                     <label>Inicio Real:</label>
                     <input v-model="backlogeditado.dtInicioReal" class="form-control" type="date"
+                        @change="editarBacklog('dtInicioReal', backlogeditado.id, backlogeditado.dtInicioReal)"
                         style="width: min-content;">
                 </div>
                 <div style="margin-left: 1rem;">
                     <label>Fim Real:</label>
-                    <input v-model="backlogeditado.dtFimReal" class="form-control" type="date" style="width: min-content;">
+                    <input v-model="backlogeditado.dtFimReal" class="form-control" type="date" style="width: min-content;"
+                        @change="editarBacklog('dtFimReal', backlogeditado.id, backlogeditado.dtFimReal)">
                 </div>
-            </div>
-
-            <div style="margin-top: 1rem;">
-                <button class="button-default" @click="salvarBacklogEditado(backlogeditado.id)">Salvar</button>
             </div>
 
         </div>
@@ -346,6 +353,7 @@
 
 <script>
 import draggable from "@/vuedraggableVue";
+import axios from "axios";
 
 export default {
     components: {
@@ -356,20 +364,15 @@ export default {
 
     data() {
         return {
+            backlogs: [],
+            novoElemento: '',
             disabled: false,
             showEditarBacklog: false,
             showIniciarSprint: false,
             showConfirmação: false,
-            teste: ".",
+            teste: "nada",
             desativarEdicao: true,
-            sprints: [{
-                id: 0,
-                nome: "Plano de ação",
-                backlogs: [],
-                ultimoBacklog: 0,
-                dtTermino: null
-            }
-            ],
+            sprints: null,
             novaSprint: {
                 id: null,
                 nome: "",
@@ -377,22 +380,120 @@ export default {
                 dtTermino: null
             },
             idSprint: null,
-            dataTermino: null,
+            dataTerminoSprint: null,
             mostrarPlano: true,
             backlogeditado: null,
             idSprintBacklogEditado: null,
+            idProjeto: sessionStorage.getItem('idProjeto'),
+            gerente: [],
         }
     },
-    mounted() {
-        this.getBacklogs()
-    },
+
     watch: {
         sprints: {
-            handler: 'atualizarLocalStore',  // Chama a função atualizarLocalStore quando sprints é alterado
+            handler: 'moverBacklog',
             deep: true,  // Observa mudanças profundas no array (necessário se houver alterações nos elementos do array)
         },
     },
+
+    mounted() {
+        this.getBacklogs(),
+            this.getGerenteseSetor()
+    },
+
     methods: {
+        abreviarMes(dataString) {
+            if (dataString == null) {
+                return null
+            }
+            const partes = dataString.split('-');
+
+            if (partes.length !== 3) {
+                console.error('Formato de data inválido. Use o formato AAAA-MM-DD');
+                return null;
+            }
+
+            // const ano = partes[0];
+            const mesNumero = parseInt(partes[1], 10);
+            const dia = partes[2];
+
+            const mesesAbreviados = [
+                'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+            ];
+
+            if (mesNumero < 1 || mesNumero > 12) {
+                return 'Número do mês inválido.'
+            }
+
+            const mesAbreviado = mesesAbreviados[mesNumero - 1];
+            // ${ano}
+            return `${dia}/${mesAbreviado}.`;
+
+        },
+
+        moverBacklog() {
+            if (this.sprints !== null) {
+                var data = this.sprints;
+                var itemProcurado = JSON.parse(sessionStorage.getItem('tarefaMovida'));
+                if (itemProcurado != null) {
+                    var idBacklog = itemProcurado.id;
+                }
+
+                for (let i = 0; i < data.length; i++) {
+                    const projeto = data[i];
+                    const backlogs = projeto.backlogs;
+
+                    for (let j = 0; j < backlogs.length; j++) {
+                        const backlog = backlogs[j];
+                        if (JSON.stringify(backlog) === JSON.stringify(itemProcurado)) {
+                            var idSprint = this.sprints[i].id
+                        }
+                    }
+                }
+
+                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    sprint_id: idSprint,
+                })
+                    .then(() => {
+                        this.getBacklogs
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+
+        },
+
+        nomeEsobrenome(nome) {
+            const nomeESobrenome = nome.split(" ");
+
+
+            if (nomeESobrenome.length >= 2) {
+                const primeiroNome = nomeESobrenome[0];
+                const segundoNome = nomeESobrenome[1];
+
+                if (segundoNome.length <= 2) {
+                    return `${primeiroNome} ${segundoNome} ${nomeESobrenome[2] || ''}`;
+                } else {
+                    return `${primeiroNome} ${segundoNome}`;
+                }
+            } else {
+                return nome;
+            }
+        },
+
+        getGerenteseSetor() {
+            axios.get('http://192.168.0.5:8000/api/pessoa/', {
+            })
+                .then((response) => {
+                    this.gerente = response.data
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
         mostrarBotao(id, mostrar) {
             if (mostrar == true) {
                 document.getElementById('botaoEdicao' + id).style.visibility = ''
@@ -403,24 +504,20 @@ export default {
         },
 
         getBacklogs() {
-            if (localStorage.getItem('sprints') == null) {
-                var localData = JSON.stringify(this.sprints);
-                localStorage.setItem('sprints', localData)
-            } else {
-                this.sprints = JSON.parse(localStorage.getItem('sprints'))
-            }
 
+            axios.get(`http://192.168.0.6:8000/api/sprint/buscar/${this.idProjeto}`, {
+            })
+                .then((response) => {
+                    this.sprints = response.data
+                    this.separarBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
-        atualizarLocalStore() {
-            localStorage.clear()
-            var localData = JSON.stringify(this.sprints)
-            localStorage.setItem('sprints', localData)
-        },
+        definirInicioFimReal(idBacklog, status) {
 
-        definirInicioFimReal(idBacklog, idSprint, status) {
-            let sprint = this.sprints.find(sprint => sprint.id === idSprint);
-            let backlog = sprint.backlogs.find(backlog => backlog.id === idBacklog);
             let data = new Date()
             let ano = data.getFullYear();
             let mes = (data.getMonth() + 1);
@@ -433,76 +530,86 @@ export default {
             }
             data = ano + '-' + mes + '-' + dia
 
-            if (status == "Em andamento") {
-                backlog.dtInicioReal = data
-            } else {
-                if (status == "Concluído") {
-                    backlog.dtFimReal = data
-                } else {
-                    if (status == "Pendente") {
-                        backlog.dtInicioReal = '0000-00-00'
-                    }
-                }
+            if (status == 'Em andamento') {
+
+                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    dtInicioReal: data,
+                })
+                    .then(() => {
+                        return this.getBacklogs()
+                    })
+
+            } if (status == 'Concluído') {
+
+                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    dtFimReal: data,
+                })
+                    .then(() => {
+                        return this.getBacklogs()
+                    })
+
+            } if (status == 'Pendente') {
+
+                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    dtInicioReal: null,
+                    dtFimReal: null,
+                })
+                    .then(() => {
+                        return this.getBacklogs()
+                    })
+
             }
 
-            this.atualizarLocalStore()
+
         },
 
-        salvarBacklogEditado(idBacklogEditado) {
-            let sprint = this.sprints.find(sprint => sprint.id === this.idSprintBacklogEditado);
-
-            sprint.backlogs = sprint.backlogs.filter(item => item.id !== idBacklogEditado);
-            sprint.backlogs.push(this.backlogeditado);
-            sprint.backlogs.sort((a, b) => a.id - b.id);
-            this.showEditarBacklog = false
-
-            this.atualizarLocalStore()
-        },
-
-        editarBacklog(idBacklog, idSprint) {
+        abrirModalEditarBacklog(idBacklog, idSprint) {
             this.showEditarBacklog = true;
 
             let sprint = this.sprints.find(sprint => sprint.id === idSprint);
 
             this.backlogeditado = sprint.backlogs.find(backlog => backlog.id === idBacklog);
-            this.idSprintBacklogEditado = sprint.id
+        },
 
-            this.atualizarLocalStore()
+        editarBacklog(itemAlterado, idBacklog, novoValor) {
+
+            axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                [itemAlterado]: novoValor,
+            })
+                .then(() => {
+                    if (itemAlterado == 'status') {
+                        return this.definirInicioFimReal(idBacklog, novoValor)
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        editarSprint(itemAlterado, idSprint, novoValor) {
+
+            axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${idSprint}`, {
+                [itemAlterado]: novoValor,
+            })
+                .then(() => {
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         ocultarPlano() {
             if (this.mostrarPlano == true) {
                 document.getElementById("botaoOcultar").className = "bi bi-eye";
-                document.getElementById(0).style.display = "none";
+                document.getElementById("Plano de ação").style.display = "none";
                 document.getElementById('pontos').style.display = "";
                 this.mostrarPlano = false
             } else {
                 document.getElementById("botaoOcultar").className = "bi bi-eye-slash";
-                document.getElementById(0).style.display = "";
+                document.getElementById("Plano de ação").style.display = "";
                 document.getElementById('pontos').style.display = "none";
                 this.mostrarPlano = true
             }
-        },
-
-        moverBacklog(idBacklog) {
-            if (this.sprints.length > 1) {
-                let backlog = this.sprints[0].backlogs.find(backlog => backlog.id === idBacklog);
-                this.sprints[1].backlogs.push(backlog);
-                this.sprints[0].backlogs = this.sprints[0].backlogs.filter(item => item.id !== idBacklog);
-                this.sprints[1].backlogs.sort((a, b) => a.id - b.id);
-            } else {
-                this.criarNovaSprint();
-                let backlog = this.sprints[0].backlogs.find(backlog => backlog.id === idBacklog);
-                this.sprints[1].backlogs.push(backlog);
-                this.sprints[0].backlogs = this.sprints[0].backlogs.filter(item => item.id !== idBacklog);
-                this.sprints[1].backlogs.sort((a, b) => a.id - b.id);
-
-                this.disabled = true
-                setTimeout(() => {
-                    this.disabled = false
-                }, 1500)
-            }
-            this.atualizarLocalStore()
         },
 
         somarHP(dados) {
@@ -539,11 +646,55 @@ export default {
 
         abrirModalIniciarSprint(id) {
             this.idSprint = id
-            this.showIniciarSprint = true;
+            let data = new Date()
+            let ano = data.getFullYear();
+            let mes = (data.getMonth() + 1);
+            if (mes < 10) {
+                mes = "0" + mes
+            }
+            let dia = data.getDate();
+            if (dia < 10) {
+                dia = "0" + dia
+            }
+            data = ano + '-' + mes + '-' + dia
+            this.teste = data
+
+            var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
+            if (sprint.dtTermino !== null) {
+
+                axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${this.idSprint}`, {
+                    dtInicio: null,
+                    dtTermino: data
+                })
+                    .then(() => {
+                        this.idSprint = null;
+                        this.getBacklogs();
+                        this.fecharModal()
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                this.showIniciarSprint = true;
+            }
+
         },
 
         iniciarSprint() {
-            if (this.dataTermino == null) {
+            let data = new Date()
+            let ano = data.getFullYear();
+            let mes = (data.getMonth() + 1);
+            if (mes < 10) {
+                mes = "0" + mes
+            }
+            let dia = data.getDate();
+            if (dia < 10) {
+                dia = "0" + dia
+            }
+            data = ano + '-' + mes + '-' + dia
+            this.teste = data
+
+            if (this.dataTerminoSprint == null) {
                 document.getElementById('dataTermino').style.border = '1px solid red';
                 this.disabled = true
                 setTimeout(() => {
@@ -551,82 +702,82 @@ export default {
                 }, 1500)
                 return
             }
-            const sprint = this.sprints.find(item => item.id == this.idSprint);
-            const dia = this.dataTermino.slice(8);
-            const mes = this.dataTermino.slice(5).slice(0, 2);
-            const ano = this.dataTermino.slice(0, 4);
 
-            sprint.dtTermino = `Fim previsto: ${dia}/${mes}/${ano}`
-            this.dataTermino = null;
-            this.idSprint = null;
-            this.fecharModal()
+            axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${this.idSprint}`, {
+                dtInicio: data,
+                dtTermino: this.dataTerminoSprint,
+            })
+                .then(() => {
+                    this.idSprint = null;
+                    this.getBacklogs();
+                    this.fecharModal()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
 
         },
 
         criarNovaSprint() {
-            if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
-                this.novaSprint.nome = 'Sprint - ' + (parseInt((this.sprints[1].nome.slice(8))) + 1);
-                this.novaSprint.id = (this.sprints[1].id) + 1;
-            } else {
-                this.novaSprint.nome = 'Sprint - 1';
-                this.novaSprint.id = 1
-            }
-            this.sprints.push(this.novaSprint);
-            this.novaSprint = {
-                id: 0,
-                nome: "",
-                backlogs: [],
-                dtTermino: null
-            },
-                this.sprints.sort((a, b) => {
-                    if (a.nome === "Plano de ação") {
-                        return -1; // Move "Plano de ação" para o início
-                    } else if (b.nome === "Plano de ação") {
-                        return 1; // Move "Plano de ação" para o início
-                    } else {
-                        return b.id - a.id; // Ordena os demais elementos pelo id de forma descendente
-                    }
-                });
 
-            this.atualizarLocalStore()
+            var nomeSprint = "Sprint - 1";
+
+            if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
+                nomeSprint = 'Sprint - ' + (this.sprints.length);
+            } else {
+                nomeSprint = 'Sprint - 1';
+            }
+
+            axios.post(`http://192.168.0.6:8000/api/sprint/cadastrar`, {
+                nome: nomeSprint,
+                projeto_id: this.idProjeto
+            })
+                .then(() => {
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         criarBacklog(id, descricao) {
-            let sprint = this.sprints.find(sprint => sprint.id === id);
-            let novoBacklog = {
-                id: "",
-                codigo: "",
-                descricao: "",
-                HP: 0,
-                responsavel: "--",
-                status: "Pendente",
-                dtInicio: "",
-                dtFim: "",
-                dtInicioReal: "0000-00-00",
-                dtFimReal: "0000-00-00",
-            };
 
-            novoBacklog.codigo = 'Tarefa - ' + (this.sprints[0].ultimoBacklog + 1);
-            novoBacklog.id = this.sprints[0].ultimoBacklog + 1
-            novoBacklog.descricao = descricao;
-            sprint.backlogs.push(novoBacklog);
-
-            this.sprints[0].ultimoBacklog = this.sprints[0].ultimoBacklog + 1
-
-            this.atualizarLocalStore()
+            axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
+                sprint_id: id,
+                codigo: 'Tarefa - ' + (this.sprints.map((item) => item.backlogs).flat().length + 1),
+                descricao: descricao
+            })
+                .then(() => {
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
-        apagarBacklog(idBacklog, idSprint) {
-            let sprint = this.sprints.find(sprint => sprint.id === idSprint);
+        apagarBacklog(idBacklog) {
 
-            sprint.backlogs = sprint.backlogs.filter(item => item.id !== idBacklog);
-
-            this.atualizarLocalStore()
+            axios.put(`http://192.168.0.6:8000/api/sprintTarefa/excluir/${idBacklog}`, {
+                usuario_id: 1
+            })
+                .then(() => {
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         apagarSprint(id) {
-            this.sprints = this.sprints.filter(item => item.id !== id);
-            this.atualizarLocalStore()
+            axios.put(`http://192.168.0.6:8000/api/sprint/excluir/${id}`, {
+                usuario_id: 1
+            })
+                .then(() => {
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
 
     }

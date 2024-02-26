@@ -1,6 +1,4 @@
 <template>
-
-
     <div>
 
         <div class="divFiltro">
@@ -52,7 +50,6 @@
                 </v-card>
             </v-menu>
         </div>
-
         <div style="display: flex; flex-flow: row; justify-content: center;">
             <div class="colunas">
                 <h3 style="text-align: center;">Pendente</h3>
@@ -153,15 +150,19 @@
             </div>
         </div>
     </div>
+    <br><br>
+
     <br><br><br><br><br>
 </template>
 <script>
 import draggableVue from "@/vuedraggableVue";
+import axios from "axios";
+
 
 export default {
     components: {
         draggableVue,
-        
+
     },
     data() {
         return {
@@ -169,14 +170,8 @@ export default {
             filtro: 'Responsável',
             valorFiltro: '',
             teste: null,
-            sprints: [{
-                id: 0,
-                nome: "Plano de ação",
-                backlogs: [],
-                ultimoBacklog: 0,
-                dtTermino: null
-            }
-            ],
+            sprints: null,
+            idProjeto: sessionStorage.getItem('idProjeto'),
 
             backlogsPendentes: [],
             backlogsEmAndamento: [],
@@ -189,10 +184,10 @@ export default {
     },
 
     watch: {
-        sprints: {
-            handler: 'atualizarStatus',  // Chama a função atualizarLocalStore quando sprints é alterado
-            deep: true,  // Observa mudanças profundas no array (necessário se houver alterações nos elementos do array)
-        },
+        // sprints: {
+        //     handler: 'atualizarStatus',  // Chama a função atualizarLocalStore quando sprints é alterado
+        //     deep: true,  // Observa mudanças profundas no array (necessário se houver alterações nos elementos do array)
+        // },
 
         backlogsPendentes: {
             handler: 'atualizarStatus',
@@ -202,6 +197,7 @@ export default {
             handler: 'atualizarStatus',
             deep: true
         },
+
         backlogsConcluidos: {
             handler: 'atualizarStatus',
             deep: true
@@ -210,16 +206,21 @@ export default {
 
     methods: {
         filtrarBacklogs(valor, item) {
-            this.getBacklogs();
-            if (valor != "" && item == 'Responsável') {
-                this.backlogsPendentes = this.backlogsPendentes.filter(item => item.responsavel == valor);
-                this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.responsavel == valor);
-                this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.responsavel == valor);
-            }
-            if (valor != "" && item == 'Sprint') {
-                this.backlogsPendentes = this.backlogsPendentes.filter(item => item.nomeSprint == valor);
-                this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.nomeSprint == valor);
-                this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.nomeSprint == valor);
+            this.backlogsPendentes = [];
+            this.backlogsEmAndamento = [];
+            this.backlogsPendentes = []
+            this.getBacklogs()
+            if (valor != "") {
+                if (item == 'Responsável') {
+                    this.backlogsPendentes = this.backlogsPendentes.filter(item => item.responsavel == valor);
+                    this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.responsavel == valor);
+                    this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.responsavel == valor);
+                }
+                if (item == 'Sprint') {
+                    this.backlogsPendentes = this.backlogsPendentes.filter(item => item.nomeSprint == valor);
+                    this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.nomeSprint == valor);
+                    this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.nomeSprint == valor);
+                }
             }
         },
 
@@ -248,49 +249,38 @@ export default {
         },
 
         getSprints() {
-            if (localStorage.getItem('sprints') == null) {
-                var localData = JSON.stringify(this.sprints);
-                localStorage.setItem('sprints', localData)
-            } else {
-                this.sprints = JSON.parse(localStorage.getItem('sprints'))
-            }
+            axios.get(`http://192.168.0.6:8000/api/sprint/buscar/${this.idProjeto}`, {
+            })
+                .then((response) => {
+                    this.sprints = response.data
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
 
-            this.getBacklogs()
         },
 
         getBacklogs() {
 
-            this.sprints.forEach((item) => {
-                item.backlogs.forEach((backlog) => {
-                    backlog.nomeSprint = item.nome;
-                });
-            });
-            this.backlogs = this.sprints.map((item) => item.backlogs);
-            this.backlogs = this.backlogs.flat();
-
-            const pendentes = [];
-            const emAndamento = [];
-            const concluidos = [];
+            this.backlogs = this.sprints.map((item) => item.backlogs).flat();
 
             this.backlogs.forEach((item) => {
                 switch (item.status) {
                     case 'Pendente':
-                        pendentes.push(item);
+                        this.backlogsPendentes.push(item);
                         break;
                     case 'Em andamento':
-                        emAndamento.push(item);
+                        this.backlogsEmAndamento.push(item);
                         break;
                     case 'Concluído':
-                        concluidos.push(item);
+                        this.backlogsConcluidos.push(item);
                         break;
                     default:
                         console.error(`Status desconhecido: ${item.status}`);
                 }
             });
 
-            this.backlogsPendentes = pendentes;
-            this.backlogsEmAndamento = emAndamento
-            this.backlogsConcluidos = concluidos;
         },
 
         atualizarStatus() {
@@ -306,59 +296,44 @@ export default {
                 dia = "0" + dia
             }
             data = ano + '-' + mes + '-' + dia
+            this.teste = data
 
-            this.backlogsPendentes.forEach((item) => item.status = "Pendente");
-            this.backlogsPendentes.forEach((item) => {
-                this.sprints.find(sprint => sprint.nome === item.nomeSprint).backlogs.find(backlog => backlog.id == item.id).status = "Pendente";
-            });
+            var backlog = JSON.parse(sessionStorage.getItem('tarefaMovida'));
 
-            this.backlogsEmAndamento.forEach((item) => item.status = "Em andamento");
-            this.backlogsEmAndamento.forEach((item) => {
-                this.sprints.find(sprint => sprint.nome === item.nomeSprint).backlogs.find(backlog => backlog.id == item.id).status = "Em andamento";
-                this.definirInicioFimReal(item.id, item.nomeSprint, "Em andamento")
-            });
+            if (backlog !== null) {
+                var idBacklog = backlog.id
 
-            this.backlogsConcluidos.forEach((item) => item.status = "Concluído");
-            this.backlogsConcluidos.forEach((item) => {
-                this.sprints.find(sprint => sprint.nome === item.nomeSprint).backlogs.find(backlog => backlog.id == item.id).status = "Concluído";
-                this.definirInicioFimReal(item.id, item.nomeSprint, "Concluído")
-            });
+                if (JSON.stringify(this.backlogsPendentes).includes(JSON.stringify(backlog))) {
 
-            this.atualizarLocalStore()
-        },
-
-        definirInicioFimReal(idBacklog, nomeSprint, status) {
-            let sprint = this.sprints.find(sprint => sprint.nome === nomeSprint);
-            let backlog = sprint.backlogs.find(backlog => backlog.id === idBacklog);
-            let data = new Date()
-            let ano = data.getFullYear();
-            let mes = (data.getMonth() + 1);
-            if (mes < 10) {
-                mes = "0" + mes
-            }
-            let dia = data.getDate();
-            if (dia < 10) {
-                dia = "0" + dia
-            }
-            data = ano + '-' + mes + '-' + dia
-
-            if (status == "Em andamento") {
-                backlog.dtInicioReal = data
-            } else {
-                if (status == "Concluído") {
-                    backlog.dtFimReal = data
+                    axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                        usuario_id: 1,
+                        status: 'Pendente',
+                        dtInicioReal: null,
+                        dtFimReal: null
+                    })
                 } else {
-                    if (status == "Pendente") {
-                        backlog.dtInicioReal = '0000-00-00'
+                    if (JSON.stringify(this.backlogsEmAndamento).includes(JSON.stringify(backlog))) {
+
+                        axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                            usuario_id: 1,
+                            status: 'Em andamento',
+                            dtInicioReal: data
+                        })
+                    } else {
+                        if (JSON.stringify(this.backlogsConcluidos).includes(JSON.stringify(backlog))) {
+
+                            axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                                usuario_id: 1,
+                                status: 'Concluído',
+                                dtFimReal: data
+                            })
+                        }
                     }
                 }
-            }
-        },
 
-        atualizarLocalStore() {
-            localStorage.clear()
-            var localData = JSON.stringify(this.sprints)
-            localStorage.setItem('sprints', localData)
+                sessionStorage.removeItem('tarefaMovida')
+
+            }
         },
 
     }
