@@ -18,7 +18,6 @@
             <br>
             <div>
                 <div>
-                    {{ teste }}
                     <table class="table">
                         <thead>
                             <tr>
@@ -64,11 +63,10 @@
                                                         Projeto</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        :disabled="item.dtTermino"
+                                                    <button style="margin: 0.2rem;" :disabled="item.dtTermino"
                                                         :style="{ 'cursor': (item.dtTermino) ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
                                                         @click="modalFinalizarProjeto = true, this.idProjetoEditado =
-                                                        item.id">
+                                                            item.id">
                                                         Finalizar Projeto</button><br />
                                                 </v-list-item>
                                             </v-list>
@@ -236,7 +234,7 @@ export default {
             gerente: [],
             disabled: false,
             setores: [],
-            idProjetoEditado: null
+            idProjetoEditado: null,
         }
     },
 
