@@ -225,7 +225,7 @@
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
                     <button type="button" class="btn-close" aria-label="Close"
-                        @click="this.getProjetos, this.modalEditarProjeto = false"></button>
+                        @click="this.getProjetos, this.modalCompartilharProjeto = false"></button>
                 </div>
                 <hr>
                 <br>
@@ -233,7 +233,6 @@
             <div style="width: 100%; display: flex; justify-content: center;">
 
                 <div style="border: 1px solid black; width: 80%; height: 15rem;">
-                    <Autocomplete @input="getItems" :results="gerente.nomeCompleto"></Autocomplete>
 
                 </div>
 
@@ -242,25 +241,32 @@
         </div>
     </div>
     <!--END MODAL SPRINT-->
+    <div class="card flex justify-content-center">
+                        <AutoComplete v-model="selectedCountry" optionLabel="name" :suggestions="filteredCountries"
+                            @complete="search" />
+                    </div>
 </template>
 
 
 <script>
 import axios from 'axios'
 
-import Autocomplete from 'vue3-autocomplete'
-// Optional: Import default CSS
-import 'vue3-autocomplete/dist/vue3-autocomplete.css'
+import { CountryService } from '../services/CountryService';
+import AutoComplete from 'primevue/autocomplete';
+
 
 export default {
     name: "ControleDeProjetos",
 
     components: {
-        Autocomplete
+        AutoComplete
     },
 
     data() {
         return {
+            countries: null,
+            selectedCountry: null,
+            filteredCountries: null,
 
             dataTerminoProjeto: null,
             teste: null,
@@ -284,6 +290,7 @@ export default {
     },
 
     mounted() {
+        CountryService.getCountries().then((data) => (this.countries = data));
         this.getProjetos(),
             this.getGerenteseSetor()
     },
@@ -294,6 +301,18 @@ export default {
     },
 
     methods: {
+        search(event) {
+            setTimeout(() => {
+                if (!event.query.trim().length) {
+                    this.filteredCountries = [...this.countries];
+                } else {
+                    this.filteredCountries = this.countries.filter((country) => {
+                        return country.name.toLowerCase().startsWith(event.query.toLowerCase());
+                    });
+                }
+            }, 250);
+        },
+
         finalizarProjeto() {
             if (this.dataTerminoProjeto == null) {
                 document.getElementById('dataTermino').style.border = '1px solid red';
