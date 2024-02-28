@@ -62,15 +62,20 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalEditarProjeto = true, this.idProjetoEditado = item.id">Editar
-                                                        Projeto</button><br />
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item">
+                                                        Compartilhar</button><br />
+                                                </v-list-item>
+                                                <v-list-item>
+                                                    <button style="margin: 0.2rem;"
+                                                        @click="modalEditarProjeto = true, this.projetoEditado = item">Editar
+                                                    </button><br />
                                                 </v-list-item>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;" :disabled="item.dtTermino"
                                                         :style="{ 'cursor': (item.dtTermino) ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
-                                                        @click="modalFinalizarProjeto = true, this.idProjetoEditado =
+                                                        @click="modalFinalizarProjeto = true, this.projetoEditado.id =
                                                             item.id">
-                                                        Finalizar Projeto</button><br />
+                                                        Finalizar</button><br />
                                                 </v-list-item>
                                             </v-list>
                                         </v-menu>
@@ -136,6 +141,8 @@
         </div>
     </div>
     <!-- fim modal novo projeto -->
+
+
     <!-- modal editar projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarProjeto" @click="fecharModalFora">
         <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
@@ -151,16 +158,14 @@
 
                     <div class="form-group" style="width: 30rem;">
                         <label for="nome">Nome do Projeto</label>
-                        <input id="nome" type="text"
-                            v-model="projetos.find(projeto => projeto.id === this.idProjetoEditado).nome"
-                            class="form-control" @focusout="editarProjeto('nome', $event.target.value)">
+                        <input id="nome" type="text" v-model="projetoEditado.nome" class="form-control"
+                            @focusout="editarProjeto('nome', projetoEditado.nome)">
                     </div>
 
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="data">Data de Início</label>
-                        <input id="data" type="date" ref="dtInicio"
-                            v-model="projetos.find(projeto => projeto.id === this.idProjetoEditado).dtInicio"
-                            class="form-control" @change="editarProjeto('dtInicio', $event.target.value)">
+                        <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio" class="form-control"
+                            @change="editarProjeto('dtInicio', $event.target.value)">
                     </div>
                 </div>
 
@@ -168,17 +173,16 @@
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
                         <select id="gerente" @change="editarProjeto('gerente_id', $event.target.value)"
-                            v-model="projetos.find(projeto => projeto.id === this.idProjetoEditado).gerente_id"
-                            class="form-select">
-                            <option v-for="item in gerente" :key="item.id" :value="item.id">
-                                {{ item.nomeCompleto }}
+                            v-model="projetoEditado.gerente_id" class="form-select">
+                            <option v-for="pessoa in gerente" :key="pessoa.nomeCompleto" :value="pessoa.id">
+                                {{ pessoa.nomeCompleto }}
                             </option>
                         </select>
                     </div>
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="setor">Setor Beneficiado</label>
-                        <select id="setor" v-model="projetos.find(projeto => projeto.id === this.idProjetoEditado).setor_id"
-                            class="form-select" @change="editarProjeto('setor_id', $event.target.value)">
+                        <select id="setor" v-model="projetoEditado.setor_id" class="form-select"
+                            @change="editarProjeto('setor_id', $event.target.value)">
                             <option v-for="setor in setores" :key="setor.id" :value="setor.id">
                                 {{ setor.nome }}
                             </option>
@@ -189,6 +193,7 @@
         </div>
     </div>
     <!-- fim modal -->
+
     <!-- MODAL Finalizar Projeto-->
     <div class="modal-mask" v-if="modalFinalizarProjeto" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
@@ -210,13 +215,15 @@
 
         </div>
     </div>
-    <!--END MODAL SPRINT-->
+    <!--END MODAL-->
+
+
     <!-- MODAL compartilhar Projeto-->
     <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora">
         <div class="modal-container" style="width: 50rem; margin-bottom: 5rem;">
             <div>
                 <div style="display: flex; justify-content: space-between">
-                    <h3 class="titulo">Compartilhar Projeto </h3>
+                    <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
                     <button type="button" class="btn-close" aria-label="Close"
                         @click="this.getProjetos, this.modalEditarProjeto = false"></button>
                 </div>
@@ -226,7 +233,7 @@
             <div style="width: 100%; display: flex; justify-content: center;">
 
                 <div style="border: 1px solid black; width: 80%; height: 15rem;">
-                    
+                    <Autocomplete @input="getItems" :results="gerente.nomeCompleto"></Autocomplete>
 
                 </div>
 
@@ -241,8 +248,16 @@
 <script>
 import axios from 'axios'
 
+import Autocomplete from 'vue3-autocomplete'
+// Optional: Import default CSS
+import 'vue3-autocomplete/dist/vue3-autocomplete.css'
+
 export default {
     name: "ControleDeProjetos",
+
+    components: {
+        Autocomplete
+    },
 
     data() {
         return {
@@ -250,7 +265,7 @@ export default {
             dataTerminoProjeto: null,
             teste: null,
             projetos: [],
-            modalCompartilharProjeto: true,
+            modalCompartilharProjeto: false,
             modalNovoProjeto: false,
             modalEditarProjeto: false,
             modalFinalizarProjeto: false,
@@ -263,7 +278,7 @@ export default {
             gerente: [],
             disabled: false,
             setores: [],
-            idProjetoEditado: null,
+            projetoEditado: null,
             userName: ''
         }
     },
@@ -273,7 +288,7 @@ export default {
             this.getGerenteseSetor()
     },
 
-    created(){
+    created() {
         this.userName = localStorage.getItem('userName')
 
     },
@@ -309,7 +324,7 @@ export default {
 
         editarProjeto(itemAlterado, novoValor) {
 
-            axios.put(`http://192.168.0.6:8000/api/projeto/atualizar/${this.idProjetoEditado}`, {
+            axios.put(`http://192.168.0.6:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
                 [itemAlterado]: novoValor,
             })
         },
@@ -357,7 +372,7 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.5:8000/api/pessoa/', {
+            axios.get('http://192.168.0.6:8000/api/pessoa/', {
             })
                 .then((response) => {
                     this.gerente = response.data
