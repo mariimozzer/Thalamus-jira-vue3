@@ -7,6 +7,7 @@ import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
 
+import LoginViewVue from '@/views/LoginView.vue'
 
 const routes = [
 
@@ -18,19 +19,20 @@ const routes = [
     props: { sharedVariable: 'backlogs' }
   },
 
-
   {
     path: '/',
+    name: 'login',
+    component: LoginViewVue,
+    meta: {
+      hideMenu: true
+    }
+  },
+
+  {
+    path: '/projetos',
     name: 'ControleDeProjetos',
     component: ControleDeProjetos
   },
-
-  // {
-  //   path: '/backlogs',
-  //   name: 'backlogs',
-  //   component: BacklogsView,
-  //   props: { sharedVariable: 'backlogs' }
-  // },
 
   {
     path: '/painel',

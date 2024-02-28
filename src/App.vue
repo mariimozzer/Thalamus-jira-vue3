@@ -1,12 +1,12 @@
 <template>
-    <div class="estilos" style="background-color: #FAF9F6; height: 1090px;">
+    <div class="estilos" style="background-color: #FAF9F6; height: 2000px;">
         <div class="menu">
             <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
         </div>
         <!-- <menuLateral></menuLateral> -->
         <div class="router">
             <br><br><br><br>
-            <nav>
+            <nav v-if="!$route.meta.hideMenu">
                 <router-link to="/">Projetos</router-link> |
                 <router-link to="/sprints">Plano de ação</router-link> |
                 <router-link to="/painel">Painel Kanban</router-link> |

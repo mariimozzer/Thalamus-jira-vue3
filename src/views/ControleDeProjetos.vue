@@ -1,8 +1,7 @@
 <template>
     <div style="padding: 1rem;">
         <div class="container"
-            style="border: 1px solid black; border-radius: 5px; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; border-radius: 5px; width: 100%; ">
-
+            style="border: 2px solid black; border-radius: 20px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
 
             <div class="col-sm-12" style="text-align: center;">
 
@@ -10,8 +9,9 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
                     </div>
-                    <button style="width: max-content; font-size: 25px;" @click="this.modalNovoProjeto = true">
-                        <i class="bi bi-plus-square"></i>
+                    <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
+                        class="botaoAdicionarSprint">
+                        <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
             </div>
@@ -41,10 +41,12 @@
                                 <td>{{ item.gerente }}</td>
                                 <td>{{ item.setor }}</td>
                                 <td>
-                                    <button style="font-size: larger;" @click="verBacklogs(item.id)">
+                                    <button style="font-size: larger;" @click="verBacklogs(item.id)"
+                                        class="botaoAdicionarSprint">
                                         <i class="fa-solid fa-list"></i>
                                     </button>
-                                    <button style="font-size: larger; margin-left: 1rem;" @click="verPainel(item.id)">
+                                    <button style="font-size: larger; margin-left: 1rem;" @click="verPainel(item.id)"
+                                        class="botaoAdicionarSprint">
                                         <i class="bi bi-kanban"></i>
                                     </button>
                                 </td>
@@ -53,7 +55,8 @@
                                         <v-menu>
                                             <template v-slot:activator="{ props }">
                                                 <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                    icon="mdi-dots-horizontal" v-bind="props"></v-btn>
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
                                             </template>
 
                                             <v-list>
@@ -186,7 +189,7 @@
         </div>
     </div>
     <!-- fim modal -->
-    <!-- MODAL INICIAR SPRINT-->
+    <!-- MODAL Finalizar Projeto-->
     <div class="modal-mask" v-if="modalFinalizarProjeto" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
             <div style="display: flex; justify-content: right;">
@@ -208,6 +211,30 @@
         </div>
     </div>
     <!--END MODAL SPRINT-->
+    <!-- MODAL compartilhar Projeto-->
+    <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora">
+        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem;">
+            <div>
+                <div style="display: flex; justify-content: space-between">
+                    <h3 class="titulo">Compartilhar Projeto </h3>
+                    <button type="button" class="btn-close" aria-label="Close"
+                        @click="this.getProjetos, this.modalEditarProjeto = false"></button>
+                </div>
+                <hr>
+                <br>
+            </div>
+            <div style="width: 100%; display: flex; justify-content: center;">
+
+                <div style="border: 1px solid black; width: 80%; height: 15rem;">
+                    
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!--END MODAL SPRINT-->
 </template>
 
 
@@ -219,9 +246,11 @@ export default {
 
     data() {
         return {
+
             dataTerminoProjeto: null,
             teste: null,
             projetos: [],
+            modalCompartilharProjeto: true,
             modalNovoProjeto: false,
             modalEditarProjeto: false,
             modalFinalizarProjeto: false,
@@ -235,12 +264,18 @@ export default {
             disabled: false,
             setores: [],
             idProjetoEditado: null,
+            userName: ''
         }
     },
 
     mounted() {
         this.getProjetos(),
             this.getGerenteseSetor()
+    },
+
+    created(){
+        this.userName = localStorage.getItem('userName')
+
     },
 
     methods: {
@@ -316,6 +351,7 @@ export default {
                 this.modalNovoProjeto = false;
                 this.modalEditarProjeto = false
                 this.modalFinalizarProjeto = false
+                this.modalCompartilharProjeto = false
                 return this.getProjetos()
             }
         },
@@ -384,5 +420,18 @@ export default {
     60% {
         transform: translate3d(4px, 0, 0);
     }
+}
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

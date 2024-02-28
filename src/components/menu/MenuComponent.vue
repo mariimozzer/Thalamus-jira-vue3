@@ -1,63 +1,71 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="color: white; ">
-        <a class="navbar-brand" href="/home">
-                                
-                                                <img src="https://roboflex.com.br/wp-content/uploads/2023/05/logotipo-roboflex.png" alt="Logo"
-                                                    style="width: 75%; ">
-                                            </a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto">
-                <button v-for="menu in menus" :key="menu.id" @mouseover="activateMenu(menu)" class="btn menu-block text-white mb-2 mr-2" :class="{ 'active': menu === activeMenu }" :style="{ backgroundColor: menu === activeMenu ? '' : '#343537' }">
-                                                        &nbsp; &nbsp;{{ menu.nome }}
-                                                    </button>
-            </ul>
-    
-            <div>
-    
-                <div class="navbar-nav ml-auto">
-                    <b-nav-item-dropdown right>
-                        <template v-slot:button-content><i style="color: white;" class="fa-solid fa-circle-user"></i>
-                                                                    <span class="username" style="color: white;">&nbsp; Olá, {{ userName }}</span>
+    <div class="menu " id="menu">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="color: white; ">
+            <a class="navbar-brand" @click="logo">
+                                    <img src="https://roboflex.com.br/wp-content/uploads/2023/05/logotipo-roboflex.png" alt="Logo"
+                                        style="width: 75%; ">
+                                </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <button v-for="menu in menus" :key="menu.id" @mouseover="activateMenu(menu)" class="btn menu-block text-white mb-2 mr-2" :class="{ 'active': menu === activeMenu }" :style="{ backgroundColor: menu === activeMenu ? '' : '#343537' }">
+                                            &nbsp; &nbsp;{{ menu.nome }}
+                                        </button>
+                </ul>
+                <div>
+                    <div class="navbar-nav ml-auto">
+                        <b-nav-item-dropdown right style="color: white;">
+                            <template v-slot:button-content><i style="color: white;" class="fa-solid fa-circle-user"></i>
+                                                    <span class="username" style="color: white;">&nbsp; Olá, {{ userName }}</span>
 </template>
-                            <b-dropdown-item style="color: rgb(255, 255, 255)" href="/alterarSenha">
-                            <span style="color: rgb(0, 0, 0);"><i class="fa-solid fa-user-gear"></i>&nbsp; Alterar Senha</span>
-                           </b-dropdown-item>
-                        <b-dropdown-item style="color: black" @click="logout">
-                            <span style="color: black;"><i class="fa-solid fa-right-from-bracket"></i>&nbsp; Logout</span>
-                           </b-dropdown-item>
-                         
-                       </b-nav-item-dropdown>
-                  </div>
+                            <b-dropdown-item style="color: black" @click="configuracoesUsuario()">
+                                <span style="color: black;"><i class="fa-solid fa-user-gear"></i>&nbsp; Configurações</span>
+                            </b-dropdown-item>
+                            <hr>
+                            <b-dropdown-item style="color: black" @click="alterarSenha">
+                                <span style="color: black;"><i class="fa-solid fa-user-gear"></i>&nbsp; Alterar
+                                    Senha</span>
+                            </b-dropdown-item>
+                            <hr>
+                            <b-dropdown-item style="color: black" @click="logout">
+                                <span style="color: black;"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;
+                                    Logout</span>
+                            </b-dropdown-item>
+                        </b-nav-item-dropdown>
+                    </div>
                 </div>
             </div>
         </nav>
 
     
-        <div v-if="activeMenu" class="menunovo" @mouseleave="closeContent">
-  <div v-for="submenu in activeMenu.filho" :key="submenu.id">
-    <h6 style="color: rgb(255, 255, 255)">{{ submenu.nome }}</h6>
-    <ul style="list-style-type: none;">
-      <li v-for="subsubmenu in submenu.filho" :key="subsubmenu.id">
-        <router-link
-          v-if="isSubSubMenuEnabled(subsubmenu)"
-          :to="`http://192.168.0.5:${subsubmenu.port}${subsubmenu.url}/`"
-          class="submenu-link"
-          :style="{ color: 'rgb(255, 255, 255)', cursor: 'pointer' }"
-        >
-          {{ subsubmenu.nome }}
-        </router-link>
+            <div v-if="activeMenu" class="menunovo" @mouseleave="closeContent">
+      <div v-for="submenu in activeMenu.filho" :key="submenu.id">
+        <h6 style="color: rgb(255, 255, 255)">{{ submenu.nome }}</h6>
+        <ul style="list-style-type: none;">
+    <li v-for="subsubmenu in submenu.filho" :key="subsubmenu.id">
+        <a v-if="isSubSubMenuEnabled(subsubmenu)" @click="handleSubSubMenuClick(subsubmenu)" class="submenu-link">
+            {{ subsubmenu.nome }}
+        </a>
         <span v-else class="submenu-disabled">
-          {{ subsubmenu.nome }}
+            {{ subsubmenu.nome }}
         </span>
-      </li>
-    </ul>
+    </li>
+</ul>
+      </div>
+    </div>
   </div>
-</div>
 </template>
   
 <script>
 import axios from 'axios'
 import Menu from '@/models/Menu.js'
+import { createToaster } from "@meforma/vue-toaster";
+import api from '../../services/api';
+
+
+const toaster = createToaster({
+    position: "top-right",
+    duration: "4000",
+});
 
 export default {
     name: "TesteMenuView",
@@ -73,8 +81,10 @@ export default {
             fabrica: '',
             gestao: '',
             id: '',
-            menuUrl: ''
-
+            menuUrl: '',
+            localData: [],
+            localSelecionado: null,
+            apiUrl: api.defaults.baseURL,
         }
     },
 
@@ -82,7 +92,7 @@ export default {
 
         getSubSubMenuUrl(subsubmenu) {
             if (subsubmenu.port) {
-                return `http://192.168.0.6:${subsubmenu.port}${subsubmenu.url}/`;
+                return `${subsubmenu.porta}/${subsubmenu.url}/`;
             } else {
                 console.error("Erro: A porta não está definida para o subsubmenu", subsubmenu);
                 return '#';
@@ -96,7 +106,7 @@ export default {
                 m.active = m === menu;
             });
 
-            const menuUrl = `http://192.168.0.6:8000/api/menu/usuario/${this.id}`;
+            const menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${this.id}`;
 
             try {
                 const menuResponse = await axios.get(menuUrl);
@@ -125,10 +135,15 @@ export default {
         },
 
         handleSubSubMenuClick(subsubmenu) {
-            if (!this.isSubSubMenuEnabled(subsubmenu)) {
-                alert("Você não tem permissão para acessar este submenu.");
-            }
-        },
+        if (this.isSubSubMenuEnabled(subsubmenu)) {
+            console.log(`Subsubmenu "${subsubmenu.nome}" clicked`);
+
+            const fullUrl = subsubmenu.url;
+            window.location.href = fullUrl; 
+        } else {
+            alert("Você não tem permissão para acessar este submenu.");
+        }
+    },
         getAllHome() {
             axios.get(`http://192.168.0.6:8000/api/menu/home`)
                 .then(response => {
@@ -169,19 +184,19 @@ export default {
 
 
         logout() {
-            const token = sessionStorage.getItem('token')
+            const token = localStorage.getItem('token')
             axios
-                .post('http://192.168.0.6:8000/api/logout', {}, {
+                .post('http://192.168.0.5:8000/api/logout', {}, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 })
                 .then(() => {
                     this.$router.push('/');
-                    sessionStorage.removeItem('token')
-                    sessionStorage.removeItem('userName')
-                    sessionStorage.removeItem('id')
-                    sessionStorage.removeItem('LoggedUser')
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('userName')
+                    localStorage.removeItem('id')
+                    localStorage.removeItem('LoggedUser')
 
 
                 })
@@ -193,13 +208,33 @@ export default {
             this.activeMenu = null;
         },
 
+        async buscaLocal() {
+            try {
+                const response = await fetch(`${this.apiUrl}/local`);
+                this.localData = await response.json();
+            } catch (error) {
+                console.error('Error ao buscar empresas', error);
+                toaster.show(`Erro buscar empresa`, { type: "error" });
+            }
+
+
+
+        },
+        configuracoesUsuario() {
+            this.$router.push({ name: "Configuracao" })
+        },
+
+        alterarSenha() {
+            this.$router.push({ name: "AlterarSenha" })
+        }
+
     },
 
     created() {
-        this.userName = sessionStorage.getItem('userName')
-        this.id = sessionStorage.getItem('id')
+        this.userName = localStorage.getItem('userName')
+        this.id = localStorage.getItem('id')
 
-        this.menuUrl = `http://192.168.0.6:8000/api/menu/usuario/${this.id}`
+        this.menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${this.id}`
 
         axios.get(this.menuUrl).then(menuResponse => {
             const menuOptions = menuResponse.data
@@ -218,8 +253,18 @@ export default {
 </script>
   
 <style>
+
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .submenu-link {
     text-decoration: none;
+    color: white;
+    cursor: pointer;
 }
 
 .submenu-link:hover {

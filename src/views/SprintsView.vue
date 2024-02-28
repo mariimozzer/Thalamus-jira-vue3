@@ -1,45 +1,72 @@
 <template>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
+        <h1
+            style="text-align: center; margin-bottom: 1rem; border-bottom: 2px rgb(56, 56, 56) solid; padding-bottom: 1rem;">
+            Plano de Ação</h1>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">
                     <div style="width: 20%;">
-                        <button @click="ocultarPlano" v-if="item.nome == 'Plano de ação'">
+                        <div style="width: 10rem;">
+                            <h5>
+                                <span style="display: flex;">
+                                    <div style="background-color: rgba(175, 175, 175, 0.6)" class="hPoints">{{
+                                        somarHP(item)[0] }}
+                                    </div>
+                                    <div style="background-color: rgba(0, 47, 255, 0.600)" class="hPoints">{{
+                                        somarHP(item)[1] }}
+                                    </div>
+                                    <div style="background-color: rgba(0, 255, 0, 0.600)" class="hPoints">{{
+                                        somarHP(item)[2] }}
+                                    </div>
+                                </span>
+                            </h5>
+                        </div>
+                        <button @click="ocultarPlano" v-if="item.nome == 'Plano de ação'" class="botaoAdicionarSprint"
+                            style=" width: 2rem; position: absolute; margin-left: ">
                             <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
                         </button>
-                        <h5>
-                            Pontos de história: {{ somarHP(item) }}
-                        </h5>
                     </div>
                     <div style="width: 60%; text-align: center;">
-                        <h2><input type="text" v-model="item.nome" @change="editarSprint('nome', item.id, item.nome)"
-                                :disabled="item.nome == 'Plano de ação'"
-                                style="width: max-content; margin-left: 0.5rem; text-align: center;">
+                        <h2><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
+                                style="width: max-content; margin-left: 0.5rem; text-align: center;" disabled>
                         </h2>
+                        <!-- @change="editarSprint('nome', item.id, item.nome)" 
+                        :disabled="item.nome == 'Plano de ação'" -->
                     </div>
 
                     <div style="width: 20%; display: flex; text-align: right; justify-content: right;" v-if="index !== 0">
-                        <div style="text-align: center;" v-if="item.dtTermino !== null">
-                            <strong style="margin-right: 1rem;" v-if="item.dtInicio !== null && item.dtTermino !== null">
-                                {{ abreviarMes(item.dtInicio) }} <i :id="item.id" style="font-size: 20px;"
-                                    class="bi bi-dash"></i> {{
-                                        abreviarMes(item.dtTermino) }}
-                            </strong>
-                            <div v-if="item.dtInicio == null && item.dtTermino !== null"
-                                style="border: 2px rgb(21, 218, 21) solid; margin: 0.5rem; border-radius: 10px;">
+                        <div style="text-align: center;">
+                            <div v-if="item.dtInicio == null && item.dtTermino == null"
+                                style="width: 13rem; border: 1px rgb(175, 175, 175) solid; margin-right: 0.5rem; border-radius: 10px;">
+                                <i style=" color: rgb(175, 175, 175); font-size: 22px; margin-left: 1rem;"
+                                    class="bi bi-stop-circle-fill"></i>
+                            </div>
+                            <div v-if="item.dtInicio !== null && item.dtTermino !== null"
+                                style="width: 13rem; border: 1px rgba(0, 47, 255, 0.700) solid; margin-right: 0.5rem; border-radius: 10px;">
                                 <strong>
-                                    Sprint Finalizada <i style=" color: rgb(21, 218, 21); font-size: 22px;"
-                                        class="bi bi-bookmark-check-fill"></i>
+                                    {{ abreviarMes(item.dtInicio) }} <i :id="item.id" style="font-size: 20px;"
+                                        class="bi bi-arrow-right"></i>
                                     {{ abreviarMes(item.dtTermino) }}
                                 </strong>
+                                <i style=" color: rgba(0, 47, 255, 0.700); font-size: 22px; margin-left: 1rem;"
+                                    class="bi bi-fast-forward-circle-fill"></i>
+                            </div>
+                            <div v-if="item.dtInicio == null && item.dtTermino !== null"
+                                style="width: 13rem; border: 1px rgba(0, 255, 0, 0.700) solid; margin-right: 0.5rem; border-radius: 10px;">
+                                <strong>
+                                    {{ abreviarMes(item.dtTermino, true) }}
+                                </strong>
+                                <i style=" color: rgba(0, 255, 0, 0.700); font-size: 22px; margin-left: 1rem;"
+                                    class="bi bi-check-circle-fill"></i>
                             </div>
                         </div>
 
                         <v-menu>
                             <template v-slot:activator="{ props }">
-                                <v-btn style="width: 1.5rem; height: 1.5rem;" icon="mdi-dots-horizontal"
-                                    v-bind="props"></v-btn>
+                                <v-btn style="width: 2rem; height: 2rem; background-color: transparent; border: none;"
+                                    icon="mdi-dots-horizontal" class="botaoAdicionarSprint" v-bind="props"></v-btn>
                             </template>
 
                             <v-list>
@@ -173,7 +200,7 @@
                                 <div style="width: 15%; margin-inline;">
                                     <select v-model="element.responsavel_id" class="form-select"
                                         @change="editarBacklog('responsavel_id', element.id, element.responsavel_id)"
-                                        style="width: 100%; outline: none; text-align: left; padding: 0.5rem; border: none;">
+                                        style="width: 100%; outline: none; text-align: left; padding: 0.5rem; border: none; background-color: transparent;">
                                         <option v-for=" item  in  gerente " :key="item.id" :value="item.id">
                                             {{ nomeEsobrenome(item.nomeCompleto) }}
                                         </option>
@@ -193,7 +220,8 @@
                                 </div>
 
                                 <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                                    <select style="width: 100%; outline: none; text-align: center; border: none;"
+                                    <select
+                                        style="width: 100%; outline: none; text-align: center; border: none; background-color: transparent;"
                                         class="form-select" @change="editarBacklog('status', element.id, element.status)"
                                         v-model="element.status">
                                         <option>Pendente</option>
@@ -205,8 +233,9 @@
                                 <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + element.id">
                                     <v-menu>
                                         <template v-slot:activator="{ props }">
-                                            <v-btn style="width: 2rem; height: 2rem; border: 1px solid black;"
-                                                icon="mdi-dots-horizontal" v-bind="props"></v-btn>
+                                            <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                v-bind="props"></v-btn>
                                         </template>
 
                                         <v-list>
@@ -245,7 +274,7 @@
                     <div style="display: flex; padding-left: 0.2rem; border-radius: 5px; width: 100%;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
                             <input style="width: 5rem;" type="text" disabled
-                                :placeholder="'Tarefa - ' + (this.sprints.map((item) => item.backlogs).flat().length + 1)">
+                                :placeholder="'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1)">
                         </div>
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
@@ -262,10 +291,10 @@
 
             <div v-if="item.nome == 'Plano de ação'" class="row"
                 style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px; width: 100%;display: flex;flex-flow: row; align-items: center;">
-                <button style="width: max-content; font-size: 25px; position: absolute;" @click="criarNovaSprint">
-                    <i class="bi bi-plus-square"></i></button>
-
                 <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
+                <button style="width: max-content; font-size: 30px; position: absolute; margin-left: 65rem;"
+                    @click="criarNovaSprint" class="botaoAdicionarSprint">
+                    <i class="bi bi-plus-circle"></i></button>
             </div>
         </div>
     </div>
@@ -402,7 +431,14 @@ export default {
     },
 
     methods: {
-        abreviarMes(dataString) {
+        somenteBacklogs() {
+            if (this.sprints !== null) {
+                var teste = this.sprints.map((item) => item.backlogs).flat()
+                teste.sort((a, b) => b.id - a.id);
+                return teste
+            }
+        },
+        abreviarMes(dataString, mandarAno) {
             if (dataString == null) {
                 return null
             }
@@ -413,7 +449,7 @@ export default {
                 return null;
             }
 
-            // const ano = partes[0];
+            const ano = partes[0].slice(2);
             const mesNumero = parseInt(partes[1], 10);
             const dia = partes[2];
 
@@ -427,8 +463,12 @@ export default {
             }
 
             const mesAbreviado = mesesAbreviados[mesNumero - 1];
-            // ${ano}
-            return `${dia}/${mesAbreviado}.`;
+
+            if (mandarAno) {
+                return `${dia}/${mesAbreviado}/${ano}`;
+            } else {
+                return `${dia}/${mesAbreviado}`;
+            }
 
         },
 
@@ -473,7 +513,7 @@ export default {
                 const primeiroNome = nomeESobrenome[0];
                 const segundoNome = nomeESobrenome[1];
 
-                if (segundoNome.length <= 2) {
+                if (segundoNome.length <= 3 || segundoNome == 'Paula') {
                     return `${primeiroNome} ${segundoNome} ${nomeESobrenome[2] || ''}`;
                 } else {
                     return `${primeiroNome} ${segundoNome}`;
@@ -504,12 +544,18 @@ export default {
         },
 
         getBacklogs() {
-
-            axios.get(`http://192.168.0.6:8000/api/sprint/buscar/${this.idProjeto}`, {
-            })
+            axios.get(`http://192.168.0.6:8000/api/sprint/buscar/${this.idProjeto}`, {})
                 .then((response) => {
-                    this.sprints = response.data
-                    this.separarBacklogs()
+                    function compararSprints(a, b) {
+                        if (a.nome === "Plano de ação") {
+                            return -1;
+                        } else if (b.nome === "Plano de ação") {
+                            return 1;
+                        }
+                        return b.id - a.id;
+                    }
+
+                    this.sprints = response.data.sort(compararSprints);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -613,17 +659,31 @@ export default {
         },
 
         somarHP(dados) {
-            let soma = 0;
+            let somaPendentes = 0;
+            let somaEmAndamento = 0;
+            let somaConcluidos = 0;
 
             if (dados.backlogs) {
                 dados.backlogs.forEach(backlog => {
-                    if (backlog.HP) {
-                        soma += parseInt(backlog.HP);
+                    if (backlog.status == 'Pendente') {
+                        if (backlog.HP) {
+                            somaPendentes += parseInt(backlog.HP);
+                        }
+                    }
+                    if (backlog.status == 'Em andamento') {
+                        if (backlog.HP) {
+                            somaEmAndamento += parseInt(backlog.HP);
+                        }
+                    }
+                    if (backlog.status == 'Concluído') {
+                        if (backlog.HP) {
+                            somaConcluidos += parseInt(backlog.HP);
+                        }
                     }
                 });
             }
-
-            return soma;
+            let lista = [somaPendentes, somaEmAndamento, somaConcluidos]
+            return lista;
         },
 
         fecharModalFora(event) {
@@ -723,7 +783,7 @@ export default {
             var nomeSprint = "Sprint - 1";
 
             if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
-                nomeSprint = 'Sprint - ' + (this.sprints.length);
+                nomeSprint = 'Sprint - ' + (parseInt((this.sprints[1].nome).match(/\d+$/)[0]) + 1);
             } else {
                 nomeSprint = 'Sprint - 1';
             }
@@ -744,7 +804,7 @@ export default {
 
             axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
                 sprint_id: id,
-                codigo: 'Tarefa - ' + (this.sprints.map((item) => item.backlogs).flat().length + 1),
+                codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
                 descricao: descricao
             })
                 .then(() => {
@@ -785,11 +845,28 @@ export default {
 </script>
 
 <style>
+.hPoints {
+    display: flex;
+    border-radius: 50%;
+    margin-right: 5px;
+    width: 1.3rem;
+    height: 1.3rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: rgb(78, 78, 78);
+}
+
+.botaoAdicionarSprint:hover {
+    transition: 50ms linear;
+    transform: scale(1.1);
+}
+
 .divFundoTabela {
-    border: 1px solid black;
-    border-radius: 5px;
+    border: 2px solid black;
+    border-radius: 20px;
     background-color: rgb(255, 255, 255);
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     padding: 0.5rem;
     width: 100%;
 }
@@ -845,6 +922,7 @@ export default {
     color: black;
 }
 
+
 .custom-select-disabled {
     color: rgb(0, 255, 0);
 }
@@ -889,5 +967,4 @@ input:disabled {
     max-height: 80%;
     overflow-y: auto;
     position: relative;
-}
-</style>
+}</style>

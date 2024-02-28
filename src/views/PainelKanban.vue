@@ -66,7 +66,7 @@
                                         {{ element.nomeSprint }}
                                     </b>
 
-                                    <i style="color: rgb(255, 0, 0); font-size: 20px; position: absolute; top: 0; right: 0; margin-right: 0.5rem;"
+                                    <i style="color: rgb(175, 175, 175); font-size: 20px; position: absolute; top: 0; right: 0; margin-right: 0.5rem;"
                                         class="bi bi-stop-circle-fill"></i><br>
 
                                 </div>
@@ -350,19 +350,21 @@ export default {
     background-color: white;
     border: 1px solid black;
     margin: 0.3rem;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 
 .bloco {
     background-color: rgb(247, 247, 247);
-    border: 1px solid black;
+    border: 2px solid black;
     height: 100%;
+    border-radius: 20px;
 }
 
 .colunas {
     width: 30%;
     margin-left: 1rem;
+    border-radius: 20px;
 }
 </style>
   
