@@ -250,7 +250,7 @@ export default {
             dataTerminoProjeto: null,
             teste: null,
             projetos: [],
-            modalCompartilharProjeto: true,
+            modalCompartilharProjeto: false,
             modalNovoProjeto: false,
             modalEditarProjeto: false,
             modalFinalizarProjeto: false,
