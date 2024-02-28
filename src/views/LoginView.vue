@@ -48,7 +48,7 @@
             </div>
     
             <div class="col-sm-12" style="text-align: center; font-size: 15px;">
-                <a href="/esqueceuSenha" style="color: rgb(0, 0, 0);">Esqueceu sua senha ?</a>
+                <a href="/#/esqueceuSenha" style="color: rgb(0, 0, 0);">Esqueceu sua senha ?</a>
             </div>
         </div>
     </form>
@@ -119,7 +119,7 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://192.168.0.5:8000/api/login', {
+                const response = await axios.post('http://192.168.0.6:8000/api/login', {
                     email: this.email,
                     password: this.password,
                 });
@@ -134,7 +134,7 @@ export default {
                 localStorage.setItem('LoggedUser', true);
 
                 // Atualizar permissões do usuário
-                const menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${userId}`;
+                const menuUrl = `http://192.168.0.6:8000/api/menu/usuario/${userId}`;
                 const menuResponse = await axios.get(menuUrl);
                 const userPermissions = menuResponse.data.map((item) => item.nome.toLowerCase());
 
