@@ -320,7 +320,7 @@
                     <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="this.teste = 'foi'"><img
+                            <li @click="atualizarPermissão(item)" v-for="item in listaPessoasFiltrada" :key="item.id"><img
                                     :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
                                         item.nomeCompleto }}</li>
                         </ul>
