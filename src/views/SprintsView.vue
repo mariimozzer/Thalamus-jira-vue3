@@ -274,7 +274,7 @@
                     <div style="display: flex; padding-left: 0.2rem; border-radius: 5px; width: 100%;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
                             <input style="width: 5rem;" type="text" disabled
-                                :placeholder="'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1)">
+                                :placeholder="this.somenteBacklogs().length !== 0 ? 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1) : 'Tarefa - 1'">
                         </div>
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
@@ -437,7 +437,9 @@ export default {
                 teste.sort((a, b) => b.id - a.id);
                 return teste
             }
+            return 'nada'
         },
+
         abreviarMes(dataString, mandarAno) {
             if (dataString == null) {
                 return null
@@ -802,17 +804,32 @@ export default {
 
         criarBacklog(id, descricao) {
 
-            axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
-                sprint_id: id,
-                codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
-                descricao: descricao
-            })
+            if(this.somenteBacklogs().length !== 0){
+
+                axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
+                    sprint_id: id,
+                    codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
+                    descricao: descricao
+                })
                 .then(() => {
                     this.getBacklogs()
                 })
                 .catch((error) => {
                     console.error(error);
                 });
+            }else {
+                axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
+                    sprint_id: id,
+                    codigo: 'Tarefa - 1',
+                    descricao: descricao
+                })
+                .then(() => {
+                    this.getBacklogs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            }
         },
 
         apagarBacklog(idBacklog) {
@@ -967,4 +984,5 @@ input:disabled {
     max-height: 80%;
     overflow-y: auto;
     position: relative;
-}</style>
+}
+</style>
