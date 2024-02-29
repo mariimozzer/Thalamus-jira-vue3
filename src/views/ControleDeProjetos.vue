@@ -10,7 +10,7 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
                     </div>
-                    <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
+                    <button  style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
                         class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
@@ -544,6 +544,7 @@ export default {
 </script>
 
 <style>
+
 .cropped1 {
     width: 50px;
     /* width of container */

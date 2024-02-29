@@ -6,7 +6,7 @@ import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 //Backlogs
 import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
-<<<<<<< Updated upstream
+
 
 //Login
 import LoginViewVue from '@/views/Login/LoginView.vue'
@@ -53,7 +53,7 @@ const routes = [
 },
 
 
->>>>>>> Stashed changes
+
   {
     path: '/',
     name: 'login',
@@ -65,7 +65,6 @@ const routes = [
 
   },
 
-<<<<<<< Updated upstream
   //Home
   {
     path: '/home',
@@ -78,10 +77,8 @@ const routes = [
 
 
   //Projetos
-=======
 
 
->>>>>>> Stashed changes
   {
     path: '/sprints',
     name: 'sprints',
