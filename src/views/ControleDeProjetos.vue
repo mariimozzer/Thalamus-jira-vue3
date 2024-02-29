@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
     <div style="padding: 1rem;">
         <div class="container"
             style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
@@ -137,6 +138,88 @@
                     <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2"
                         @click="adicionarProjeto">Salvar</button>
                 </div>
+=======
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12" style="text-align: center;">
+    
+                    <h3 class="titulo"> Gerenciamento de Projetos </h3>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="row sub-container">
+            <div class="col-sm-3">
+                <BButton>Button</BButton>
+                <BButton variant="danger">Button</BButton>
+                <BButton variant="success">Button</BButton>
+                <BButton variant="outline-primary">Button</BButton>
+    
+                <button class="button-default" @click="adicionarProjeto">
+                            <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar Projeto
+                        </button>
+    
+    
+            </div>
+    
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-16">
+                <table class="table table-hover ">
+    
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome do Projeto </th>
+                            <th scope="col">Data Início</th>
+                            <th scope="col">Gerente Responsável</th>
+                            <th scope="col">Setor Beneficiário</th>
+                            <th scope="col">
+    
+                            </th>
+    
+    
+                        </tr>
+    
+    
+                    </thead>
+    
+    
+                    <tbody>
+    
+                        <!-- <tr v-for="item in projetos" :key="item.id">
+                
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.nome }}</td>
+                                        <td>{{ item.dataInicio }}</td>
+            
+                                        <td></td>
+                
+                                        <td class="icon-tabela" style="text-align: center;">
+                                            <i @click="editarSetor(item)" class="fa fa-edit icones-tabela"></i> |
+                                            <i @click="excluirSetor(item)" class="fa fa-trash icones-tabela"></i>
+                                        </td>
+                                    </tr> -->
+    
+                        <tr>
+                            <td>1</td>
+                            <td>Thalamus</td>
+                            <td>14/11/2023</td>
+                            <td>Darley</td>
+                            <td>Desenvolvimento</td>
+                            <td>
+                                <button class="button-default" @click="verBacklogs()">
+                                            <i class="fa-solid fa-list"></i>&nbsp; Backlogs
+                                        </button>
+                            </td>
+    
+                        </tr>
+                    </tbody>
+    
+                </table>
+>>>>>>> Stashed changes
             </div>
         </div>
     </div>
@@ -267,6 +350,11 @@
 
 <script>
 import axios from 'axios'
+<<<<<<< Updated upstream
+=======
+import api from '../services/api';
+import Projeto from '@/models/Projeto'
+>>>>>>> Stashed changes
 
 
 export default {
@@ -360,6 +448,7 @@ export default {
         },
 
         adicionarProjeto() {
+<<<<<<< Updated upstream
             axios.post('http://192.168.0.6:8000/api/projeto/cadastrar', {
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
@@ -375,6 +464,24 @@ export default {
                         "gerente_id": "",
                         "setor_id": "",
                     };
+=======
+            this.$router.push({ name: "AdicionarProjeto" })
+        },
+
+        verBacklogs() {
+            this.$router.push({ name: "backlogs" })
+        },
+
+        obterProjetoId(id) {
+            axios.get(`${api.defaults.baseURL}/projeto/${id}`)
+                .then(response => {
+                    const projetoData = response.data;
+                    this.nomeProjeto = projetoData.nomeProjeto;
+                    this.dtInicio = projetoData.dtInicio;
+                    this.gerente = projetoData.gerente;
+                    this.setor = projetoData.setor;
+
+>>>>>>> Stashed changes
                 })
                 .catch((error) => {
                     console.error(error);
