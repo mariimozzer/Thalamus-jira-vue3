@@ -63,7 +63,7 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item" disabled> 
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item">
                                                         Compartilhar</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
@@ -320,22 +320,27 @@
                     <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="this.teste = 'foi'"><img
+                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="atualizarPermissão(item)"><img
                                     :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
-                                        item.nomeCompleto }}</li>
+                                        item.nomeCompleto }}
+                            </li>
                         </ul>
                     </div>
                     <br>
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} (você)
+                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{
+                                item.usuario_id }} / desenvolvimento:{{ idUsuario }}
+
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
                                 <option value="2">Editor</option>
                             </select>
                         </li>
                     </ul>
+                    {{ projetoEditado.permissao }} <br>
+                    {{teste}}
                 </div>
 
             </div>
@@ -362,13 +367,13 @@ export default {
 
     data() {
         return {
-
+            idUsuario: localStorage.getItem('id'),
             pessoaSelecionada: null,
             listaPessoasFiltrada: null,
 
             pessoasComAcesso: [],
             dataTerminoProjeto: null,
-            teste: null,
+            teste: '?',
             projetos: [],
             modalCompartilharProjeto: false,
             modalNovoProjeto: false,
@@ -399,6 +404,16 @@ export default {
     },
 
     methods: {
+        atualizarPermissão(item) {
+            // var novaPermissao = {
+            //     "usuario_id": item.id, 
+            //     "nivel": 1, 
+            //     "nome": item.nomeCompleto
+            // }
+
+            this.teste = item
+        },
+
         procurar() {
             if (!this.pessoaSelecionada) {
                 this.listaPessoasFiltrada = this.gerente
@@ -509,7 +524,7 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.5:8000/api/pessoa/', {
+            axios.get('http://192.168.0.6:8000/api/pessoa/', {
             })
                 .then((response) => {
                     this.gerente = response.data
