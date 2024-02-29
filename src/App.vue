@@ -115,7 +115,7 @@ nav a.router-link-exact-active {
 
 .button-default {
     width: 100%;
-    background-color: var(--dark-color) !important;
+    background-color: var(--botao) !important;
     color: rgb(255, 255, 255) !important;
     padding: 10px !important;
     margin: 6px 0 !important;

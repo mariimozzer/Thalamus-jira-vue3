@@ -1,9 +1,9 @@
 <template>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
-        <h1
+        <h3
             style="text-align: center; margin-bottom: 1rem; border-bottom: 2px rgb(56, 56, 56) solid; padding-bottom: 1rem;">
-            Plano de Ação</h1>
+            Plano de Ação</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">

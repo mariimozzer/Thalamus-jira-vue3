@@ -67,7 +67,7 @@
                 <transition name="hint" appear>
                     <div v-if='passwordValidation.errors.length > 0 && !submitted' class='hints'>
                         <hr>
-                        <p style="color: green;" v-for='error in passwordValidation.errors' :key="error.id">{{error}} </p>
+                        <p style="color: red;" v-for='error in passwordValidation.errors' :key="error.id">{{error}} </p>
                     </div>
                 </transition>
             </div>
@@ -199,7 +199,7 @@ export default {
                         this.new_password_confirmation = ''
                         this.loading = false
                         toaster.show(`Senha resetada com sucesso!`, { type: "success" });
-                        this.$router.push({ name: "HomeView"})
+                        this.$router.push({ name: "home"})
 
                         console.log(response)
                     })
