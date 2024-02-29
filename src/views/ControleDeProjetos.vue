@@ -1,7 +1,7 @@
 <template>
     <div style="padding: 1rem;">
         <div class="container"
-            style="border: 2px solid black; border-radius: 20px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+            style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
 
             <div class="col-sm-12" style="text-align: center;">
 
@@ -62,7 +62,7 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item">
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item" disabled> 
                                                         Compartilhar</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
@@ -219,55 +219,66 @@
 
 
     <!-- MODAL compartilhar Projeto-->
-    <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora">
-        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem;">
+    <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora" style="padding: none;">
+        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem; padding: none !important;">
             <div>
-                <div style="display: flex; justify-content: space-between">
-                    <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
-                    <button type="button" class="btn-close" aria-label="Close"
-                        @click="this.getProjetos, this.modalCompartilharProjeto = false"></button>
-                </div>
+
+                <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
                 <hr>
                 <br>
             </div>
             <div style="width: 100%; display: flex; justify-content: center;">
+                <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
+                    <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
+                        style="background-color: #f1f1f1; color: black;"
+                        @focusout="this.listaPessoasFiltrada = null, this.pessoaSelecionada = null" @input="this.procurar()"
+                        placeholder="Adicionar  Participante">
 
-                <div style="border: 1px solid black; width: 80%; height: 15rem;">
-
+                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
+                        v-if="listaPessoasFiltrada">
+                        <ul style="list-style: none;">
+                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="this.teste = 'foi'"><img
+                                    :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
+                                        item.nomeCompleto }}</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <h5>Pessoas com acesso:</h5>
+                    <ul style="list-style: none; padding-left: 0rem !important;">
+                        <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
+                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} (você)
+                            <select style="width: 7rem" class="form-select" v-model="item.nivel">
+                                <option value="1">Leitor</option>
+                                <option value="2">Editor</option>
+                            </select>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
 
         </div>
     </div>
+
+
     <!--END MODAL SPRINT-->
-    <div class="card flex justify-content-center">
-                        <AutoComplete v-model="selectedCountry" optionLabel="name" :suggestions="filteredCountries"
-                            @complete="search" />
-                    </div>
 </template>
 
 
 <script>
 import axios from 'axios'
 
-import { CountryService } from '../services/CountryService';
-import AutoComplete from 'primevue/autocomplete';
-
 
 export default {
     name: "ControleDeProjetos",
 
-    components: {
-        AutoComplete
-    },
-
     data() {
         return {
-            countries: null,
-            selectedCountry: null,
-            filteredCountries: null,
 
+            pessoaSelecionada: null,
+            listaPessoasFiltrada: null,
+
+            pessoasComAcesso: [],
             dataTerminoProjeto: null,
             teste: null,
             projetos: [],
@@ -282,6 +293,7 @@ export default {
                 "setor_id": "",
             },
             gerente: [],
+            pessoaCompartilhada: null,
             disabled: false,
             setores: [],
             projetoEditado: null,
@@ -290,27 +302,26 @@ export default {
     },
 
     mounted() {
-        CountryService.getCountries().then((data) => (this.countries = data));
         this.getProjetos(),
             this.getGerenteseSetor()
     },
 
     created() {
         this.userName = localStorage.getItem('userName')
-
     },
 
     methods: {
-        search(event) {
-            setTimeout(() => {
-                if (!event.query.trim().length) {
-                    this.filteredCountries = [...this.countries];
-                } else {
-                    this.filteredCountries = this.countries.filter((country) => {
-                        return country.name.toLowerCase().startsWith(event.query.toLowerCase());
-                    });
+        procurar() {
+            if (!this.pessoaSelecionada) {
+                this.listaPessoasFiltrada = this.gerente
+            } else {
+                if (this.listaPessoasFiltrada !== null) {
+
+                    this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().startsWith(this.pessoaSelecionada.toLowerCase())
+                    );
                 }
-            }, 250);
+            }
+
         },
 
         finalizarProjeto() {
@@ -391,10 +402,15 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.6:8000/api/pessoa/', {
+            axios.get('http://192.168.0.5:8000/api/pessoa/', {
             })
                 .then((response) => {
                     this.gerente = response.data
+                    this.gerente = this.gerente.map(item => ({
+                        id: item.id,
+                        nomeCompleto: item.nomeCompleto,
+                        path_image: item.path_image
+                    }))
                 })
                 .catch((error) => {
                     console.error(error);
@@ -427,6 +443,22 @@ export default {
 </script>
 
 <style>
+.cropped1 {
+    width: 50px;
+    /* width of container */
+    height: 50px;
+    /* height of container */
+    object-fit: cover;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+
+li {
+    margin-top: 0.2rem;
+    cursor: pointer;
+}
+
 .shake {
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     transform: translate3d(0, 0, 0);

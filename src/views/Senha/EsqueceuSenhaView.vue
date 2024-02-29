@@ -13,7 +13,7 @@
                 <b-input-group-prepend is-text>
                     <i class="fa-solid fa-envelope"></i>
                 </b-input-group-prepend>
-                <b-form-input type="text" placeholder="Digite seu e-mail" v-model="email"></b-form-input>
+                <b-form-input @keyup.enter="resetarSenha()" type="text" placeholder="Digite seu e-mail" v-model="email"></b-form-input>
                 <b-input-group-append>
                 </b-input-group-append>
             </b-input-group>

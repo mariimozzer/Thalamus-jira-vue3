@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="">
         <br>
         <div class="box-login">
 
@@ -231,7 +231,7 @@ export default {
     max-width: 400px;
     margin: auto;
     border: 1px solid #ddd;
-    margin-top: 50px;
+    margin-top: 0px;
     padding: 30px;
     border-radius: 20px;
     background-color: #ffffff;

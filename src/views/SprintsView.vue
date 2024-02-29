@@ -864,7 +864,7 @@ export default {
 
 .divFundoTabela {
     border: 2px solid black;
-    border-radius: 20px;
+    border-radius: 15px;
     background-color: rgb(255, 255, 255);
     margin-bottom: 2rem;
     padding: 0.5rem;
