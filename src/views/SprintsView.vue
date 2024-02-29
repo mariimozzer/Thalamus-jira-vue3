@@ -1,9 +1,9 @@
 <template>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
-        <h1
+        <h3
             style="text-align: center; margin-bottom: 1rem; border-bottom: 2px rgb(56, 56, 56) solid; padding-bottom: 1rem;">
-            Plano de Ação</h1>
+            Plano de Ação</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">
@@ -273,10 +273,8 @@
                     </draggable>
                     <div style="display: flex; padding-left: 0.2rem; border-radius: 5px; width: 100%;" :id="item.id">
                         <div style="border: 1px solid black; border-radius: 5px; padding: 0.3rem;">
-
                             <input style="width: 5rem;" type="text" disabled
                                 :placeholder="this.somenteBacklogs().length !== 0 ? 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1) : 'Tarefa - 1'">
-
                         </div>
                         <div
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">

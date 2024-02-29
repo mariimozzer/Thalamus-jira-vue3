@@ -6,7 +6,6 @@ import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 //Backlogs
 import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
-<<<<<<< Updated upstream
 
 //Login
 import LoginViewVue from '@/views/Login/LoginView.vue'
@@ -41,19 +40,6 @@ if(localStorage.getItem('LoggedUser'))
 const routes = [
 
 //Login
-=======
-import FinanceiroView from '../views/FinanceiroView.vue'
-
-const routes = [
-
-{
-  path: '/financeiro',
-  name: 'financeiro', 
-  component: FinanceiroView
-},
-
-
->>>>>>> Stashed changes
   {
     path: '/',
     name: 'login',
@@ -65,7 +51,6 @@ const routes = [
 
   },
 
-<<<<<<< Updated upstream
   //Home
   {
     path: '/home',
@@ -78,10 +63,6 @@ const routes = [
 
 
   //Projetos
-=======
-
-
->>>>>>> Stashed changes
   {
     path: '/sprints',
     name: 'sprints',
