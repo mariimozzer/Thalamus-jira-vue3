@@ -8,7 +8,10 @@ import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
 
 //Login
-import LoginViewVue from '@/views/LoginView.vue'
+import LoginViewVue from '@/views/Login/LoginView.vue'
+
+//Home
+import HomeView from '@/views/Home/HomeView.vue'
 
 //Senha
 import EsqueceuSenhaView from "@/views/Senha/EsqueceuSenhaView"
@@ -47,6 +50,17 @@ const routes = [
     
 
   },
+
+  //Home
+  {
+    path: '/home',
+    name: 'home',
+    component: HomeView,
+    beforeEnter: guardMyroute,
+    
+
+  },
+
 
   //Projetos
   {

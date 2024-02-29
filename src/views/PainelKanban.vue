@@ -4,7 +4,7 @@
         <div class="divFiltro">
             <v-menu v-model="menu" :close-on-content-click="false" location="end">
                 <template v-slot:activator="{ props }">
-                    <v-btn style="width: 2rem; height: 2rem;" icon="mdi-filter-menu" v-bind="props"></v-btn>
+                    <v-btn style="width: 2.5rem; height: 2.5rem;" icon="mdi-filter-menu" v-bind="props"></v-btn>
                 </template>
 
                 <v-card>
