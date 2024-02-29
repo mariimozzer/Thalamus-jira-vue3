@@ -6,11 +6,7 @@
         <!-- <menuLateral></menuLateral> -->
         <div class="router">
             <br><br><br><br>
-            <nav v-if="!$route.meta.hideMenu">
-                <router-link to="/projetos">Projetos</router-link> |
-                <router-link to="/sprints">Plano de ação</router-link> |
-                <router-link to="/painel">Painel Kanban</router-link> |
-            </nav>
+
             <router-view />
 
             <br><br><br><br>

@@ -1,4 +1,12 @@
 <template>
+    <div style="width: 100%; justify-content: space-between; display: flex;">
+        <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+            class="bi bi-list-task botaoAdicionarSprint"></i>
+        <h2>{{ nomeDoProjeto }}</h2>
+        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
+            class="bi bi-kanban botaoAdicionarSprint"></i>
+    </div>
+    <hr>
     <div>
 
         <div class="divFiltro">
@@ -176,6 +184,8 @@ export default {
             backlogsPendentes: [],
             backlogsEmAndamento: [],
             backlogsConcluidos: [],
+
+            nomeDoProjeto: sessionStorage.getItem('nomeDoProjeto'),
         };
     },
 
@@ -205,6 +215,18 @@ export default {
     },
 
     methods: {
+        verBacklogs() {
+            this.$router.push({ name: "sprints" })
+        },
+
+        verPainel() {
+            this.$router.push({ name: "painel" })
+        },
+
+        verProjetos() {
+            this.$router.push({ name: "ControleDeProjetos" })
+        },
+
         filtrarBacklogs(valor, item) {
             this.backlogsPendentes = [];
             this.backlogsEmAndamento = [];

@@ -9,7 +9,7 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
                     </div>
-                    <button  style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
+                    <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
                         class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
@@ -27,12 +27,11 @@
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Beneficiário</th>
                                 <th scope="col"></th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <thead>
                             <tr v-for="item in projetos" :key="item.id" @mouseover="mostrarBotao(item.id, true)"
-                                @mouseleave="mostrarBotao(item.id, false)">
+                                @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
                                 <td><input type="date" v-model="item.dtInicio" disabled style="text-align: center;"></td>
                                 <td><input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
@@ -40,16 +39,6 @@
                                         andamento...</span></td>
                                 <td>{{ item.gerente }}</td>
                                 <td>{{ item.setor }}</td>
-                                <td>
-                                    <button style="font-size: larger;" @click="verBacklogs(item.id)"
-                                        class="botaoAdicionarSprint">
-                                        <i class="fa-solid fa-list"></i>
-                                    </button>
-                                    <button style="font-size: larger; margin-left: 1rem;" @click="verPainel(item.id)"
-                                        class="botaoAdicionarSprint">
-                                        <i class="bi bi-kanban"></i>
-                                    </button>
-                                </td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu>
@@ -230,14 +219,14 @@
             <div style="width: 100%; display: flex; justify-content: center;">
                 <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
                     <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
-                        style="background-color: #f1f1f1; color: black;"
-                        @focusout="this.listaPessoasFiltrada = null, this.pessoaSelecionada = null" @input="this.procurar()"
+                        style="background-color: #f1f1f1; color: black;" @input="this.procurar()" @focusout="fecharLista()"
                         placeholder="Adicionar  Participante">
 
-                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
+                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.1rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="atualizarPermissão(item)"><img
+                            <li @click="atualizarPermissão(item), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
+                                v-for="item in listaPessoasFiltrada" :key="item.id"><img
                                     :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
                                         item.nomeCompleto }}
                             </li>
@@ -248,7 +237,7 @@
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
                             v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{
-                                item.usuario_id }} / desenvolvimento:{{ idUsuario }}
+                                item.usuario_id }} / desenvolvimento:{{ idUsuario }}>
 
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
@@ -256,23 +245,18 @@
                             </select>
                         </li>
                     </ul>
-                    {{ projetoEditado.permissao }} <br>
-                    {{teste}}
                 </div>
 
             </div>
 
         </div>
     </div>
-
-
-    <!--END MODAL SPRINT-->
+    <!--END MODAL-->
 </template>
 
 
 <script>
 import axios from 'axios'
-
 
 export default {
     name: "ControleDeProjetos",
@@ -283,7 +267,8 @@ export default {
             pessoaSelecionada: null,
             listaPessoasFiltrada: null,
 
-            pessoasComAcesso: [],
+            pessoasComAcessoPorProjeto: [],
+
             dataTerminoProjeto: null,
             teste: '?',
             projetos: [],
@@ -316,14 +301,31 @@ export default {
     },
 
     methods: {
-        atualizarPermissão(item) {
-            // var novaPermissao = {
-            //     "usuario_id": item.id, 
-            //     "nivel": 1, 
-            //     "nome": item.nomeCompleto
-            // }
+        atualizarPermissão(item){
+            var novaPermissão = {
+                usuario_id: item.id,
+                nivel: 1,
+                nome: item.nomeCompleto
+            }
+            this.projetoEditado.permissao.push(novaPermissão);
+            // this.projetoEditado.permissao = this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario));
 
-            this.teste = item
+            // axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+            //     usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
+            // })
+            //     .then(() => {
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
+
+        },
+
+        fecharLista() {
+            setTimeout(() => {
+                this.listaPessoasFiltrada = null;
+                this.pessoaSelecionada = null;
+            }, 200);
         },
 
         procurar() {
@@ -396,14 +398,20 @@ export default {
                 });
         },
 
-        verBacklogs(id) {
+        verBacklogs(id, nomeProjeto) {
             this.$router.push({ name: "sprints" })
             sessionStorage.setItem('idProjeto', id)
+            sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
         },
 
-        verPainel(id) {
+        verPainel(id, nomeProjeto) {
             this.$router.push({ name: "painel" })
             sessionStorage.setItem('idProjeto', id)
+            sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+        },
+
+        verProjetos() {
+            this.$router.push({ name: "ControleDeProjetos" })
         },
 
         fecharModalFora(event) {
@@ -447,9 +455,9 @@ export default {
                 .then((response) => {
                     this.projetos = response.data;
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
+                        .catch((error) => {
+                        console.error(error);
+                    });
         }
 
     }
@@ -458,7 +466,6 @@ export default {
 </script>
 
 <style>
-
 .cropped1 {
     width: 50px;
     /* width of container */

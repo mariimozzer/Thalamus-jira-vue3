@@ -1,4 +1,9 @@
 <template>
+    <div style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid grey; align-items: center;">
+        <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;" class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
+        <h2>{{ nomeDoProjeto }}</h2>
+        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;" class="bi bi-kanban botaoAdicionarSprint"></i>
+    </div>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
         <h3
@@ -11,7 +16,7 @@
                         <div style="width: 10rem;">
                             <h5>
                                 <span style="display: flex;">
-                                    <div style="background-color: rgba(175, 175, 175, 0.6)" class="hPoints">{{
+                                    <div style="background-color: rgba(255, 145, 0, 0.600)" class="hPoints">{{
                                         somarHP(item)[0] }}
                                     </div>
                                     <div style="background-color: rgba(0, 47, 255, 0.600)" class="hPoints">{{
@@ -23,28 +28,26 @@
                                 </span>
                             </h5>
                         </div>
-                        <button @click="ocultarPlano" v-if="item.nome == 'Plano de ação'" class="botaoAdicionarSprint"
+                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint"
                             style=" width: 2rem; position: absolute; margin-left: ">
-                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" id="botaoOcultar"></i>
+                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar" :id="'botaoOcultar' + item.nome"></i>
                         </button>
                     </div>
                     <div style="width: 60%; text-align: center;">
-                        <h2><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
+                        <h3><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
                                 style="width: max-content; margin-left: 0.5rem; text-align: center;" disabled>
-                        </h2>
-                        <!-- @change="editarSprint('nome', item.id, item.nome)" 
-                        :disabled="item.nome == 'Plano de ação'" -->
+                        </h3>
                     </div>
 
                     <div style="width: 20%; display: flex; text-align: right; justify-content: right;" v-if="index !== 0">
                         <div style="text-align: center;">
                             <div v-if="item.dtInicio == null && item.dtTermino == null"
-                                style="width: 13rem; border: 1px rgb(175, 175, 175) solid; margin-right: 0.5rem; border-radius: 10px;">
-                                <i style=" color: rgb(175, 175, 175); font-size: 22px; margin-left: 1rem;"
+                                style="width: 13rem; border: 1px rgba(255, 145, 0, 0.8) solid; margin-right: 0.5rem; border-radius: 10px;">
+                                <i style=" color: rgba(255, 145, 0, 0.700); font-size: 22px; margin-left: 1rem;"
                                     class="bi bi-stop-circle-fill"></i>
                             </div>
                             <div v-if="item.dtInicio !== null && item.dtTermino !== null"
-                                style="width: 13rem; border: 1px rgba(0, 47, 255, 0.700) solid; margin-right: 0.5rem; border-radius: 10px;">
+                                style="width: 13rem; border: 1px rgba(0, 47, 255, 0.8) solid; margin-right: 0.5rem; border-radius: 10px;">
                                 <strong>
                                     {{ abreviarMes(item.dtInicio) }} <i :id="item.id" style="font-size: 20px;"
                                         class="bi bi-arrow-right"></i>
@@ -220,13 +223,13 @@
                                 </div>
 
                                 <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
-                                    <select
+                                    <select :style="{ 'color': (element.status == 'Pendente') ? 'rgb(255, 145, 0)' : (element.status == 'Em andamento') ? 'rgb(0, 47, 255)' : 'rgb(0, 192, 0)',}"
                                         style="width: 100%; outline: none; text-align: center; border: none; background-color: transparent;"
                                         class="form-select" @change="editarBacklog('status', element.id, element.status)"
                                         v-model="element.status">
-                                        <option>Pendente</option>
-                                        <option>Em andamento</option>
-                                        <option>Concluído</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select>
                                 </div>
 
@@ -284,14 +287,14 @@
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; display: none;" id="pontos" @click="ocultarPlano" class="ocultar">
+                <div style="text-align: center; display: none;" :id="'pontos' + item.nome" @click="ocultarPlano(item.nome)" class="ocultar">
                     <i class="bi bi-grip-horizontal"></i>
                 </div>
             </div>
 
             <div v-if="item.nome == 'Plano de ação'" class="row"
                 style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px; width: 100%;display: flex;flex-flow: row; align-items: center;">
-                <h1 style="text-align: center; margin-bottom: 1rem;">Sprints</h1>
+                <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
                 <button style="width: max-content; font-size: 30px; position: absolute; margin-left: 65rem;"
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
@@ -410,10 +413,10 @@ export default {
             },
             idSprint: null,
             dataTerminoSprint: null,
-            mostrarPlano: true,
             backlogeditado: null,
             idSprintBacklogEditado: null,
             idProjeto: sessionStorage.getItem('idProjeto'),
+            nomeDoProjeto: sessionStorage.getItem('nomeDoProjeto'),
             gerente: [],
         }
     },
@@ -438,6 +441,18 @@ export default {
                 return teste
             }
             return 'nada'
+        },
+
+        verBacklogs() {
+            this.$router.push({ name: "sprints" })
+        },
+
+        verPainel() {
+            this.$router.push({ name: "painel" })
+        },
+
+        verProjetos(){
+            this.$router.push({ name: "ControleDeProjetos" })
         },
 
         abreviarMes(dataString, mandarAno) {
@@ -646,17 +661,18 @@ export default {
                 });
         },
 
-        ocultarPlano() {
-            if (this.mostrarPlano == true) {
-                document.getElementById("botaoOcultar").className = "bi bi-eye";
-                document.getElementById("Plano de ação").style.display = "none";
-                document.getElementById('pontos').style.display = "";
-                this.mostrarPlano = false
+        ocultarPlano(nome) {
+            var idBotao = 'botaoOcultar' + nome;
+            var idPontos = 'pontos' + nome
+
+            if (document.getElementById(nome).style.display !== "none") {
+                document.getElementById(idBotao).className = "bi bi-eye";
+                document.getElementById(nome).style.display = "none";
+                document.getElementById(idPontos).style.display = "";
             } else {
-                document.getElementById("botaoOcultar").className = "bi bi-eye-slash";
-                document.getElementById("Plano de ação").style.display = "";
-                document.getElementById('pontos').style.display = "none";
-                this.mostrarPlano = true
+                document.getElementById(idBotao).className = "bi bi-eye-slash";
+                document.getElementById(nome).style.display = "";
+                document.getElementById(idPontos).style.display = "none";
             }
         },
 
