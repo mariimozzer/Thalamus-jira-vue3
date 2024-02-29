@@ -1,5 +1,5 @@
 <template>
-<<<<<<< Updated upstream
+
     <div style="padding: 1rem;">
         <div class="container"
             style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
@@ -10,7 +10,7 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
                     </div>
-                    <button  style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
+                    <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
                         class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
@@ -63,7 +63,8 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item"> 
+
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item">
                                                         Compartilhar</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
@@ -138,7 +139,6 @@
                     <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2"
                         @click="adicionarProjeto">Salvar</button>
                 </div>
-=======
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
@@ -219,7 +219,6 @@
                     </tbody>
     
                 </table>
->>>>>>> Stashed changes
             </div>
         </div>
     </div>
@@ -320,22 +319,30 @@
                     <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li @click="atualizarPermissão(item)" v-for="item in listaPessoasFiltrada" :key="item.id"><img
+
+                            <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="atualizarPermissão(item)"><img
                                     :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
-                                        item.nomeCompleto }}</li>
+                                        item.nomeCompleto }}
+                            </li>
                         </ul>
                     </div>
                     <br>
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{ item.usuario_id }} / desenvolvimento:{{ idUsuario }}
+
+                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{
+                                item.usuario_id }} / desenvolvimento:{{ idUsuario }}
+
+
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
                                 <option value="2">Editor</option>
                             </select>
                         </li>
                     </ul>
+                    {{ projetoEditado.permissao }} <br>
+                    {{teste}}
                 </div>
 
             </div>
@@ -350,11 +357,6 @@
 
 <script>
 import axios from 'axios'
-<<<<<<< Updated upstream
-=======
-import api from '../services/api';
-import Projeto from '@/models/Projeto'
->>>>>>> Stashed changes
 
 
 export default {
@@ -368,7 +370,7 @@ export default {
 
             pessoasComAcesso: [],
             dataTerminoProjeto: null,
-            teste: null,
+            teste: '?',
             projetos: [],
             modalCompartilharProjeto: false,
             modalNovoProjeto: false,
@@ -399,6 +401,16 @@ export default {
     },
 
     methods: {
+        atualizarPermissão(item) {
+            // var novaPermissao = {
+            //     "usuario_id": item.id, 
+            //     "nivel": 1, 
+            //     "nome": item.nomeCompleto
+            // }
+
+            this.teste = item
+        },
+
         procurar() {
             if (!this.pessoaSelecionada) {
                 this.listaPessoasFiltrada = this.gerente
@@ -448,7 +460,7 @@ export default {
         },
 
         adicionarProjeto() {
-<<<<<<< Updated upstream
+
             axios.post('http://192.168.0.6:8000/api/projeto/cadastrar', {
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
@@ -464,24 +476,6 @@ export default {
                         "gerente_id": "",
                         "setor_id": "",
                     };
-=======
-            this.$router.push({ name: "AdicionarProjeto" })
-        },
-
-        verBacklogs() {
-            this.$router.push({ name: "backlogs" })
-        },
-
-        obterProjetoId(id) {
-            axios.get(`${api.defaults.baseURL}/projeto/${id}`)
-                .then(response => {
-                    const projetoData = response.data;
-                    this.nomeProjeto = projetoData.nomeProjeto;
-                    this.dtInicio = projetoData.dtInicio;
-                    this.gerente = projetoData.gerente;
-                    this.setor = projetoData.setor;
-
->>>>>>> Stashed changes
                 })
                 .catch((error) => {
                     console.error(error);
@@ -550,7 +544,6 @@ export default {
 </script>
 
 <style>
-
 .cropped1 {
     width: 50px;
     /* width of container */
