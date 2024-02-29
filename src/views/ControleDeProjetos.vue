@@ -1,5 +1,4 @@
 <template>
-
     <div style="padding: 1rem;">
         <div class="container"
             style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
@@ -63,7 +62,6 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-
                                                         @click="modalCompartilharProjeto = true, this.projetoEditado = item">
                                                         Compartilhar</button><br />
                                                 </v-list-item>
@@ -139,86 +137,6 @@
                     <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2"
                         @click="adicionarProjeto">Salvar</button>
                 </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="col-sm-12" style="text-align: center;">
-    
-                    <h3 class="titulo"> Gerenciamento de Projetos </h3>
-                    <hr>
-                </div>
-            </div>
-        </div>
-        <div class="row sub-container">
-            <div class="col-sm-3">
-                <BButton>Button</BButton>
-                <BButton variant="danger">Button</BButton>
-                <BButton variant="success">Button</BButton>
-                <BButton variant="outline-primary">Button</BButton>
-    
-                <button class="button-default" @click="adicionarProjeto">
-                            <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar Projeto
-                        </button>
-    
-    
-            </div>
-    
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-sm-16">
-                <table class="table table-hover ">
-    
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nome do Projeto </th>
-                            <th scope="col">Data Início</th>
-                            <th scope="col">Gerente Responsável</th>
-                            <th scope="col">Setor Beneficiário</th>
-                            <th scope="col">
-    
-                            </th>
-    
-    
-                        </tr>
-    
-    
-                    </thead>
-    
-    
-                    <tbody>
-    
-                        <!-- <tr v-for="item in projetos" :key="item.id">
-                
-                                        <td>{{ item.id }}</td>
-                                        <td>{{ item.nome }}</td>
-                                        <td>{{ item.dataInicio }}</td>
-            
-                                        <td></td>
-                
-                                        <td class="icon-tabela" style="text-align: center;">
-                                            <i @click="editarSetor(item)" class="fa fa-edit icones-tabela"></i> |
-                                            <i @click="excluirSetor(item)" class="fa fa-trash icones-tabela"></i>
-                                        </td>
-                                    </tr> -->
-    
-                        <tr>
-                            <td>1</td>
-                            <td>Thalamus</td>
-                            <td>14/11/2023</td>
-                            <td>Darley</td>
-                            <td>Desenvolvimento</td>
-                            <td>
-                                <button class="button-default" @click="verBacklogs()">
-                                            <i class="fa-solid fa-list"></i>&nbsp; Backlogs
-                                        </button>
-                            </td>
-    
-                        </tr>
-                    </tbody>
-    
-                </table>
             </div>
         </div>
     </div>
@@ -319,7 +237,6 @@
                     <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-
                             <li v-for="item in listaPessoasFiltrada" :key="item.id" @click="atualizarPermissão(item)"><img
                                     :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
                                         item.nomeCompleto }}
@@ -330,10 +247,8 @@
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-
                             v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{
                                 item.usuario_id }} / desenvolvimento:{{ idUsuario }}
-
 
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
@@ -460,7 +375,6 @@ export default {
         },
 
         adicionarProjeto() {
-
             axios.post('http://192.168.0.6:8000/api/projeto/cadastrar', {
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
