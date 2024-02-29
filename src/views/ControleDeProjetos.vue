@@ -62,7 +62,7 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item" disabled> 
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item"> 
                                                         Compartilhar</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
@@ -246,7 +246,7 @@
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} (você)
+                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{ item.usuario_id }} / desenvolvimento:{{ idUsuario }}
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
                                 <option value="2">Editor</option>
@@ -274,7 +274,7 @@ export default {
 
     data() {
         return {
-
+            idUsuario: localStorage.getItem('id'),
             pessoaSelecionada: null,
             listaPessoasFiltrada: null,
 
@@ -402,7 +402,7 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.5:8000/api/pessoa/', {
+            axios.get('http://192.168.0.6:8000/api/pessoa/', {
             })
                 .then((response) => {
                     this.gerente = response.data
