@@ -243,9 +243,9 @@
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <select id="gerente" v-model="projetoEditado.gerente_id" disabled
-                            style="text-align: left; padding: none; width: 100%; border: 1px solid black; border-radius: 10px; padding: 5px;">
-                            <option style="padding: 5px;" v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                {{ pessoa.nomeCompleto }} (você) 
+                            style="text-align: left; padding-top : 1.5rem; padding-bottom: 1.5rem; width: 100%; border: 1px solid black; border-radius: 10px; padding: 5px; height: 3rem;">
+                            <option style="padding-top : 1.5rem; padding-bottom: 1.5rem;" v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                {{ pessoa.nomeCompleto }} (Gerente) 
                             </option>
                         </select>
                         <li v-for="(item, index) in projetoEditado.permissao" :key="item.usuario_id">
@@ -260,6 +260,7 @@
                                 </div>
                             </template>
                         </li>
+                        <br><br><br>
                     </ul>
                 </div>
 
