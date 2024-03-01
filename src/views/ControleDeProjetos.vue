@@ -163,8 +163,8 @@
                         <label for="gerente">Gerente Responsável</label>
                         <select id="gerente" @change="editarProjeto('gerente_id', $event.target.value)"
                             v-model="projetoEditado.gerente_id" class="form-select">
-                            <option v-for="pessoa in gerente" :key="pessoa.nomeCompleto" :value="pessoa.id">
-                                {{ pessoa.nomeCompleto }}
+                            <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                {{ pessoa.nome }}
                             </option>
                         </select>
                     </div>
@@ -219,10 +219,10 @@
             <div style="width: 100%; display: flex; justify-content: center;">
                 <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
                     <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
-                        style="background-color: #f1f1f1; color: black;" @input="this.procurar()" @focusout="fecharLista()"
+                        style="background-color: #f1f1f1; color: black; padding-top : 1.5rem; padding-bottom: 1.5rem;" @input="this.procurar()" @focusout="fecharLista()"
                         placeholder="Adicionar  Participante">
 
-                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 2.1rem; width: 30rem;"
+                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
                             <li @click="atualizarPermissão(item), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
@@ -236,19 +236,19 @@
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
                         <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }} / produção: {{
-                                item.usuario_id }} / desenvolvimento:{{ idUsuario }}>
+                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }}
+                            <!-- {{ item.usuario_id }} {{ idUsuario }} -->
 
                             <select style="width: 7rem" class="form-select" v-model="item.nivel">
                                 <option value="1">Leitor</option>
                                 <option value="2">Editor</option>
                             </select>
                         </li>
+                        <br><br><br>
                     </ul>
                 </div>
 
             </div>
-
         </div>
     </div>
     <!--END MODAL-->
@@ -301,14 +301,13 @@ export default {
     },
 
     methods: {
-        atualizarPermissão(item){
+        atualizarPermissão(item) {
             var novaPermissão = {
                 usuario_id: item.id,
                 nivel: 1,
                 nome: item.nomeCompleto
             }
             this.projetoEditado.permissao.push(novaPermissão);
-            // this.projetoEditado.permissao = this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario));
 
             // axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
             //     usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
@@ -333,7 +332,6 @@ export default {
                 this.listaPessoasFiltrada = this.gerente
             } else {
                 if (this.listaPessoasFiltrada !== null) {
-
                     this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().startsWith(this.pessoaSelecionada.toLowerCase())
                     );
                 }
@@ -425,7 +423,20 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.6:8000/api/pessoa/', {
+            // axios.get('http://192.168.0.6:8000/api/usuario/', {
+            // })
+            //     .then((response) => {
+            //         this.gerente = response.data
+            //         this.gerente = this.gerente.map(item => ({
+            //             id: item.id,
+            //             nome: item.name
+            //         }))
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
+
+            axios.get('http://192.168.0.5:8000/api/pessoa/', {
             })
                 .then((response) => {
                     this.gerente = response.data
@@ -455,9 +466,9 @@ export default {
                 .then((response) => {
                     this.projetos = response.data;
                 })
-                        .catch((error) => {
-                        console.error(error);
-                    });
+                .catch((error) => {
+                    console.error(error);
+                });
         }
 
     }
