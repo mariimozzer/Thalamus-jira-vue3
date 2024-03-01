@@ -7,7 +7,7 @@
 
                 <div style="display: flex;">
                     <div style="width: 100%;">
-                        <h3 style="text-align: center; margin: 0;">Projetos Cadastrados</h3>
+                        <h3 style="text-align: center; margin: 0;">Seus Projetos</h3>
                     </div>
                     <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
                         class="botaoAdicionarSprint">
@@ -33,9 +33,11 @@
                             <tr v-for="item in projetos" :key="item.id" @mouseover="mostrarBotao(item.id, true)"
                                 @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td><input type="date" v-model="item.dtInicio" disabled style="text-align: center;"></td>
+                                <td><input v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
+                                        v-model="item.dtInicio" disabled style="text-align: center;"></td>
                                 <td><input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
-                                        style="text-align: center;"> <span v-if="!item.dtTermino">Projeto em
+                                        style="text-align: center;"> <span
+                                        v-if="!item.dtTermino && projetos.length > 0">Projeto em
                                         andamento...</span></td>
                                 <td>
                                     <select id="gerente" v-model="item.gerente_id" disabled
@@ -48,7 +50,7 @@
                                 <td>{{ item.setor }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
-                                        <v-menu>
+                                        <v-menu v-if="Array.isArray(projetos) && projetos.length > 0">
                                             <template v-slot:activator="{ props }">
                                                 <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
                                                     class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
@@ -58,17 +60,22 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item">
+                                                        :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item"
+                                                        :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }">
                                                         Compartilhar</button><br />
                                                 </v-list-item>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
+                                                        :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                        :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }"
                                                         @click="modalEditarProjeto = true, this.projetoEditado = item">Editar
                                                     </button><br />
                                                 </v-list-item>
                                                 <v-list-item>
-                                                    <button style="margin: 0.2rem;" :disabled="item.dtTermino"
-                                                        :style="{ 'cursor': (item.dtTermino) ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
+                                                    <button style="margin: 0.2rem;"
+                                                        :disabled="item.dtTermino || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                        :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
                                                         @click="modalFinalizarProjeto = true, this.projetoEditado.id =
                                                             item.id">
                                                         Finalizar</button><br />
@@ -141,7 +148,7 @@
 
     <!-- modal editar projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarProjeto" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
+        <div style="max-height: 80%; width: 50rem; padding: 3rem; " class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Editar Projeto </h3>
@@ -216,7 +223,7 @@
 
     <!-- MODAL compartilhar Projeto-->
     <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora" style="padding: none;">
-        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem; padding: none !important;">
+        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem; padding: none !important; height: 100rem;">
             <div>
 
                 <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
@@ -227,41 +234,44 @@
                 <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
                     <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
                         style="background-color: #f1f1f1; color: black; padding-top : 1.5rem; padding-bottom: 1.5rem;"
-                        @input="this.procurar()" @focusout="fecharLista()" placeholder="Adicionar  Participante">
+                        @input="this.procurar()" @focusout="fecharLista()" placeholder="Adicionar Participante">
 
-                    <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3rem; width: 30rem;"
+                    <div style="height: fit-content; max-height: 15rem ; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li @click="atualizarPermissão(item), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
-                                v-for="item in listaPessoasFiltrada" :key="item.id"><img
-                                    :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"> {{
-                                        item.nomeCompleto }}
+                            <li @click="atualizarPermissão(item, 'adicionar'), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
+                                v-for="item in listaPessoasFiltrada" :key="item.id">
+                                <div
+                                    style="display: flex; border: 1px solid black; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;">
+                                    <!-- <img :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"
+                                        alt="N/A" style="margin-right: 1rem;"> -->
+                                    {{ item.nomeCompleto }}
+                                </div>
                             </li>
                         </ul>
                     </div>
                     <br>
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
-                        <select id="gerente" v-model="projetoEditado.gerente_id" disabled
-                            style="text-align: left; padding-top : 1.5rem; padding-bottom: 1.5rem; width: 100%; border: 1px solid black; border-radius: 10px; padding: 5px; height: 3rem;">
-                            <option style="padding-top : 1.5rem; padding-bottom: 1.5rem;" v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                {{ pessoa.nomeCompleto }} (Gerente) 
-                            </option>
-                        </select>
-                        <li v-for="(item, index) in projetoEditado.permissao" :key="item.usuario_id">
-                            <template v-if="index > 0">
-                                <div
-                                    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;">
-                                    {{ item.nome }}
-                                    <select style="width: 7rem" class="form-select" v-model="item.nivel">
-                                        <option value="1">Leitor</option>
-                                        <option value="2">Editor</option>
-                                    </select>
-                                </div>
-                            </template>
+                        <li v-for="item in reordenarArray(projetoEditado.permissao)" :key="item.usuario_id"
+                            style="display: flex; align-items: center;">
+                            <div
+                                style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;">
+                                {{ item.nome }} {{ item.usuario_id == projetoEditado.gerente_id ? '(Gerente)' : '' }}
+                                <select style="width: 7rem; text-align: center;" class="form-select" v-model="item.nivel"
+                                    :disabled="item.usuario_id == idUsuario">
+                                    <option value="1">Leitor</option>
+                                    <option value="2">Editor</option>
+                                </select>
+                            </div>
+                            <i v-if="parseInt(item.usuario_id) !== parseInt(this.idUsuario)"
+                                @click=" atualizarPermissão(item, 'remover')"
+                                style="margin-left: 1rem; font-size: 20px; color: red;" :id="'botaoEdicao' + item.id"
+                                class="bi bi-dash-circle botaoAdicionarSprint"></i>
                         </li>
                         <br><br><br>
                     </ul>
+
                 </div>
 
             </div>
@@ -317,6 +327,16 @@ export default {
     },
 
     methods: {
+        reordenarArray(array) {
+            var id = parseInt(localStorage.getItem('id'))
+
+            const primeiroElemento = array.find(item => parseInt(item.usuario_id) === id);
+            const arraySemPrimeiroElemento = [array.filter(item => item.usuario_id !== parseInt(id))];
+            return [].concat(primeiroElemento, ...arraySemPrimeiroElemento)
+
+
+        },
+
         nomeEsobrenome(nome) {
             const nomeESobrenome = nome.split(" ");
 
@@ -335,22 +355,36 @@ export default {
             }
         },
 
-        atualizarPermissão(item) {
-            var novaPermissão = {
-                usuario_id: item.id,
-                nivel: 1,
-                nome: item.nomeCompleto
-            }
-            this.projetoEditado.permissao.push(novaPermissão);
+        atualizarPermissão(item, ação) {
+            if (ação == 'adicionar') {
 
-            // axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-            //     usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
-            // })
-            //     .then(() => {
-            //     })
-            //     .catch((error) => {
-            //         console.error(error);
-            //     });
+                var novaPermissão = {
+                    usuario_id: item.id,
+                    nivel: 1,
+                    nome: item.nomeCompleto
+                }
+                this.projetoEditado.permissao.push(novaPermissão);
+
+                axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                    usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
+                })
+                    .then(() => {
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+            if (ação == 'remover') {
+                this.projetoEditado.permissao = this.projetoEditado.permissao.filter(pessoa => pessoa.usuario_id !== parseInt(item.usuario_id));
+                axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                    usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
+                })
+                    .then(() => {
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
 
         },
 
@@ -363,14 +397,12 @@ export default {
 
         procurar() {
             if (!this.pessoaSelecionada) {
-                this.listaPessoasFiltrada = this.gerente
+                this.listaPessoasFiltrada = this.gerente.filter(item => !(this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id));
             } else {
                 if (this.listaPessoasFiltrada !== null) {
-                    this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().startsWith(this.pessoaSelecionada.toLowerCase())
-                    );
+                    this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().startsWith(this.pessoaSelecionada.toLowerCase()));
                 }
             }
-
         },
 
         finalizarProjeto() {
@@ -431,9 +463,19 @@ export default {
         },
 
         verBacklogs(id, nomeProjeto) {
-            this.$router.push({ name: "sprints" })
-            sessionStorage.setItem('idProjeto', id)
-            sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+            if (this.projetos.length > 0) {
+                if ((this.projetos.find(projeto => projeto.id == id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 2) {
+                    this.$router.push({ name: "sprints" })
+                    sessionStorage.setItem('idProjeto', id)
+                    sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+                }
+                if ((this.projetos.find(projeto => projeto.id == id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1) {
+                    this.$router.push({ name: "sprintsVo" })
+                    sessionStorage.setItem('idProjeto', id)
+                    sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+                }
+            }
+
         },
 
         verPainel(id, nomeProjeto) {
@@ -457,27 +499,13 @@ export default {
         },
 
         getGerenteseSetor() {
-            // axios.get('http://192.168.0.6:8000/api/usuario/', {
-            // })
-            //     .then((response) => {
-            //         this.gerente = response.data
-            //         this.gerente = this.gerente.map(item => ({
-            //             id: item.id,
-            //             nomeCompleto: item.name
-            //         }))
-            //     })
-            //     .catch((error) => {
-            //         console.error(error);
-            //     });
-
-            axios.get('http://192.168.0.5:8000/api/pessoa/', {
+            axios.get('http://192.168.0.6:8000/api/usuario/', {
             })
                 .then((response) => {
                     this.gerente = response.data
                     this.gerente = this.gerente.map(item => ({
                         id: item.id,
-                        nomeCompleto: item.nomeCompleto,
-                        path_image: item.path_image
+                        nomeCompleto: item.name
                     }))
                 })
                 .catch((error) => {
@@ -495,7 +523,8 @@ export default {
         },
 
         getProjetos() {
-            axios.get('http://192.168.0.6:8000/api/projeto/listar', {
+            var id = parseFloat(localStorage.getItem('id'))
+            axios.get(`http://192.168.0.6:8000/api/projeto/usuario/${id}`, {
             })
                 .then((response) => {
                     this.projetos = response.data;
@@ -503,6 +532,15 @@ export default {
                 .catch((error) => {
                     console.error(error);
                 });
+
+            // axios.get(`http://192.168.0.6:8000/api/projeto/listar`, {
+            // })
+            //     .then((response) => {
+            //         this.projetos = response.data;
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
         }
 
     }

@@ -6,6 +6,7 @@ import ControleDeProjetos from '../views/ControleDeProjetos.vue'
 //Backlogs
 import PainelKanbanView from '../views/PainelKanban'
 import SprintsView from '../views/SprintsView'
+import SprintsViewOnly from '@/views/SprintsView-Only.vue'
 
 //Login
 import LoginViewVue from '@/views/Login/LoginView.vue'
@@ -67,6 +68,14 @@ const routes = [
     path: '/sprints',
     name: 'sprints',
     component: SprintsView,
+    props: { sharedVariable: 'backlogs' },
+    beforeEnter: guardMyroute,
+
+  },
+  {
+    path: '/sprintsVo',
+    name: 'sprintsVo',
+    component: SprintsViewOnly,
     props: { sharedVariable: 'backlogs' },
     beforeEnter: guardMyroute,
 
