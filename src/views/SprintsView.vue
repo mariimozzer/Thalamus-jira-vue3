@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid grey; align-items: center;">
+    <div style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
         <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;" class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;" class="bi bi-kanban botaoAdicionarSprint"></i>

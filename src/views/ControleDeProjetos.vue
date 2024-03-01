@@ -37,7 +37,14 @@
                                 <td><input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
                                         style="text-align: center;"> <span v-if="!item.dtTermino">Projeto em
                                         andamento...</span></td>
-                                <td>{{ item.gerente }}</td>
+                                <td>
+                                    <select id="gerente" v-model="item.gerente_id" disabled
+                                        style="text-align: center; padding: none; width: 13rem;">
+                                        <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                            {{ nomeEsobrenome(pessoa.nomeCompleto) }}
+                                        </option>
+                                    </select>
+                                </td>
                                 <td>{{ item.setor }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
@@ -164,7 +171,7 @@
                         <select id="gerente" @change="editarProjeto('gerente_id', $event.target.value)"
                             v-model="projetoEditado.gerente_id" class="form-select">
                             <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                {{ pessoa.nome }}
+                                {{ pessoa.nomeCompleto }}
                             </option>
                         </select>
                     </div>
@@ -219,8 +226,8 @@
             <div style="width: 100%; display: flex; justify-content: center;">
                 <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
                     <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
-                        style="background-color: #f1f1f1; color: black; padding-top : 1.5rem; padding-bottom: 1.5rem;" @input="this.procurar()" @focusout="fecharLista()"
-                        placeholder="Adicionar  Participante">
+                        style="background-color: #f1f1f1; color: black; padding-top : 1.5rem; padding-bottom: 1.5rem;"
+                        @input="this.procurar()" @focusout="fecharLista()" placeholder="Adicionar  Participante">
 
                     <div style="height: 11rem; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
@@ -235,16 +242,24 @@
                     <br>
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
-                        <li style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;"
-                            v-for="item in projetoEditado.permissao" :key="item">{{ item.nome }}
-                            <!-- {{ item.usuario_id }} {{ idUsuario }} -->
-
-                            <select style="width: 7rem" class="form-select" v-model="item.nivel">
-                                <option value="1">Leitor</option>
-                                <option value="2">Editor</option>
-                            </select>
+                        <select id="gerente" v-model="projetoEditado.gerente_id" disabled
+                            style="text-align: left; padding: none; width: 100%; border: 1px solid black; border-radius: 10px; padding: 5px;">
+                            <option style="padding: 5px;" v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                {{ pessoa.nomeCompleto }} (você) 
+                            </option>
+                        </select>
+                        <li v-for="(item, index) in projetoEditado.permissao" :key="item.usuario_id">
+                            <template v-if="index > 0">
+                                <div
+                                    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px;">
+                                    {{ item.nome }}
+                                    <select style="width: 7rem" class="form-select" v-model="item.nivel">
+                                        <option value="1">Leitor</option>
+                                        <option value="2">Editor</option>
+                                    </select>
+                                </div>
+                            </template>
                         </li>
-                        <br><br><br>
                     </ul>
                 </div>
 
@@ -301,6 +316,24 @@ export default {
     },
 
     methods: {
+        nomeEsobrenome(nome) {
+            const nomeESobrenome = nome.split(" ");
+
+
+            if (nomeESobrenome.length >= 2) {
+                const primeiroNome = nomeESobrenome[0];
+                const segundoNome = nomeESobrenome[1];
+
+                if (segundoNome.length <= 3 || segundoNome == 'Paula') {
+                    return `${primeiroNome} ${segundoNome} ${nomeESobrenome[2] || ''}`;
+                } else {
+                    return `${primeiroNome} ${segundoNome}`;
+                }
+            } else {
+                return nome;
+            }
+        },
+
         atualizarPermissão(item) {
             var novaPermissão = {
                 usuario_id: item.id,
@@ -429,7 +462,7 @@ export default {
             //         this.gerente = response.data
             //         this.gerente = this.gerente.map(item => ({
             //             id: item.id,
-            //             nome: item.name
+            //             nomeCompleto: item.name
             //         }))
             //     })
             //     .catch((error) => {
