@@ -19,28 +19,56 @@ import EsqueceuSenhaView from "@/views/Senha/EsqueceuSenhaView"
 import ValidarSenhaView from "@/views/Senha/ValidarSenhaView"
 import AlterarSenhaView from "@/views/Senha/AlterarSenhaView"
 import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
+import PainelKanbanViewOnlyVue from '@/views/PainelKanban-ViewOnly.vue'
+import axios from 'axios'
 
 
-function guardMyroute(to, from, next)
-{
- var isAuthenticated= false;
-if(localStorage.getItem('LoggedUser'))
-  isAuthenticated = true;
- else
-  isAuthenticated= false;
- if(isAuthenticated) 
- {
-  next(); 
- } 
- else
- {
-  next('/'); 
- }
+function guardMyroute(to, from, next) {
+  var isAuthenticated = false;
+  if (localStorage.getItem('LoggedUser'))
+    isAuthenticated = true;
+  else
+    isAuthenticated = false;
+  if (isAuthenticated) {
+    next();
+  }
+  else {
+    next('/');
+  }
 }
+
+function guardMyroute2(to, from, next) {
+  var isAuthenticated = false;
+  if (localStorage.getItem('LoggedUser'))
+    isAuthenticated = true;
+  else
+    isAuthenticated = false;
+  if (isAuthenticated) {
+
+    var idUsuario = localStorage.getItem('id');
+    var projetos = null
+    var idProjeto = sessionStorage.getItem('idProjeto')
+    axios.get(`http://192.168.0.5:8000/api/projeto/usuario/${idUsuario}`, {
+    })
+      .then((response) => {
+        projetos = response.data;
+
+        if ((projetos.find(projeto => projeto.id == idProjeto).permissao).find(pessoa => pessoa.usuario_id == idUsuario).nivel == 2) {
+          next();
+        } else {
+          next('/projetos');
+        }
+      })
+  }
+  else {
+    next('/');
+  }
+}
+
 
 const routes = [
 
-//Login
+  //Login
   {
     path: '/',
     name: 'login',
@@ -48,7 +76,7 @@ const routes = [
     meta: {
       hideMenu: true
     },
-    
+
 
   },
 
@@ -58,7 +86,7 @@ const routes = [
     name: 'home',
     component: HomeView,
     beforeEnter: guardMyroute,
-    
+
 
   },
 
@@ -69,7 +97,7 @@ const routes = [
     name: 'sprints',
     component: SprintsView,
     props: { sharedVariable: 'backlogs' },
-    beforeEnter: guardMyroute,
+    beforeEnter: guardMyroute2,
 
   },
   {
@@ -92,50 +120,58 @@ const routes = [
     path: '/painel',
     name: 'painel',
     component: PainelKanbanView,
+    beforeEnter: guardMyroute2,
+
+  },
+
+  {
+    path: '/painelVo',
+    name: 'painelVo',
+    component: PainelKanbanViewOnlyVue,
     beforeEnter: guardMyroute,
 
   },
 
-// Senha
-{
-  path: '/alterarSenha',
-  name: 'AlterarSenha',
-  component: AlterarSenhaView,
-  beforeEnter: guardMyroute,
-
-},
-
+  // Senha
   {
-  path: '/esqueceuSenha',
-  name: 'EsqueceuSenha',
-  component: EsqueceuSenhaView,
-  meta: {
-    hideMenu: true
-  }
+    path: '/alterarSenha',
+    name: 'AlterarSenha',
+    component: AlterarSenhaView,
+    beforeEnter: guardMyroute,
 
-},
-
-{
-  path: '/validarSenha', 
-  name: 'ValidarSenha',
-  component: ValidarSenhaView,
-  meta: {
-    hideMenu: true
   },
 
-},
-{
-  path: '/configuracao', 
-  name: 'Configuracao',
-  component: ConfiguracaoUsuario,
-  beforeEnter: guardMyroute,
-},
+  {
+    path: '/esqueceuSenha',
+    name: 'EsqueceuSenha',
+    component: EsqueceuSenhaView,
+    meta: {
+      hideMenu: true
+    }
+
+  },
+
+  {
+    path: '/validarSenha',
+    name: 'ValidarSenha',
+    component: ValidarSenhaView,
+    meta: {
+      hideMenu: true
+    },
+
+  },
+  {
+    path: '/configuracao',
+    name: 'Configuracao',
+    component: ConfiguracaoUsuario,
+    beforeEnter: guardMyroute,
+  },
 
 
-   { 
-    path: '/:pathMatch(.*)*', redirect: '/' 
+  {
+    path: '/:pathMatch(.*)*', redirect: '/'
   }
- 
+
 ]
 
 const router = createRouter({

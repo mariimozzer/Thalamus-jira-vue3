@@ -1,72 +1,25 @@
 <template>
         <br><br><br><br>
+
     <div>
-        <div style="width: 100%; justify-content: space-between; display: flex;">
+        <div style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
             <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
                 class="bi bi-list-task botaoAdicionarSprint"></i>
             <h2>{{ nomeDoProjeto }}</h2>
             <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
                 class="bi bi-kanban botaoAdicionarSprint"></i>
         </div>
-        <hr>
+        <br>
+        <div style="width: 100%; text-align: center; color: red;">
+            <h6 style="margin-left: 1rem;">Acesso de leitor ! <br> Serão exibidas apenas as tarefas atribuídas a você.</h6>
+        </div>
         <div>
-
-            <div class="divFiltro">
-                <v-menu v-model="menu" :close-on-content-click="false" location="end">
-                    <template v-slot:activator="{ props }">
-                        <v-btn style="width: 2.5rem; height: 2.5rem;" icon="mdi-filter-menu" v-bind="props"></v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <!-- <v-list-item>
-                                <label> Filtrar: </label>
-                                <select v-model="filtro" class="form-select" style="
-                width: fit-content;
-                margin-inline: 0.5rem;
-                background-color: transparent;
-                border: 1px solid black;
-              ">
-                                    <option>Responsável</option>
-                                    <option>Sprint</option>
-                                </select>
-                            </v-list-item> -->
-
-                            <v-list-item>
-                                <label>
-                                    Filtrar responsável:
-                                </label>
-                                <select v-if="this.filtro == 'Responsável'" v-model="valorFiltro"
-                                    style=" width: fit-content; margin-inline: 0.5rem; background-color: transparent; border: 1px solid black;"
-                                    class="form-select" @change="filtrarBacklogs(this.valorFiltro, this.filtro)">
-                                    <option value="">Todos</option>
-                                    <option
-                                        v-for="backlog in filtrarRepetidos(sprints.map((item) => item.backlogs).flat(), 'responsavel')"
-                                        :key="backlog">{{ backlog.responsavel
-                                        }}</option>
-                                </select>
-
-                                <select v-if="this.filtro == 'Sprint'" v-model="valorFiltro"
-                                    style=" width: fit-content; margin-inline: 0.5rem; background-color: transparent; border: 1px solid black;"
-                                    class="form-select" @change="filtrarBacklogs(this.valorFiltro, this.filtro)">
-                                    <option value="">Todos</option>
-                                    <option
-                                        v-for="backlog in filtrarRepetidos(sprints.map((item) => item.backlogs).flat(), 'sprint')"
-                                        :key="backlog">{{ backlog.nomeSprint
-                                        }}</option>
-                                </select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-            </div>
             <div style="display: flex; flex-flow: row; justify-content: center;">
                 <div class="colunas">
                     <h3 style="text-align: center;">Pendente</h3>
                     <draggableVue class="list-group bloco" :list="backlogsPendentes" group="backlogs" itemKey="codigo">
                         <template #item="{ element }">
                             <div class="list-group-item card">
-
                                 <label>
                                     <div style="margin-bottom: 1rem;">
                                         <b style="font-size: 22px;">
@@ -177,6 +130,7 @@ export default {
     },
     data() {
         return {
+            idUsuario: localStorage.getItem('id'),
             menu: false,
             filtro: 'Responsável',
             valorFiltro: '',
@@ -219,34 +173,23 @@ export default {
 
     methods: {
         verBacklogs() {
-            this.$router.push({ name: "sprints" })
+            this.$router.push({ name: "sprintsVo" })
         },
 
-        verPainel() {
-            this.$router.push({ name: "painel" })
-        },
+        // verPainel() {
+        //     this.$router.push({ name: "painel" })
+        // },
 
         verProjetos() {
             this.$router.push({ name: "ControleDeProjetos" })
         },
 
-        filtrarBacklogs(valor, item) {
-            this.backlogsPendentes = [];
-            this.backlogsEmAndamento = [];
-            this.backlogsPendentes = []
-            this.getBacklogs()
-            if (valor != "") {
-                if (item == 'Responsável') {
-                    this.backlogsPendentes = this.backlogsPendentes.filter(item => item.responsavel == valor);
-                    this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.responsavel == valor);
-                    this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.responsavel == valor);
-                }
-                if (item == 'Sprint') {
-                    this.backlogsPendentes = this.backlogsPendentes.filter(item => item.nomeSprint == valor);
-                    this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => item.nomeSprint == valor);
-                    this.backlogsConcluidos = this.backlogsConcluidos.filter(item => item.nomeSprint == valor);
-                }
-            }
+        filtrarBacklogs() {
+
+            this.backlogsPendentes = this.backlogsPendentes.filter(item => parseInt(item.responsavel_id) == parseInt(this.idUsuario));
+            this.backlogsEmAndamento = this.backlogsEmAndamento.filter(item => parseInt(item.responsavel_id) == parseInt(this.idUsuario));
+            this.backlogsConcluidos = this.backlogsConcluidos.filter(item => parseInt(item.responsavel_id) == parseInt(this.idUsuario));
+
         },
 
         filtrarRepetidos(array, chave) {
@@ -305,6 +248,8 @@ export default {
                         console.error(`Status desconhecido: ${item.status}`);
                 }
             });
+
+            this.filtrarBacklogs()
 
         },
 

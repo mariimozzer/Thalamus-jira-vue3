@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <form @submit.prevent="login" class="container reset-margin">
+        <form @submit.prevent="login" class="container reset-margin" style="padding-top: 1rem;">
     
             <div class="box-login">
                 <div style="text-align: center;">
@@ -21,15 +21,6 @@
                     </div>
                     <input type="password" class="form-control" v-model="password" placeholder="12345678">
                 </div>
-                <br>
-    
-                <!-- <div class="form-check ">
-                            <input class="form-check-input" type="radio" id="roboflex" value="roboflex" v-model="local">
-                            <label class="form-check-label" for="roboflex"> Roboflex </label>
-                            <br>
-                            <input class="form-check-input" type="radio" id="zontec" value="zontec" v-model="local">
-                            <label class="form-check-label" for="zontec"> Zontec </label>
-                        </div> -->
     
                 <ul style="list-style: none;  margin: 0; padding: 0;">
                     <li v-for="local in localData" :key="local.local_nome">
@@ -119,7 +110,7 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://192.168.0.6:8000/api/login', {
+                const response = await axios.post('http://192.168.0.5:8000/api/login', {
                     email: this.email,
                     password: this.password,
                 });
@@ -134,7 +125,7 @@ export default {
                 localStorage.setItem('LoggedUser', true);
 
                 // Atualizar permissões do usuário
-                const menuUrl = `http://192.168.0.6:8000/api/menu/usuario/${userId}`;
+                const menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${userId}`;
                 const menuResponse = await axios.get(menuUrl);
                 const userPermissions = menuResponse.data.map((item) => item.nome.toLowerCase());
 

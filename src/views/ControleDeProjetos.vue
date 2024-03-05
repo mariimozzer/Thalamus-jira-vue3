@@ -1,4 +1,5 @@
 <template>
+    <br><br><br><br>
     <div style="padding: 1rem;">
         <div class="container"
             style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
@@ -17,8 +18,8 @@
             </div>
             <br>
             <div>
-                <div>
-                    <table class="table">
+                <div class="table responsive">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">Nome do Projeto </th>
@@ -29,17 +30,18 @@
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <thead>
+                        <tbody>
                             <tr v-for="item in projetos" :key="item.id" @mouseover="mostrarBotao(item.id, true)"
                                 @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td><input v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
+                                <td style="text-align: center;"><input
+                                        v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
                                         v-model="item.dtInicio" disabled style="text-align: center;"></td>
-                                <td><input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
-                                        style="text-align: center;"> <span
+                                <td style="text-align: center;"><input v-if="item.dtTermino" type="date"
+                                        v-model="item.dtTermino" disabled style="text-align: center;"> <span
                                         v-if="!item.dtTermino && projetos.length > 0">Projeto em
                                         andamento...</span></td>
-                                <td>
+                                <td style="text-align: center;">
                                     <select id="gerente" v-model="item.gerente_id" disabled
                                         style="text-align: center; padding: none; width: 13rem;">
                                         <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
@@ -47,7 +49,7 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td>{{ item.setor }}</td>
+                                <td style="text-align: center;">{{ item.setor }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(projetos) && projetos.length > 0">
@@ -76,16 +78,17 @@
                                                     <button style="margin: 0.2rem;"
                                                         :disabled="item.dtTermino || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
                                                         :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
-                                                        @click="modalFinalizarProjeto = true, this.projetoEditado.id =
-                                                            item.id">
-                                                        Finalizar</button><br />
+                                                        @click="modalFinalizarProjeto = true, this.projetoEditado = item">
+                                                        Finalizar
+                                                    </button>
+                                                    <br />
                                                 </v-list-item>
                                             </v-list>
                                         </v-menu>
                                     </div>
                                 </td>
                             </tr>
-                        </thead>
+                        </tbody>
 
                     </table>
                 </div>
@@ -148,7 +151,7 @@
 
     <!-- modal editar projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarProjeto" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 50rem; padding: 3rem; " class="modal-container">
+        <div style="max-height: 80%; width: 50rem; padding: 3rem; margin-bottom: 2rem; " class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Editar Projeto </h3>
@@ -167,8 +170,8 @@
 
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="data">Data de Início</label>
-                        <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio" class="form-control"
-                            @change="editarProjeto('dtInicio', $event.target.value)">
+                        <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio"
+                            class="form-control" @change="editarProjeto('dtInicio', $event.target.value)">
                     </div>
                 </div>
 
@@ -192,6 +195,43 @@
                         </select>
                     </div>
                 </div>
+                <div style="display: flex;">
+                    <div style="display: flex; flex-flow: column;">
+                        <div style="width: 100%; justify-content: space-between; display: flex;">
+                            <span>
+                                Anexos:
+                            </span>
+                            <i title="Adicionar anexo" style="font-size: 20px; cursor: pointer; justify-self: right;"
+                                class="bi bi-plus-circle" @click="openFileInput"></i>
+                        </div>
+
+                        <input style="display: none;" ref="fileInput" class="form-control form-control-sm" type="file"
+                            @change="handleFileUpload">
+
+                        <ul style="list-style: none; padding-left: 0rem; ">
+                            <li v-for="item in projetoEditado.anexos" :key="item"
+                                @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
+                                @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
+                                <div
+                                    style="margin-left: 1rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
+                                    <a :href="'http://192.168.0.5:8000/storage/' + item.path" target="_blank"
+                                        class="link">
+                                        <i style="font-size: 25px;"
+                                            :class="'bi bi-filetype-' + item.nome.split('.')[1].toLowerCase()"></i>
+                                        {{ item.nome }}
+                                    </a>
+
+                                    <button class="botaoAdicionarSprint" style="color: red; visibility: hidden;"
+                                        :id="'botaoExcluir' + item.id" @click="excluirAnexo(item.id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
             </div>
         </div>
     </div>
@@ -200,18 +240,19 @@
     <!-- MODAL Finalizar Projeto-->
     <div class="modal-mask" v-if="modalFinalizarProjeto" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
-            <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
+            <div style="display: flex; justify-content: center">
+                <h5>{{ projetoEditado.nome }}</h5>
             </div>
+            <br>
 
             <div style="width: 100%;">
                 <div>
                     <label>Data de termino do projeto:</label>
                     <input :class="{ shake: disabled }" v-model="dataTerminoProjeto" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                        class="form-control" type="date">
                 </div>
                 <div style="margin-top: 1rem;">
-                    <button class="button-default" @click="finalizarProjeto()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
+                    <button class="button-default" @click="finalizarProjeto()">
                         Finalizar Projeto</button>
                 </div>
             </div>
@@ -220,10 +261,10 @@
     </div>
     <!--END MODAL-->
 
-
     <!-- MODAL compartilhar Projeto-->
     <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora" style="padding: none;">
-        <div class="modal-container" style="width: 50rem; margin-bottom: 5rem; padding: none !important; height: 100rem;">
+        <div class="modal-container"
+            style="width: 50rem; margin-bottom: 5rem; padding: none !important; height: 100rem;">
             <div>
 
                 <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
@@ -242,7 +283,7 @@
                             <li @click="atualizarPermissão(item, 'adicionar'), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
                                 v-for="item in listaPessoasFiltrada" :key="item.id">
                                 <div
-                                    style="display: flex; border: 1px solid black; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;">
+                                    style="display: flex; ; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;">
                                     <!-- <img :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"
                                         alt="N/A" style="margin-right: 1rem;"> -->
                                     {{ item.nomeCompleto }}
@@ -253,18 +294,20 @@
                     <br>
                     <h5>Pessoas com acesso:</h5>
                     <ul style="list-style: none; padding-left: 0rem !important;">
-                        <li v-for="item in reordenarArray(projetoEditado.permissao)" :key="item.usuario_id"
+                        <li v-for="item in reordenarArray(projetoEditado.permissao) " :key="item.usuario_id"
                             style="display: flex; align-items: center;">
                             <div
                                 style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;">
-                                {{ item.nome }} {{ item.usuario_id == projetoEditado.gerente_id ? '(Gerente)' : '' }}
-                                <select style="width: 7rem; text-align: center;" class="form-select" v-model="item.nivel"
-                                    :disabled="item.usuario_id == idUsuario">
+                                {{ item.nome }} {{ item.usuario_id == projetoEditado.gerente_id ? '(Gerente)' :
+                        item.usuario_id == this.idUsuario ? '(Você)' : '' }}
+                                <select style="width: 7rem; text-align: center;" class="form-select"
+                                    v-model="item.nivel" @change="atualizarPermissão(item, 'atualizar')"
+                                    :disabled="item.usuario_id == projetoEditado.gerente_id || item.usuario_id == this.idUsuario">
                                     <option value="1">Leitor</option>
                                     <option value="2">Editor</option>
                                 </select>
                             </div>
-                            <i v-if="parseInt(item.usuario_id) !== parseInt(this.idUsuario)"
+                            <i v-if="parseInt(item.usuario_id) !== parseInt(this.idUsuario) && parseInt(item.usuario_id) !== parseInt(this.projetoEditado.gerente_id)"
                                 @click=" atualizarPermissão(item, 'remover')"
                                 style="margin-left: 1rem; font-size: 20px; color: red;" :id="'botaoEdicao' + item.id"
                                 class="bi bi-dash-circle botaoAdicionarSprint"></i>
@@ -282,19 +325,29 @@
 
 
 <script>
+import { ref } from 'vue';
 import axios from 'axios'
 
 export default {
     name: "ControleDeProjetos",
 
+    setup() {
+        const fileInput = ref(null);
+
+        const openFileInput = () => {
+            fileInput.value.click();
+        };
+
+        return { fileInput, openFileInput, };
+    },
+
     data() {
         return {
-            idUsuario: localStorage.getItem('id'),
+            inputArquivo: false,
+            idUsuario: null,
             pessoaSelecionada: null,
             listaPessoasFiltrada: null,
-
             pessoasComAcessoPorProjeto: [],
-
             dataTerminoProjeto: null,
             teste: '?',
             projetos: [],
@@ -323,12 +376,50 @@ export default {
     },
 
     created() {
-        this.userName = localStorage.getItem('userName')
+        this.userName = localStorage.getItem('userName'),
+            this.idUsuario = localStorage.getItem('id')
     },
 
     methods: {
+
+        handleFileUpload() {
+            // Acesse o elemento de input de arquivo usando refs
+            const fileInput = this.$refs.fileInput;
+
+            // Verifique se o elemento de input de arquivo existe e tem arquivos
+            if (fileInput && fileInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append('projeto_id', this.projetoEditado.id);
+
+                // Adicione todos os arquivos presentes no input
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('anexos[]', fileInput.files[i]);
+                }
+
+                // Envie a requisição usando Axios
+                axios.post('http://192.168.0.5:8000/api/projeto/anexo/adicionar', formData)
+                    .then(response => {
+                        this.projetoEditado.anexos.push({
+                            path: response.data.anexos_salvos[0].path,
+                            nome: response.data.anexos_salvos[0].nome,
+                            id: response.data.anexos_salvos[0].id
+                        });
+                    })
+                    .catch(error => {
+                        // Trata erros
+                        console.error(error);
+                    });
+            }
+        },
+
+        excluirAnexo(id) {
+            axios.delete(`http://192.168.0.5:8000/api/projeto/anexo/remover/${id}`);
+            this.projetoEditado.anexos = this.projetoEditado.anexos.filter(anexo => anexo.id !== id)
+        },
+
         reordenarArray(array) {
-            var id = parseInt(localStorage.getItem('id'))
+            var id = this.projetoEditado.gerente_id
+            // var idUserLogado = parseInt(localStorage.getItem('id'))
 
             const primeiroElemento = array.find(item => parseInt(item.usuario_id) === id);
             const arraySemPrimeiroElemento = [array.filter(item => item.usuario_id !== parseInt(id))];
@@ -365,8 +456,8 @@ export default {
                 }
                 this.projetoEditado.permissao.push(novaPermissão);
 
-                axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-                    usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
+                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                    usuarios: this.projetoEditado.permissao
                 })
                     .then(() => {
                     })
@@ -376,8 +467,20 @@ export default {
             }
             if (ação == 'remover') {
                 this.projetoEditado.permissao = this.projetoEditado.permissao.filter(pessoa => pessoa.usuario_id !== parseInt(item.usuario_id));
-                axios.post(`http://192.168.0.6:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-                    usuarios: this.projetoEditado.permissao.filter(item => item.usuario_id !== parseInt(this.idUsuario))
+                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                    usuarios: this.projetoEditado.permissao
+                })
+                    .then(() => {
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+            if (ação == 'atualizar') {
+
+                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                    usuarios: this.projetoEditado.permissao
+                    // .filter(item => item.usuario_id !== parseInt(this.idUsuario))
                 })
                     .then(() => {
                     })
@@ -414,7 +517,7 @@ export default {
                 }, 1500)
                 return
             }
-            axios.put(`http://192.168.0.6:8000/api/projeto/atualizar/${this.idProjetoEditado}`, {
+            axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
                 dtTermino: this.dataTerminoProjeto,
             })
             this.modalFinalizarProjeto = false;
@@ -433,21 +536,31 @@ export default {
             }
         },
 
+        mostrarBotaoExcluirAnexo(id, mostrar) {
+            if (mostrar == true) {
+                document.getElementById('botaoExcluir' + id).style.visibility = ''
+            }
+            if (mostrar == false) {
+                document.getElementById('botaoExcluir' + id).style.visibility = 'hidden'
+            }
+        },
+
         editarProjeto(itemAlterado, novoValor) {
 
-            axios.put(`http://192.168.0.6:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
+            axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
                 [itemAlterado]: novoValor,
             })
         },
 
         adicionarProjeto() {
-            axios.post('http://192.168.0.6:8000/api/projeto/cadastrar', {
+            axios.post('http://192.168.0.5:8000/api/projeto/cadastrar', {
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
                 gerente_id: this.novoProjeto.gerente_id,
-                setor_id: this.novoProjeto.setor_id
+                setor_id: this.novoProjeto.setor_id,
+                usuario_id: this.idUsuario
             })
-                .then(() => {
+                .then((response) => {
                     this.getProjetos();
                     this.modalNovoProjeto = false;
                     this.novoProjeto = {
@@ -456,6 +569,7 @@ export default {
                         "gerente_id": "",
                         "setor_id": "",
                     };
+                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -499,7 +613,7 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.6:8000/api/usuario/', {
+            axios.get('http://192.168.0.5:8000/api/usuario/', {
             })
                 .then((response) => {
                     this.gerente = response.data
@@ -512,7 +626,7 @@ export default {
                     console.error(error);
                 });
 
-            axios.get('http://192.168.0.6:8000/api/setor', {
+            axios.get('http://192.168.0.5:8000/api/setor', {
             })
                 .then((response) => {
                     this.setores = response.data.data
@@ -524,7 +638,7 @@ export default {
 
         getProjetos() {
             var id = parseFloat(localStorage.getItem('id'))
-            axios.get(`http://192.168.0.6:8000/api/projeto/usuario/${id}`, {
+            axios.get(`http://192.168.0.5:8000/api/projeto/usuario/${id}`, {
             })
                 .then((response) => {
                     this.projetos = response.data;
@@ -533,7 +647,7 @@ export default {
                     console.error(error);
                 });
 
-            // axios.get(`http://192.168.0.6:8000/api/projeto/listar`, {
+            // axios.get(`http://192.168.0.5:8000/api/projeto/listar`, {
             // })
             //     .then((response) => {
             //         this.projetos = response.data;
@@ -542,13 +656,22 @@ export default {
             //         console.error(error);
             //     });
         }
-
     }
 
 }
 </script>
 
 <style>
+.link {
+    color: black;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: rgb(0, 102, 255);
+
+}
+
 .cropped1 {
     width: 50px;
     /* width of container */

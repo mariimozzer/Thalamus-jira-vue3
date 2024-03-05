@@ -1,6 +1,6 @@
 import axios from "axios";
 
-  const baseURL= 'http://192.168.0.6:8000/api';
+  const baseURL= 'http://192.168.0.5:8000/api';
    const devURL = 'http://192.168.0.6:8082';
 
 
@@ -11,7 +11,7 @@ import axios from "axios";
 
 //local de armazenamento das fotos de visitante e colaborador
 export const urlFoto = {
-  caminhoFoto: `http://192.168.0.6:8000/storage/`,
+  caminhoFoto: `http://192.168.0.5:8000/storage/`,
 };
 
 

@@ -1,4 +1,5 @@
 <template>
+        <br><br><br><br>
     <div
         style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
         <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
@@ -86,8 +87,10 @@
 
                                 </v-list-item>
                                 <v-list-item>
-                                    <button style="margin: 0.2rem; color: black;" @click="abrirModalIniciarSprint(item.id)"
-                                        :disabled="item.dtInicio == null && item.dtTermino !== null">Editar Sprint
+                                    <button style="margin: 0.2rem; color: black;"
+                                        @click="abrirModaeEditarSprint(item.id, false)"
+                                        :disabled="item.dtInicio == null && item.dtTermino !== null"
+                                        :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'grey' : 'black', }">Editar Sprint
                                     </button><br />
                                 </v-list-item>
                                 <v-list-item>
@@ -137,7 +140,7 @@
                         <div style="width: 3rem; text-align: center;">
                             <strong>
                                 <select
-                                    style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
+                                    style=" text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
                                     disabled>
                                     <option selected>H.P.</option>
                                 </select>
@@ -179,23 +182,24 @@
                         </div>
 
                     </div>
-                    <draggable :list=item.backlogs group="backlogs" itemKey="id">
+                    <draggable :list=item.backlogs group="backlogs" itemKey="id" :scroll-sensitivity="150"
+                        :force-fallback="true">
                         <template #item="{ element }">
                             <div @mouseover="mostrarBotao(element.id, true)" @mouseleave="mostrarBotao(element.id, false)"
-                                style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
+                                style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center; cursor: all-scroll;">
 
                                 <div style="width:10%; text-align: center;">
-                                    <label style="width: 100%">{{ element.codigo }}</label>
+                                    <label style="width: 100%;cursor: all-scroll;">{{ element.codigo }}</label>
                                 </div>
 
                                 <div style="width: 30%; padding-left: 0.5rem; padding-right: 1rem">
-                                    <input :disabled="desativarEdicao" type="text" v-model="element.descricao"
-                                        style="width:100%; outline: none;">
+                                    <input :title="element.descricao" readonly type="text" v-model="element.descricao"
+                                        style="width:100%; outline: none; cursor: help;">
                                 </div>
 
                                 <div style="width: 3rem; text-align: center;">
                                     <select v-model="element.HP" @change="editarBacklog('HP', element.id, element.HP)"
-                                        style="width: 5rem%; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
+                                        style="text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem;">
                                         <option hidden>0</option>
                                         <option>1</option>
                                         <option>2</option>
@@ -212,7 +216,7 @@
                                     </select>
                                 </div>
 
-                                <div style="width: 15%; margin-inline;">
+                                <div style="width: 15%;">
                                     <select v-model="element.responsavel_id" class="form-select"
                                         @change="editarBacklog('responsavel_id', element.id, element.responsavel_id)"
                                         style="width: 100%; outline: none; text-align: left; padding: 0.5rem; border: none; background-color: transparent;">
@@ -224,15 +228,15 @@
                                 </div>
 
                                 <div style="width:10%; margin-inline: 0.5rem;">
-                                    <input style="width: 7rem; outline: none; text-align: center;" type="date"
-                                        @change="editarBacklog('dtInicio', element.id, element.dtInicio)"
+                                    <input style="width: 7rem; outline: none; text-align: center; cursor: pointer;"
+                                        type="date" @change="editarBacklog('dtInicio', element.id, element.dtInicio)"
                                         v-model="element.dtInicio">
                                 </div>
 
                                 <div style="width: 10%; margin-inline: 0.5rem;">
-                                    <input style="width: 7rem; outline: none; text-align: center;" type="date"
-                                        :min="element.dtInicio" @change="editarBacklog('dtFim', element.id, element.dtFim)"
-                                        v-model="element.dtFim">
+                                    <input style="width: 7rem; outline: none; text-align: center; cursor: pointer;"
+                                        type="date" :min="element.dtInicio"
+                                        @change="editarBacklog('dtFim', element.id, element.dtFim)" v-model="element.dtFim">
                                 </div>
 
                                 <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
@@ -320,7 +324,7 @@
     <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
             <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close" @click="fecharModal"></button>
+                <button type="button" class="btn-close" aria-label="Close" @click="this.showIniciarSprint = false"></button>
             </div>
 
             <div style="width: 100%;">
@@ -332,6 +336,35 @@
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="iniciarSprint()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
                         Iniciar Sprint</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--END MODAL SPRINT-->
+
+    <!-- MODAL INICIAR SPRINT-->
+    <div class="modal-mask" v-if="showEditarSprint" @click="fecharModalFora">
+        <div class="modal-container" style="height: min-content; width: 50rem;">
+            <div style="display: flex; justify-content: right;">
+                <button type="button" class="btn-close" aria-label="Close" @click="this.showEditarSprint = false"></button>
+            </div>
+
+            <div style="width: 100%;">
+                <div>
+                    <label>Data prevista de inicio:</label>
+                    <input :class="{ shake: disabled }" v-model="sprintEditada.dtInicio" id="dataInicio"
+                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                </div>
+                <br>
+                <div>
+                    <label>Data prevista de termino:</label>
+                    <input :class="{ shake: disabled }" v-model="sprintEditada.dtTermino" id="dataTermino"
+                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint,true)"><i class="fa-solid fa-circle-plus"></i>&nbsp;
+                        Salvar</button>
                 </div>
             </div>
 
@@ -395,7 +428,7 @@
 
         </div>
     </div>
-    <!--END MODAL EDTIRAR-->
+    <!--END MODAL -->
 </template>
 
 <script>
@@ -415,6 +448,7 @@ export default {
             backlogs: [],
             novoElemento: '',
             disabled: false,
+            showEditarSprint: false,
             showEditarBacklog: false,
             showIniciarSprint: false,
             showConfirmação: false,
@@ -434,6 +468,7 @@ export default {
             idProjeto: sessionStorage.getItem('idProjeto'),
             nomeDoProjeto: sessionStorage.getItem('nomeDoProjeto'),
             gerente: [],
+            sprintEditada: null
         }
     },
 
@@ -450,6 +485,7 @@ export default {
     },
 
     methods: {
+
         somenteBacklogs() {
             if (this.sprints !== null) {
                 var teste = this.sprints.map((item) => item.backlogs).flat()
@@ -525,7 +561,7 @@ export default {
                     }
                 }
 
-                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
                     sprint_id: idSprint,
                 })
                     .then(() => {
@@ -566,7 +602,7 @@ export default {
             //         console.error(error);
             //     });
 
-            axios.get('http://192.168.0.6:8000/api/usuario/', {
+            axios.get('http://192.168.0.5:8000/api/usuario/', {
             })
                 .then((response) => {
                     this.gerente = response.data
@@ -590,7 +626,7 @@ export default {
         },
 
         getBacklogs() {
-            axios.get(`http://192.168.0.6:8000/api/sprint/buscar/${this.idProjeto}`, {})
+            axios.get(`http://192.168.0.5:8000/api/sprint/buscar/${this.idProjeto}`, {})
                 .then((response) => {
                     function compararSprints(a, b) {
                         if (a.nome === "Plano de ação") {
@@ -624,17 +660,21 @@ export default {
 
             if (status == 'Em andamento') {
 
-                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
-                    dtInicioReal: data,
+                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    usuario_id: this.idUsuario,
+                    dtInicioReal: data
                 })
                     .then(() => {
+                        
                         return this.getBacklogs()
                     })
 
             } if (status == 'Concluído') {
 
-                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
-                    dtFimReal: data,
+                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    usuario_id: this.idUsuario,
+                    dtFimReal: data
+
                 })
                     .then(() => {
                         return this.getBacklogs()
@@ -642,9 +682,10 @@ export default {
 
             } if (status == 'Pendente') {
 
-                axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    usuario_id: this.idUsuario,
                     dtInicioReal: null,
-                    dtFimReal: null,
+                    dtFimReal: null
                 })
                     .then(() => {
                         return this.getBacklogs()
@@ -665,8 +706,9 @@ export default {
 
         editarBacklog(itemAlterado, idBacklog, novoValor) {
 
-            axios.put(`http://192.168.0.6:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
-                [itemAlterado]: novoValor,
+            axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                usuario_id: this.idUsuario,
+                [itemAlterado]: novoValor
             })
                 .then(() => {
                     if (itemAlterado == 'status') {
@@ -680,7 +722,7 @@ export default {
 
         editarSprint(itemAlterado, idSprint, novoValor) {
 
-            axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${idSprint}`, {
+            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${idSprint}`, {
                 [itemAlterado]: novoValor,
             })
                 .then(() => {
@@ -738,7 +780,7 @@ export default {
                 this.showEditarBacklog = false;
                 this.showIniciarSprint = false;
                 this.showConfirmação = false;
-
+                this.showEditarSprint = false
             }
 
         },
@@ -764,12 +806,11 @@ export default {
                 dia = "0" + dia
             }
             data = ano + '-' + mes + '-' + dia
-            this.teste = data
 
             var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
             if (sprint.dtTermino !== null) {
 
-                axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${this.idSprint}`, {
+                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
                     dtInicio: null,
                     dtTermino: data
                 })
@@ -783,6 +824,30 @@ export default {
                     });
             } else {
                 this.showIniciarSprint = true;
+            }
+
+        },
+
+        abrirModaeEditarSprint(id, salvar) {
+            this.idSprint = id
+            var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
+            if (salvar == false) {
+                this.showEditarSprint = true;
+                this.sprintEditada = sprint
+            } else {
+                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                    dtInicio: this.sprintEditada.dtInicio,
+                    dtTermino: this.sprintEditada.dtTermino
+                })
+                    .then(() => {
+                        this.idSprint = null;
+                        this.getBacklogs();
+                        this.showEditarSprint = false;
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+
             }
 
         },
@@ -810,7 +875,7 @@ export default {
                 return
             }
 
-            axios.put(`http://192.168.0.6:8000/api/sprint/atualizar/${this.idSprint}`, {
+            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
                 dtInicio: data,
                 dtTermino: this.dataTerminoSprint,
             })
@@ -835,7 +900,7 @@ export default {
                 nomeSprint = 'Sprint - 1';
             }
 
-            axios.post(`http://192.168.0.6:8000/api/sprint/cadastrar`, {
+            axios.post(`http://192.168.0.5:8000/api/sprint/cadastrar`, {
                 nome: nomeSprint,
                 projeto_id: this.idProjeto
             })
@@ -851,7 +916,7 @@ export default {
 
             if (this.somenteBacklogs().length !== 0) {
 
-                axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
+                axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
                     sprint_id: id,
                     codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
                     descricao: descricao
@@ -863,7 +928,7 @@ export default {
                         console.error(error);
                     });
             } else {
-                axios.post(`http://192.168.0.6:8000/api/sprintTarefa/cadastrar`, {
+                axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
                     sprint_id: id,
                     codigo: 'Tarefa - 1',
                     descricao: descricao
@@ -879,7 +944,7 @@ export default {
 
         apagarBacklog(idBacklog) {
 
-            axios.put(`http://192.168.0.6:8000/api/sprintTarefa/excluir/${idBacklog}`, {
+            axios.put(`http://192.168.0.5:8000/api/sprintTarefa/excluir/${idBacklog}`, {
                 usuario_id: this.idUsuario
             })
                 .then(() => {
@@ -891,7 +956,7 @@ export default {
         },
 
         apagarSprint(id) {
-            axios.put(`http://192.168.0.6:8000/api/sprint/excluir/${id}`, {
+            axios.put(`http://192.168.0.5:8000/api/sprint/excluir/${id}`, {
                 usuario_id: this.idUsuario
             })
                 .then(() => {
@@ -900,7 +965,10 @@ export default {
                 .catch((error) => {
                     console.error(error);
                 });
-        }
+        },
+
+
+
     }
 }
 </script>

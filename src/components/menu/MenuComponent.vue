@@ -154,7 +154,7 @@ export default {
         },
 
         getAllEstrutura() {
-            axios.get(`http://192.168.0.6:8000/api/menu/estrutura`)
+            axios.get(`http://192.168.0.5:8000/api/menu/estrutura`)
                 .then(response => {
                     this.menus = response.data.data.map((p) => new Menu(p));
                 })
@@ -186,7 +186,7 @@ export default {
         logout() {
             const token = localStorage.getItem('token')
             axios
-                .post('http://192.168.0.6:8000/api/logout', {}, {
+                .post('http://192.168.0.5:8000/api/logout', {}, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

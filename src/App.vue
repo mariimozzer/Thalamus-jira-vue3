@@ -1,18 +1,17 @@
 <template>
-    <div class="estilos" style="background-color: #FAF9F6; height: 2000px;">
-        <div class="menu">
-            <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
+    <body style="background-color: #FAF9F6; min-height: 100vh">
+        <div class="estilos">
+            <div class="menu">
+                <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
+            </div>
+            <!-- <menuLateral></menuLateral> -->
+            <div class="router">
+                <router-view />
+                <br><br>
+            </div>
+            <FooterComponent></FooterComponent>
         </div>
-        <!-- <menuLateral></menuLateral> -->
-        <div class="router">
-            <br><br><br><br>
-
-            <router-view />
-
-            <br><br><br><br>
-        </div>
-        <FooterComponent></FooterComponent>
-    </div>
+    </body>
 </template>
 
 <script>
@@ -189,5 +188,4 @@ thead {
     margin-bottom: 100px;
     margin-top: 0px;
 } */
-
 </style>
