@@ -23,6 +23,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Nome do Projeto </th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Data de Início</th>
                                 <th scope="col">Data de Termino</th>
                                 <th scope="col">Gerente Responsável</th>
@@ -34,13 +35,23 @@
                             <tr v-for="item in projetos" :key="item.id" @mouseover="mostrarBotao(item.id, true)"
                                 @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td style="text-align: center;"><input
-                                        v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
-                                        v-model="item.dtInicio" disabled style="text-align: center;"></td>
-                                <td style="text-align: center;"><input v-if="item.dtTermino" type="date"
-                                        v-model="item.dtTermino" disabled style="text-align: center;"> <span
-                                        v-if="!item.dtTermino && projetos.length > 0">Projeto em
-                                        andamento...</span></td>
+                                <td><select v-model="item.status" class="form-select" :disabled="item.status == 'Concluído'"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : 'rgb(0, 192, 0)', 'cursor': (item.status == 'Concluído') ? 'not-allowed' : ''}"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarProjetoInLine(item.id, 'status', item.status)">
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
+                                <td style="text-align: center;">
+                                    <input v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
+                                        v-model="item.dtInicio" disabled style="text-align: center; width: 8rem;">
+                                </td>
+                                <td style="text-align: center;">
+                                    <input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
+                                        style="text-align: center; width: 8rem;">
+                                    <label v-if="!item.dtTermino" style="width: 8rem;">-</label>
+                                </td>
                                 <td style="text-align: center;">
                                     <select id="gerente" v-model="item.gerente_id" disabled
                                         style="text-align: center; padding: none; width: 13rem;">
@@ -299,7 +310,7 @@
                             <div
                                 style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;">
                                 {{ item.nome }} {{ item.usuario_id == projetoEditado.gerente_id ? '(Gerente)' :
-                        item.usuario_id == this.idUsuario ? '(Você)' : '' }}
+            item.usuario_id == this.idUsuario ? '(Você)' : '' }}
                                 <select style="width: 7rem; text-align: center;" class="form-select"
                                     v-model="item.nivel" @change="atualizarPermissão(item, 'atualizar')"
                                     :disabled="item.usuario_id == projetoEditado.gerente_id || item.usuario_id == this.idUsuario">
@@ -349,7 +360,7 @@ export default {
             listaPessoasFiltrada: null,
             pessoasComAcessoPorProjeto: [],
             dataTerminoProjeto: null,
-            teste: '?',
+            teste: 'teste',
             projetos: [],
             modalCompartilharProjeto: false,
             modalNovoProjeto: false,
@@ -519,6 +530,7 @@ export default {
             }
             axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
                 dtTermino: this.dataTerminoProjeto,
+                status: "Concluído"
             })
             this.modalFinalizarProjeto = false;
             setTimeout(() => {
@@ -550,6 +562,26 @@ export default {
             axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${this.projetoEditado.id}`, {
                 [itemAlterado]: novoValor,
             })
+        },
+
+        editarProjetoInLine(idProjeto, itemAlterado, novoValor) {
+
+            if (novoValor !== "Concluído") {
+
+                axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
+                    [itemAlterado]: novoValor,
+                })
+            }
+            if (novoValor == "Concluído") {
+                var dataAtual = new Date().toISOString().split('T')[0];
+                axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
+                    [itemAlterado]: novoValor,
+                    dtTermino: dataAtual
+                })
+                .then(() => { 
+                    this.getProjetos()
+                })
+            }
         },
 
         adicionarProjeto() {

@@ -92,7 +92,7 @@
                                     <v-menu>
 
                                         <template v-slot:activator="{ props }">
-                                            <button style=";margin: 0.2rem; color: grey; cursor: not-allowed;"
+                                            <button style="margin: 0.2rem; color: grey; cursor: not-allowed;"
                                                 v-bind="props" disabled>Excluir
                                                 Sprint</button>
                                         </template>
@@ -138,7 +138,7 @@
                         <div style="width: 3rem; text-align: center;">
                             <strong>
                                 <select
-                                    style="width: 5rem%; text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
+                                    style="text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
                                     disabled>
                                     <option selected>H.P.</option>
                                 </select>
@@ -198,7 +198,7 @@
                             <div style="width: 3rem; text-align: center">
                                 <select v-model="element.HP" @change="editarBacklog('HP', element.id, element.HP)"
                                     disabled
-                                    style="width: 5rem%; text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem; cursor: not-allowed;">
+                                    style="text-align: center; border: 1px solid black; border-radius: 50px; padding-left: 0.2rem; padding-right: 0.2rem; cursor: not-allowed;">
                                     <option hidden>0</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -215,7 +215,7 @@
                                 </select>
                             </div>
 
-                            <div style="width: 15%; margin-inline;">
+                            <div style="width: 15%">
                                 <select v-model="element.responsavel_id" class="form-select" disabled
                                     @change="editarBacklog('responsavel_id', element.id, element.responsavel_id)"
                                     style="width: 100%; outline: none; text-align: left; padding: 0.5rem; border: none; background-color: transparent; cursor: not-allowed;">
