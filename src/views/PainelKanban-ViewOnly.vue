@@ -1,17 +1,19 @@
 <template>
-        <br><br><br><br>
+    <br><br><br>
 
-    <div>
-        <div style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
-            <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-                class="bi bi-list-task botaoAdicionarSprint"></i>
-            <h2>{{ nomeDoProjeto }}</h2>
-            <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
-                class="bi bi-kanban botaoAdicionarSprint"></i>
-        </div>
-        <br>
+    <div
+        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 999999;">
+        <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+            class="bi bi-list-task botaoAdicionarSprint"></i>
+        <h2>{{ nomeDoProjeto }}</h2>
+        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
+            class="bi bi-kanban botaoAdicionarSprint"></i>
+    </div>
+    <br><br><br>
+
         <div style="width: 100%; text-align: center; color: red;">
-            <h6 style="margin-left: 1rem;">Acesso de leitor ! <br> Serão exibidas apenas as tarefas atribuídas a você.</h6>
+            <h6 style="margin-left: 1rem;">Acesso de leitor ! <br> Serão exibidas apenas as tarefas atribuídas a você.
+            </h6>
         </div>
         <div>
             <div style="display: flex; flex-flow: row; justify-content: center;">
@@ -34,12 +36,13 @@
 
                                     </div>
 
-                                    <b> Fim previsto: </b> <input style="outline: none;" type="date" v-model="element.dtFim"
-                                        disabled><br><b>Responsável:</b>
+                                    <b> Fim previsto: </b> <input style="outline: none;" type="date"
+                                        v-model="element.dtFim" disabled><br><b>Responsável:</b>
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
+                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly
+                                        style="cursor: auto;"></textarea>
 
                                 </label>
                                 <br>
@@ -49,7 +52,9 @@
                 </div>
                 <div class="colunas">
                     <h3 style="text-align: center;">Em andamento</h3>
-                    <draggableVue class="list-group bloco" :list="backlogsEmAndamento" group="backlogs" itemKey="codigo">
+                    <draggableVue class="list-group bloco" :list="backlogsEmAndamento" group="backlogs"
+                        itemKey="codigo">
+
                         <template #item="{ element }">
                             <div class="list-group-item card">
 
@@ -68,12 +73,13 @@
 
                                     </div>
 
-                                    <b>Fim previsto: </b><input style="outline: none;" type="date" v-model="element.dtFim"
-                                        disabled><br><b>Responsável:</b>
+                                    <b>Fim previsto: </b><input style="outline: none;" type="date"
+                                        v-model="element.dtFim" disabled><br><b>Responsável:</b>
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
+                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly
+                                        style="cursor: auto;"></textarea>
 
                                 </label>
                                 <br>
@@ -85,6 +91,7 @@
                 <div class="colunas">
                     <h3 style="text-align: center;">Concluído</h3>
                     <draggableVue class="list-group bloco" :list="backlogsConcluidos" group="backlogs" itemKey="codigo">
+
                         <template #item="{ element }">
                             <div class="list-group-item card">
 
@@ -101,12 +108,13 @@
 
                                     </div>
 
-                                    <b>Fim previsto:</b> <input style="outline: none;" type="date" v-model="element.dtFim"
-                                        disabled><br><b>Responsável:</b>
+                                    <b>Fim previsto:</b> <input style="outline: none;" type="date"
+                                        v-model="element.dtFim" disabled><br><b>Responsável:</b>
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
+                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly
+                                        style="cursor: auto;"></textarea>
                                 </label>
                                 <br>
                             </div>
@@ -118,8 +126,8 @@
         <br><br>
 
         <br><br><br><br><br>
-    </div>
 </template>
+
 <script>
 import draggableVue from "@/vuedraggableVue";
 import axios from "axios";
@@ -339,4 +347,3 @@ export default {
     border-radius: 20px;
 }
 </style>
-  
