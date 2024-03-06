@@ -86,7 +86,8 @@
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <input type="text" :title="element.descricao" readonly v-model="element.descricao">
+                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
+
                                 </label>
                                 <br>
                             </div>
@@ -119,7 +120,8 @@
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <input type="text" :title="element.descricao" readonly v-model="element.descricao">
+                                    <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
+
                                 </label>
                                 <br>
                             </div>
@@ -151,8 +153,8 @@
                                     {{ element.responsavel }}
                                     <br>
                                     <b>Descrição: </b>
-                                    <input type="text" :title="element.descricao" readonly v-model="element.descricao">
                                 </label>
+                                <textarea cols="40" rows="3" v-model="element.descricao" readonly style="cursor: auto;"></textarea>
                                 <br>
                             </div>
                         </template>
