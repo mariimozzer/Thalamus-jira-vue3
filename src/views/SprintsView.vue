@@ -1,7 +1,7 @@
 <template>
     <br><br><br>
     <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 999999;">
+        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
         <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
         <h2>{{ nomeDoProjeto }}</h2>
@@ -33,7 +33,7 @@
                             </h5>
                         </div>
                         <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint"
-                            style=" width: 2rem; position: absolute; margin-left: ">
+                            style=" width: 2rem; margin-left: ">
                             <i style="font-size: 20px;" class="bi bi-eye-slash ocultar"
                                 :id="'botaoOcultar' + item.nome"></i>
                         </button>
@@ -321,10 +321,13 @@
                 </div>
             </div>
 
-            <div v-if="item.nome == 'Plano de ação'" class="row"
-                style="margin-top: 1rem; width: 100%;display: flex;flex-flow: row; align-items: center;">
+            <div v-if="item.nome == 'Plano de ação'"
+                style="margin-top: 1rem; width: 100%;display: flex;flex-flow: row; align-items: center; justify-content: space-between;">
+                <button style="width: 5rem;font-size: 30px;padding-left: 2rem; visibility: hidden"
+                    @click="criarNovaSprint" class="botaoAdicionarSprint">
+                    <i class="bi bi-plus-circle"></i></button>
                 <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
-                <button style="width: max-content; font-size: 30px; position: absolute; margin-left: 65rem;"
+                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;"
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
             </div>
