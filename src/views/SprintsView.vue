@@ -1,5 +1,5 @@
 <template>
-        <br><br><br><br>
+    <br><br><br><br>
     <div
         style="width: 100%; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
         <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
@@ -10,8 +10,7 @@
     </div>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
-        <h3
-            style="text-align: center; margin-bottom: 1rem; border-bottom: 2px rgb(56, 56, 56) solid; padding-bottom: 1rem;">
+        <h3 style="text-align: center; margin-top: 1rem;">
             Plano de Ação</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
@@ -21,13 +20,13 @@
                             <h5>
                                 <span style="display: flex;">
                                     <div style="background-color: rgba(255, 145, 0, 0.600)" class="hPoints">{{
-                                        somarHP(item)[0] }}
+            somarHP(item)[0] }}
                                     </div>
                                     <div style="background-color: rgba(0, 47, 255, 0.600)" class="hPoints">{{
-                                        somarHP(item)[1] }}
+            somarHP(item)[1] }}
                                     </div>
                                     <div style="background-color: rgba(0, 255, 0, 0.600)" class="hPoints">{{
-                                        somarHP(item)[2] }}
+            somarHP(item)[2] }}
                                     </div>
                                 </span>
                             </h5>
@@ -44,7 +43,8 @@
                         </h3>
                     </div>
 
-                    <div style="width: 20%; display: flex; text-align: right; justify-content: right;" v-if="index !== 0">
+                    <div style="width: 20%; display: flex; text-align: right; justify-content: right;"
+                        v-if="index !== 0">
                         <div style="text-align: center;">
                             <div v-if="item.dtInicio == null && item.dtTermino == null"
                                 style="width: 13rem; border: 1px rgba(255, 145, 0, 0.8) solid; margin-right: 0.5rem; border-radius: 10px;">
@@ -82,7 +82,7 @@
                                     <button style="margin: 0.2rem;" @click="abrirModalIniciarSprint(item.id)"
                                         :disabled="item.dtInicio == null && item.dtTermino !== null"
                                         :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null) ? 'grey' : 'black' }">{{
-                                            item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
+            item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
                                     </button><br />
 
                                 </v-list-item>
@@ -90,11 +90,13 @@
                                     <button style="margin: 0.2rem; color: black;"
                                         @click="abrirModaeEditarSprint(item.id, false)"
                                         :disabled="item.dtInicio == null && item.dtTermino !== null"
-                                        :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'grey' : 'black', }">Editar Sprint
+                                        :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null || item.dtInicio == null && item.dtTermino == null) ? 'grey' : 'black', }">Editar
+                                        Sprint
                                     </button><br />
                                 </v-list-item>
                                 <v-list-item>
                                     <v-menu>
+
                                         <template v-slot:activator="{ props }">
                                             <button style="color: red;margin: 0.2rem;" v-bind="props">Excluir
                                                 Sprint</button>
@@ -133,14 +135,14 @@
 
                         <div style="width: 30%; padding-left: 0.5rem; padding-right: 1rem">
                             <strong>
-                                <input type="text" style="width:100%; outline: none; text-align: center;" value="Descrição">
+                                <input type="text" style="width:100%; outline: none; text-align: center;"
+                                    value="Descrição">
                             </strong>
                         </div>
 
                         <div style="width: 3rem; text-align: center;">
                             <strong>
-                                <select
-                                    style=" text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
+                                <select style=" text-align: center; padding-left: 0.2rem; padding-right: 0.2rem;"
                                     disabled>
                                     <option selected>H.P.</option>
                                 </select>
@@ -149,7 +151,8 @@
 
                         <div style="width: 15%; margin-inline: ">
                             <strong>
-                                <select style="width: 100%; outline: none; text-align: left; margin-left: 1rem;" disabled>
+                                <select style="width: 100%; outline: none; text-align: left; margin-left: 1rem;"
+                                    disabled>
                                     <option selected>Responsável</option>
                                 </select>
                             </strong>
@@ -184,8 +187,10 @@
                     </div>
                     <draggable :list=item.backlogs group="backlogs" itemKey="id" :scroll-sensitivity="150"
                         :force-fallback="true">
+
                         <template #item="{ element }">
-                            <div @mouseover="mostrarBotao(element.id, true)" @mouseleave="mostrarBotao(element.id, false)"
+                            <div @mouseover="mostrarBotao(element.id, true)"
+                                @mouseleave="mostrarBotao(element.id, false)"
                                 style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center; cursor: all-scroll;">
 
                                 <div style="width:10%; text-align: center;">
@@ -236,14 +241,16 @@
                                 <div style="width: 10%; margin-inline: 0.5rem;">
                                     <input style="width: 7rem; outline: none; text-align: center; cursor: pointer;"
                                         type="date" :min="element.dtInicio"
-                                        @change="editarBacklog('dtFim', element.id, element.dtFim)" v-model="element.dtFim">
+                                        @change="editarBacklog('dtFim', element.id, element.dtFim)"
+                                        v-model="element.dtFim">
                                 </div>
 
                                 <div style="width: 15%; margin-right: 0.3rem; margin-left: 0.3rem;">
                                     <select
                                         :style="{ 'color': (element.status == 'Pendente') ? 'rgb(255, 145, 0)' : (element.status == 'Em andamento') ? 'rgb(0, 47, 255)' : 'rgb(0, 192, 0)', }"
                                         style="width: 100%; outline: none; text-align: center; border: none; background-color: transparent;"
-                                        class="form-select" @change="editarBacklog('status', element.id, element.status)"
+                                        class="form-select"
+                                        @change="editarBacklog('status', element.id, element.status)"
                                         v-model="element.status">
                                         <option style="color: rgb(255, 145, 0);">Pendente</option>
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
@@ -265,8 +272,10 @@
                                                     @click="abrirModalEditarBacklog(element.id, item.id, false)">Editar
                                                     Tarefa</button><br />
                                                 <v-menu>
+
                                                     <template v-slot:activator="{ props }">
-                                                        <button style="color: red;margin: 0.2rem;" v-bind="props">Excluir
+                                                        <button style="color: red;margin: 0.2rem;"
+                                                            v-bind="props">Excluir
                                                             Tarefa</button>
                                                     </template>
 
@@ -305,14 +314,14 @@
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; display: none;" :id="'pontos' + item.nome" @click="ocultarPlano(item.nome)"
-                    class="ocultar">
+                <div style="text-align: center; display: none;" :id="'pontos' + item.nome"
+                    @click="ocultarPlano(item.nome)" class="ocultar">
                     <i class="bi bi-grip-horizontal"></i>
                 </div>
             </div>
 
             <div v-if="item.nome == 'Plano de ação'" class="row"
-                style="border-bottom: 2px rgb(56, 56, 56) solid; margin-bottom: 1rem; border-radius: 1px; width: 100%;display: flex;flex-flow: row; align-items: center;">
+                style="margin-top: 1rem; width: 100%;display: flex;flex-flow: row; align-items: center;">
                 <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
                 <button style="width: max-content; font-size: 30px; position: absolute; margin-left: 65rem;"
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
@@ -324,7 +333,8 @@
     <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
             <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close" @click="this.showIniciarSprint = false"></button>
+                <button type="button" class="btn-close" aria-label="Close"
+                    @click="this.showIniciarSprint = false"></button>
             </div>
 
             <div style="width: 100%;">
@@ -334,7 +344,8 @@
                         :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
                 </div>
                 <div style="margin-top: 1rem;">
-                    <button class="button-default" @click="iniciarSprint()"><i class="fa-solid fa-circle-plus"></i>&nbsp;
+                    <button class="button-default" @click="iniciarSprint()"><i
+                            class="fa-solid fa-circle-plus"></i>&nbsp;
                         Iniciar Sprint</button>
                 </div>
             </div>
@@ -347,7 +358,8 @@
     <div class="modal-mask" v-if="showEditarSprint" @click="fecharModalFora">
         <div class="modal-container" style="height: min-content; width: 50rem;">
             <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close" @click="this.showEditarSprint = false"></button>
+                <button type="button" class="btn-close" aria-label="Close"
+                    @click="this.showEditarSprint = false"></button>
             </div>
 
             <div style="width: 100%;">
@@ -363,7 +375,8 @@
                         :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
                 </div>
                 <div style="margin-top: 1rem;">
-                    <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint,true)"><i class="fa-solid fa-circle-plus"></i>&nbsp;
+                    <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint, true)"><i
+                            class="fa-solid fa-circle-plus"></i>&nbsp;
                         Salvar</button>
                 </div>
             </div>
@@ -399,30 +412,70 @@
                 </div>
             </div>
 
-            <div style="display: flex; margin-top: 1rem;">
+            <div style="display: flex;">
                 <div>
-                    <label>Inicio Previsto:</label>
-                    <input v-model="backlogeditado.dtInicio" class="form-control" type="date" style="width: min-content;"
-                        @change="editarBacklog('dtInicio', backlogeditado.id, backlogeditado.dtInicio)">
-                </div>
-                <div style="margin-left: 1rem;">
-                    <label>Fim Previsto:</label>
-                    <input v-model="backlogeditado.dtFim" class="form-control" type="date" style="width: min-content;"
-                        @change="editarBacklog('dtFim', backlogeditado.id, backlogeditado.dtFim)">
-                </div>
-            </div>
+                    <div style="display: flex; margin-top: 1rem; width: min-content;">
+                        <div>
+                            <label>Inicio Previsto:</label>
+                            <input v-model="backlogeditado.dtInicio" class="form-control" type="date"
+                                style="width: min-content;"
+                                @change="editarBacklog('dtInicio', backlogeditado.id, backlogeditado.dtInicio)">
+                        </div>
+                        <div style="margin-left: 1rem;">
+                            <label>Fim Previsto:</label>
+                            <input v-model="backlogeditado.dtFim" class="form-control" type="date"
+                                style="width: min-content;"
+                                @change="editarBacklog('dtFim', backlogeditado.id, backlogeditado.dtFim)">
+                        </div>
+                    </div>
 
-            <div style="display: flex; margin-top: 1rem;">
-                <div>
-                    <label>Inicio Real:</label>
-                    <input v-model="backlogeditado.dtInicioReal" class="form-control" type="date"
-                        @change="editarBacklog('dtInicioReal', backlogeditado.id, backlogeditado.dtInicioReal)"
-                        style="width: min-content;">
+                    <div style="display: flex; margin-top: 1rem; width: min-content;">
+                        <div>
+                            <label>Inicio Real:</label>
+                            <input v-model="backlogeditado.dtInicioReal" class="form-control" type="date"
+                                @change="editarBacklog('dtInicioReal', backlogeditado.id, backlogeditado.dtInicioReal)"
+                                style="width: min-content;">
+                        </div>
+                        <div style="margin-left: 1rem;">
+                            <label>Fim Real:</label>
+                            <input v-model="backlogeditado.dtFimReal" class="form-control" type="date"
+                                style="width: min-content;"
+                                @change="editarBacklog('dtFimReal', backlogeditado.id, backlogeditado.dtFimReal)">
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-left: 1rem;">
-                    <label>Fim Real:</label>
-                    <input v-model="backlogeditado.dtFimReal" class="form-control" type="date" style="width: min-content;"
-                        @change="editarBacklog('dtFimReal', backlogeditado.id, backlogeditado.dtFimReal)">
+
+                <div style="margin-top: 1rem;margin-left: 1rem ;width: 100%">
+                    <div style="width: 100%; justify-content: space-between; display: flex;">
+                        <label>
+                            Anexos:
+                        </label>
+                        <i title="Adicionar anexo" style="font-size: 20px; cursor: pointer; justify-self: right; margin-right: 1rem;"
+                            class="bi bi-plus-circle" @click="openFileInput"></i>
+                    </div>
+
+                    <input style="display: none;" ref="fileInput" class="form-control form-control-sm" type="file"
+                        @change="handleFileUpload">
+
+                    <ul style="list-style: none; padding-left: 0rem; overflow: auto; max-height: 10rem;">
+                        <li v-for="item in backlogeditado.anexos" :key="item"
+                            @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
+                            @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
+                            <div
+                                style="margin-left: 1rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
+                                <a :href="'http://192.168.0.5:8000/storage/' + item.path" target="_blank" class="link">
+                                    <i style="font-size: 25px;"
+                                        :class="'bi bi-filetype-' + item.nome.split('.')[1].toLowerCase()"></i>
+                                    {{ item.nome }}
+                                </a>
+
+                                <button class="botaoAdicionarSprint" style="color: red; visibility: hidden;"
+                                    :id="'botaoExcluir' + item.id" @click="excluirAnexo(item.id)">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -432,6 +485,7 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import draggable from "@/vuedraggableVue";
 import axios from "axios";
 
@@ -441,6 +495,16 @@ export default {
     },
 
     name: "SprintsView",
+
+    setup() {
+        const fileInput = ref(null);
+
+        const openFileInput = () => {
+            fileInput.value.click();
+        };
+
+        return { fileInput, openFileInput, };
+    },
 
     data() {
         return {
@@ -485,6 +549,50 @@ export default {
     },
 
     methods: {
+
+        handleFileUpload() {
+            // Acesse o elemento de input de arquivo usando refs
+            const fileInput = this.$refs.fileInput;
+
+            // Verifique se o elemento de input de arquivo existe e tem arquivos
+            if (fileInput && fileInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append('sprintTarefa_id', this.backlogeditado.id);
+
+                // Adicione todos os arquivos presentes no input
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('anexos[]', fileInput.files[i]);
+                }
+
+                // Envie a requisição usando Axios
+                axios.post('http://192.168.0.5:8000/api/sprintTarefa/anexo/adicionar', formData)
+                    .then(response => {
+                        this.backlogeditado.anexos.push({
+                            path: response.data.anexos_salvos[0].path,
+                            nome: response.data.anexos_salvos[0].nome,
+                            id: response.data.anexos_salvos[0].id
+                        });
+                    })
+                    .catch(error => {
+                        // Trata erros
+                        console.error(error);
+                    });
+            }
+        },
+
+        excluirAnexo(id) {
+            axios.delete(`http://192.168.0.5:8000/api/sprintTarefa/anexo/remover/${id}`);
+            this.backlogeditado.anexos = this.backlogeditado.anexos.filter(anexo => anexo.id !== id)
+        },
+
+        mostrarBotaoExcluirAnexo(id, mostrar) {
+            if (mostrar == true) {
+                document.getElementById('botaoExcluir' + id).style.visibility = ''
+            }
+            if (mostrar == false) {
+                document.getElementById('botaoExcluir' + id).style.visibility = 'hidden'
+            }
+        },
 
         somenteBacklogs() {
             if (this.sprints !== null) {
@@ -534,9 +642,9 @@ export default {
             const mesAbreviado = mesesAbreviados[mesNumero - 1];
 
             if (mandarAno) {
-                return `${dia}/${mesAbreviado}/${ano}`;
+                return `${dia}/${mesAbreviado}./${ano}`;
             } else {
-                return `${dia}/${mesAbreviado}`;
+                return `${dia}/${mesAbreviado}.`;
             }
 
         },
@@ -665,7 +773,7 @@ export default {
                     dtInicioReal: data
                 })
                     .then(() => {
-                        
+
                         return this.getBacklogs()
                     })
 
