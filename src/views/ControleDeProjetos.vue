@@ -5,8 +5,15 @@
             style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
 
             <div class="col-sm-12" style="text-align: center;">
-
                 <div style="display: flex;">
+                    <div class="input-group mb-3" style="width: 20rem; position: absolute;">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Projeto" aria-label="Username"
+                            aria-describedby="basic-addon1" v-model="projetoSelecionado"
+                            @input="filtrarProjetos($event.target.value)">
+                    </div>
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Seus Projetos</h3>
                     </div>
@@ -32,13 +39,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in projetos" :key="item.id" @mouseover="mostrarBotao(item.id, true)"
-                                @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
+                            <tr v-for="item in listaProjetosFiltrada" :key="item.id"
+                                @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
+                                @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select" :disabled="item.status == 'Concluído'"
-                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : 'rgb(0, 192, 0)', 'cursor': (item.status == 'Concluído') ? 'not-allowed' : ''}"
+                                <td><select v-model="item.status" class="form-select"
+                                        :disabled="item.status == 'Concluído'"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', 'cursor': (item.status == 'Concluído') ? 'not-allowed' : '' }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
                                         @click.stop @change="editarProjetoInLine(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
                                         <option style="color: rgb(255, 145, 0);">Pendente</option>
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
@@ -171,77 +181,85 @@
                 </div>
                 <hr>
                 <br>
-                <div style="display: flex;">
 
-                    <div class="form-group" style="width: 30rem;">
-                        <label for="nome">Nome do Projeto</label>
-                        <input id="nome" type="text" v-model="projetoEditado.nome" class="form-control"
-                            @focusout="editarProjeto('nome', projetoEditado.nome)">
-                    </div>
-
-                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="data">Data de Início</label>
-                        <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio"
-                            class="form-control" @change="editarProjeto('dtInicio', $event.target.value)">
-                    </div>
-                </div>
-
-                <div style="display: flex;">
-                    <div class="form-group" style="width: 30rem;">
-                        <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" @change="editarProjeto('gerente_id', $event.target.value)"
-                            v-model="projetoEditado.gerente_id" class="form-select">
-                            <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                {{ pessoa.nomeCompleto }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="setor">Setor Beneficiado</label>
-                        <select id="setor" v-model="projetoEditado.setor_id" class="form-select"
-                            @change="editarProjeto('setor_id', $event.target.value)">
-                            <option v-for="setor in setores" :key="setor.id" :value="setor.id">
-                                {{ setor.nome }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: flex;">
-                    <div style="display: flex; flex-flow: column;">
-                        <div style="width: 100%; justify-content: space-between; display: flex;">
-                            <span>
-                                Anexos:
-                            </span>
-                            <i title="Adicionar anexo" style="font-size: 20px; cursor: pointer; justify-self: right;"
-                                class="bi bi-plus-circle" @click="openFileInput"></i>
+                <div style="display: flex; width: 100%;">
+                    <div style="display: flex; flex-flow: column; width: 50%">
+                        <div class="form-group">
+                            <label for="nome">Nome do Projeto</label>
+                            <input id="nome" type="text" v-model="projetoEditado.nome" class="form-control"
+                                @focusout="editarProjeto('nome', projetoEditado.nome)">
                         </div>
 
-                        <input style="display: none;" ref="fileInput" class="form-control form-control-sm" type="file"
-                            @change="handleFileUpload">
+                        <div class="form-group">
+                            <label for="gerente">Gerente Responsável</label>
+                            <select id="gerente" @change="editarProjeto('gerente_id', $event.target.value)"
+                                v-model="projetoEditado.gerente_id" class="form-select">
+                                <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                    {{ pessoa.nomeCompleto }}
+                                </option>
+                            </select>
+                        </div>
 
-                        <ul style="list-style: none; padding-left: 0rem; ">
-                            <li v-for="item in projetoEditado.anexos" :key="item"
-                                @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
-                                @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
-                                <div
-                                    style="margin-left: 1rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
-                                    <a :href="'http://192.168.0.5:8000/storage/' + item.path" target="_blank"
-                                        class="link">
-                                        <i style="font-size: 25px;"
-                                            :class="'bi bi-filetype-' + item.nome.split('.')[1].toLowerCase()"></i>
-                                        {{ item.nome }}
-                                    </a>
+                        <div style="display: flex; flex-flow: column;">
+                            <div style="width: 100%; justify-content: space-between; display: flex;">
+                                <span>
+                                    Anexos:
+                                </span>
+                                <i title="Adicionar anexo"
+                                    style="font-size: 20px; cursor: pointer; justify-self: right;"
+                                    class="bi bi-plus-circle" @click="openFileInput"></i>
+                            </div>
 
-                                    <button class="botaoAdicionarSprint" style="color: red; visibility: hidden;"
-                                        :id="'botaoExcluir' + item.id" @click="excluirAnexo(item.id)">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
+                            <input style="display: none;" ref="fileInput" class="form-control form-control-sm"
+                                type="file" @change="handleFileUpload">
+
+                            <ul style="list-style: none; padding-left: 0rem; ">
+                                <li v-for="item in projetoEditado.anexos" :key="item"
+                                    @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
+                                    @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
+                                    <div
+                                        style="margin-left: 1rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
+                                        <a :href="'http://192.168.0.5:8000/storage/' + item.path" target="_blank"
+                                            class="link">
+                                            <i style="font-size: 25px;"
+                                                :class="'bi bi-filetype-' + item.nome.split('.')[1].toLowerCase()"></i>
+                                            {{ item.nome }}
+                                        </a>
+
+                                        <button class="botaoAdicionarSprint" style="color: red; visibility: hidden;"
+                                            :id="'botaoExcluir' + item.id" @click="excluirAnexo(item.id)">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
 
+                    <div style="display: flex; flex-flow: column; width: 50%;">
 
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="data">Data de Início</label>
+                            <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio"
+                                class="form-control" @change="editarProjeto('dtInicio', $event.target.value)">
+                            <label for="data">Data de Termino</label>
+                            <input id="data" type="date" ref="dtTermino" v-model="projetoEditado.dtTermino"
+                                class="form-control" @change="editarProjeto('dtTermino', $event.target.value)">
+                        </div>
+
+
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="setor">Setor Beneficiado</label>
+                            <select id="setor" v-model="projetoEditado.setor_id" class="form-select"
+                                @change="editarProjeto('setor_id', $event.target.value)">
+                                <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+                                    {{ setor.nome }}
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -284,20 +302,23 @@
             </div>
             <div style="width: 100%; display: flex; justify-content: center;">
                 <div style="display: flex; flex-flow: column; width: 100%; height: 10rem;">
-                    <input type="text" v-model="pessoaSelecionada" class="form-control" @focusin="this.procurar()"
+                    <input type="text" v-model="pessoaSelecionada" class="form-control"
+                        @focusin="this.procurar($event.target.value)"
                         style="background-color: #f1f1f1; color: black; padding-top : 1.5rem; padding-bottom: 1.5rem;"
-                        @input="this.procurar()" @focusout="fecharLista()" placeholder="Adicionar Participante">
+                        @input="this.procurar($event.target.value)" @focusout="fecharLista()"
+                        placeholder="Adicionar Participante">
 
                     <div style="height: fit-content; max-height: 15rem ; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li @click="atualizarPermissão(item, 'adicionar'), this.listaPessoasFiltrada = null, this.pessoaSelecionada = null"
+                            <li @click="atualizarPermissão(item, 'adicionar')"
                                 v-for="item in listaPessoasFiltrada" :key="item.id">
-                                <div
-                                    style="display: flex; ; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;">
+                                <div style="display: flex; ; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;"
+                                    :style="{ 'color': (this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id) ? 'grey' : 'black', 'cursor': (this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id) ? 'not-allowed' : '' }">
                                     <!-- <img :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"
                                         alt="N/A" style="margin-right: 1rem;"> -->
-                                    {{ item.nomeCompleto }}
+                                    {{ item.nomeCompleto }} {{ (this.projetoEditado.permissao.map((item) =>
+                                item.usuario_id)).includes(item.id) ? '(Já adicionado)' : '' }}
                                 </div>
                             </li>
                         </ul>
@@ -310,7 +331,7 @@
                             <div
                                 style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;">
                                 {{ item.nome }} {{ item.usuario_id == projetoEditado.gerente_id ? '(Gerente)' :
-            item.usuario_id == this.idUsuario ? '(Você)' : '' }}
+                                item.usuario_id == this.idUsuario ? '(Você)' : '' }}
                                 <select style="width: 7rem; text-align: center;" class="form-select"
                                     v-model="item.nivel" @change="atualizarPermissão(item, 'atualizar')"
                                     :disabled="item.usuario_id == projetoEditado.gerente_id || item.usuario_id == this.idUsuario">
@@ -357,6 +378,7 @@ export default {
             inputArquivo: false,
             idUsuario: null,
             pessoaSelecionada: null,
+            listaProjetosFiltrada: null,
             listaPessoasFiltrada: null,
             pessoasComAcessoPorProjeto: [],
             dataTerminoProjeto: null,
@@ -393,8 +415,18 @@ export default {
 
     methods: {
 
+        filtrarProjetos(texto) {
+            if (!texto) {
+                this.listaProjetosFiltrada = this.projetos;
+            } else {
+                const textoLowerCase = texto.toLowerCase();
+                this.listaProjetosFiltrada = this.projetos.filter(projeto => {
+                    return projeto.nome.toLowerCase().includes(textoLowerCase);
+                });
+            }
+        },
+
         handleFileUpload() {
-            // Acesse o elemento de input de arquivo usando refs
             const fileInput = this.$refs.fileInput;
 
             // Verifique se o elemento de input de arquivo existe e tem arquivos
@@ -458,46 +490,57 @@ export default {
         },
 
         atualizarPermissão(item, ação) {
-            if (ação == 'adicionar') {
+            if ((this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id)) {
+                return
+            } else {
 
-                var novaPermissão = {
-                    usuario_id: item.id,
-                    nivel: 1,
-                    nome: item.nomeCompleto
+                if (ação == 'adicionar') {
+
+                    var novaPermissão = {
+                        usuario_id: item.id,
+                        nivel: 1,
+                        nome: item.nomeCompleto
+                    }
+                    this.projetoEditado.permissao.push(novaPermissão);
+
+                    axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                        usuarios: this.projetoEditado.permissao
+                    })
+                        .then(() => {
+                            this.listaPessoasFiltrada = null;
+                            this.pessoaSelecionada = null
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
                 }
-                this.projetoEditado.permissao.push(novaPermissão);
+                if (ação == 'remover') {
+                    this.projetoEditado.permissao = this.projetoEditado.permissao.filter(pessoa => pessoa.usuario_id !== parseInt(item.usuario_id));
+                    axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                        usuarios: this.projetoEditado.permissao
+                    })
+                        .then(() => {
+                            this.listaPessoasFiltrada = null;
+                            this.pessoaSelecionada = null
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                }
+                if (ação == 'atualizar') {
 
-                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-                    usuarios: this.projetoEditado.permissao
-                })
-                    .then(() => {
+                    axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
+                        usuarios: this.projetoEditado.permissao
+                        // .filter(item => item.usuario_id !== parseInt(this.idUsuario))
                     })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
-            if (ação == 'remover') {
-                this.projetoEditado.permissao = this.projetoEditado.permissao.filter(pessoa => pessoa.usuario_id !== parseInt(item.usuario_id));
-                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-                    usuarios: this.projetoEditado.permissao
-                })
-                    .then(() => {
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
-            if (ação == 'atualizar') {
-
-                axios.post(`http://192.168.0.5:8000/api/permissao/projeto/${this.projetoEditado.id}`, {
-                    usuarios: this.projetoEditado.permissao
-                    // .filter(item => item.usuario_id !== parseInt(this.idUsuario))
-                })
-                    .then(() => {
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+                        .then(() => {
+                            this.listaPessoasFiltrada = null;
+                            this.pessoaSelecionada = null
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                }
             }
 
         },
@@ -509,12 +552,15 @@ export default {
             }, 200);
         },
 
-        procurar() {
-            if (!this.pessoaSelecionada) {
-                this.listaPessoasFiltrada = this.gerente.filter(item => !(this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id));
+        procurar(texto) {
+            if (!texto) {
+                this.listaPessoasFiltrada = this.gerente
+                // .filter(item => !(this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id));
             } else {
                 if (this.listaPessoasFiltrada !== null) {
-                    this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().startsWith(this.pessoaSelecionada.toLowerCase()));
+                    // this.listaPessoasFiltrada = this.gerente.filter(item => !(this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id));
+                    this.listaPessoasFiltrada = this.gerente
+                    this.listaPessoasFiltrada = this.listaPessoasFiltrada.filter(nome => nome.nomeCompleto.toLowerCase().includes(texto.toLowerCase()));
                 }
             }
         },
@@ -578,9 +624,9 @@ export default {
                     [itemAlterado]: novoValor,
                     dtTermino: dataAtual
                 })
-                .then(() => { 
-                    this.getProjetos()
-                })
+                    .then(() => {
+                        this.getProjetos()
+                    })
             }
         },
 
@@ -674,6 +720,7 @@ export default {
             })
                 .then((response) => {
                     this.projetos = response.data;
+                    this.listaProjetosFiltrada = response.data;
                 })
                 .catch((error) => {
                     console.error(error);

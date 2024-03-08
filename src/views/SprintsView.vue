@@ -1,14 +1,14 @@
 <template>
     <br><br><br>
     <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
-        <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
-        <h2>{{ nomeDoProjeto }}</h2>
-        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
-            class="bi bi-kanban botaoAdicionarSprint"></i>
-    </div>
-    <br><br>
+    style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
+    <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+    class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
+    <h2>{{ nomeDoProjeto }}</h2>
+    <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
+    class="bi bi-kanban botaoAdicionarSprint"></i>
+</div>
+<br><br><br>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
         <h3 style="text-align: center; margin-top: 1rem;">
@@ -311,7 +311,8 @@
                             style="border: 1px solid black; border-radius: 5px; width: 100%; margin-left: 0.3rem; padding: 0.3rem;">
                             <input type="text" placeholder="O que será feito?"
                                 @keyup.enter="criarBacklog(item.id, $event.target.value), $event.target.value = ''"
-                                style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;">
+                                style="width: 100%; padding: 0.1rem; padding-left: 0.5rem; outline: none;"
+                                :id="'inputNovaTarefa' + item.id">
                         </div>
                     </div>
                 </div>
@@ -327,8 +328,8 @@
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
                 <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
-                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;"
-                    @click="criarNovaSprint" class="botaoAdicionarSprint">
+                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;" @click="criarNovaSprint"
+                    class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
             </div>
         </div>
@@ -454,7 +455,8 @@
                         <label>
                             Anexos:
                         </label>
-                        <i title="Adicionar anexo" style="font-size: 20px; cursor: pointer; justify-self: right; margin-right: 1rem;"
+                        <i title="Adicionar anexo"
+                            style="font-size: 20px; cursor: pointer; justify-self: right; margin-right: 1rem;"
                             class="bi bi-plus-circle" @click="openFileInput"></i>
                     </div>
 
@@ -748,8 +750,16 @@ export default {
                         }
                         return b.id - a.id;
                     }
-
                     this.sprints = response.data.sort(compararSprints);
+
+                    var id = sessionStorage.getItem('ultimaSprintEditada')
+                    if (id !== null) {
+                        setTimeout(() => {
+                            document.getElementById('inputNovaTarefa' + id).focus();
+                            sessionStorage.removeItem('ultimaSprintEditada')
+                        }, 250)
+                    }
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -1033,8 +1043,28 @@ export default {
                     codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
                     descricao: descricao
                 })
-                    .then(() => {
-                        this.getBacklogs()
+                    .then((response) => {
+                        sessionStorage.setItem('ultimaSprintEditada', id)
+                        // this.getBacklogs();
+
+                        var novoItem = {
+                            "id": response.data.id,
+                            "sprint_id": id,
+                            "codigo": 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
+                            "descricao": descricao,
+                            "HP": 0,
+                            "responsavel_id": 0,
+                            "status": "Pendente",
+                            "dtInicio": null,
+                            "dtFim": null,
+                            "dtInicioReal": null,
+                            "dtFimReal": null,
+                            "responsavel": null,
+                            "anexos": []
+                        };
+
+                        const sprint = this.sprints.find(item => item.id === id)
+                        sprint.backlogs.push(novoItem)
                     })
                     .catch((error) => {
                         console.error(error);
@@ -1046,12 +1076,14 @@ export default {
                     descricao: descricao
                 })
                     .then(() => {
-                        this.getBacklogs()
+                        sessionStorage.setItem('ultimaSprintEditada', id)
+                        this.getBacklogs();
                     })
                     .catch((error) => {
                         console.error(error);
                     });
             }
+
         },
 
         apagarBacklog(idBacklog) {

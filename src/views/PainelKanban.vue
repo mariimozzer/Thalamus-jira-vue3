@@ -205,11 +205,6 @@ export default {
     },
 
     watch: {
-        // sprints: {
-        //     handler: 'atualizarStatus',  // Chama a função atualizarLocalStore quando sprints é alterado
-        //     deep: true,  // Observa mudanças profundas no array (necessário se houver alterações nos elementos do array)
-        // },
-
         backlogsPendentes: {
             handler: 'atualizarStatus',
             deep: true
