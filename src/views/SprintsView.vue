@@ -3,10 +3,10 @@
     <div
     style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
     <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-    class="fa-solid fa-house-chimney botaoAdicionarSprint"></i>
+    class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
     <h2>{{ nomeDoProjeto }}</h2>
     <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
-    class="bi bi-kanban botaoAdicionarSprint"></i>
+    class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
 </div>
 <br><br><br>
     <div style="width: 100%; padding: 1rem;" class="container">
@@ -32,7 +32,7 @@
                                 </span>
                             </h5>
                         </div>
-                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint"
+                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint"  :title="'Ocultar Sprint'"
                             style=" width: 2rem; margin-left: ">
                             <i style="font-size: 20px;" class="bi bi-eye-slash ocultar"
                                 :id="'botaoOcultar' + item.nome"></i>
@@ -328,7 +328,7 @@
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
                 <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
-                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;" @click="criarNovaSprint"
+                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;" @click="criarNovaSprint" :title="'Adicionar nova sprint'"
                     class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
             </div>
@@ -752,11 +752,11 @@ export default {
                     }
                     this.sprints = response.data.sort(compararSprints);
 
-                    var id = sessionStorage.getItem('ultimaSprintEditada')
-                    if (id !== null) {
+                    var id = localStorage.getItem('ultimaSprintEditada')
+                    if (id) {
                         setTimeout(() => {
                             document.getElementById('inputNovaTarefa' + id).focus();
-                            sessionStorage.removeItem('ultimaSprintEditada')
+                            localStorage.removeItem('ultimaSprintEditada')
                         }, 250)
                     }
 
@@ -1044,7 +1044,7 @@ export default {
                     descricao: descricao
                 })
                     .then((response) => {
-                        sessionStorage.setItem('ultimaSprintEditada', id)
+                        localStorage.setItem('ultimaSprintEditada', id)
                         // this.getBacklogs();
 
                         var novoItem = {

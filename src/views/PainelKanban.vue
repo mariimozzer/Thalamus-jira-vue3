@@ -3,7 +3,7 @@
     <div
         style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
         <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="bi bi-list-task botaoAdicionarSprint"></i>
+            class="bi bi-list-task botaoAdicionarSprint" :title="'Ir para tela de sprints'"></i>
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint"></i>

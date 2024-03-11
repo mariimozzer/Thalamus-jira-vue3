@@ -21,6 +21,7 @@ import AlterarSenhaView from "@/views/Senha/AlterarSenhaView"
 import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
 import PainelKanbanViewOnlyVue from '@/views/PainelKanban-ViewOnly.vue'
 import axios from 'axios'
+import ControleDePCMs from '@/views/PCM/ControleDePCMs.vue'
 
 
 function guardMyroute(to, from, next) {
@@ -87,6 +88,14 @@ const routes = [
     component: HomeView,
     beforeEnter: guardMyroute,
 
+
+  },
+
+  //PCM
+  {
+    path: '/PCM',
+    name: 'PCM',
+    component: ControleDePCMs,
 
   },
 

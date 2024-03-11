@@ -10,15 +10,14 @@
                         <span class="input-group-text" id="basic-addon1"><i
                                 class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" class="form-control" placeholder="Pesquisar Projeto" aria-label="Username"
-                            aria-describedby="basic-addon1" v-model="projetoSelecionado"
-                            @input="filtrarProjetos($event.target.value)">
+                            aria-describedby="basic-addon1" v-model="projetoSelecionado" @input="filtrarProjetos()">
                     </div>
 
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Seus Projetos</h3>
                     </div>
-                    <button style="width: max-content; font-size: 30px;" @click="this.modalNovoProjeto = true"
-                        class="botaoAdicionarSprint">
+                    <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoProjeto = true" class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
@@ -44,7 +43,6 @@
                                 @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
                                 <td><select v-model="item.status" class="form-select"
-                                        :disabled="item.status == 'Concluído'"
                                         :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', 'cursor': (item.status == 'Concluído') ? 'not-allowed' : '' }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
                                         @click.stop @change="editarProjetoInLine(item.id, 'status', item.status)">
@@ -65,7 +63,7 @@
                                 <td style="text-align: center;">
                                     <select id="gerente" v-model="item.gerente_id" disabled
                                         style="text-align: center; padding: none; width: 13rem;">
-                                        <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
+                                        <option v-for="pessoa in gerente" :key="pessoa.nomeCompleto" :value="pessoa.id">
                                             {{ nomeEsobrenome(pessoa.nomeCompleto) }}
                                         </option>
                                     </select>
@@ -153,8 +151,8 @@
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="setor">Setor Beneficiado</label>
                         <select id="setor" v-model="novoProjeto.setor_id" class="form-select">
-                            <option v-for="item in setores" :key="item.id" :value="item.id">
-                                {{ item.nome }}
+                            <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+                                {{ setor.nome }}
                             </option>
                         </select>
                     </div>
@@ -172,10 +170,11 @@
 
     <!-- modal editar projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarProjeto" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 50rem; padding: 3rem; margin-bottom: 2rem; " class="modal-container">
+        <div style="max-height: 80%; width: 50rem; padding: 3rem; margin-bottom: 2rem; overflow: hidden; "
+            class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
-                    <h3 class="titulo">Editar Projeto </h3>
+                    <h3 class="titulo">Editar: {{ projetoEditado.nome }} </h3>
                     <button type="button" class="btn-close" aria-label="Close"
                         @click="this.getProjetos, this.modalEditarProjeto = false"></button>
                 </div>
@@ -213,12 +212,12 @@
                             <input style="display: none;" ref="fileInput" class="form-control form-control-sm"
                                 type="file" @change="handleFileUpload">
 
-                            <ul style="list-style: none; padding-left: 0rem; ">
+                            <ul style="list-style: none; padding-left: 0rem; overflow: auto; max-height: 7rem;">
                                 <li v-for="item in projetoEditado.anexos" :key="item"
                                     @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
                                     @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
                                     <div
-                                        style="margin-left: 1rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
+                                        style="margin-left: 0rem; padding-left: 0rem; border: 1px solid black; border-radius: 10px; padding: 5px; display: flex; width: 20rem; justify-content: space-between;">
                                         <a :href="'http://192.168.0.5:8000/storage/' + item.path" target="_blank"
                                             class="link">
                                             <i style="font-size: 25px;"
@@ -243,12 +242,10 @@
                             <label for="data">Data de Início</label>
                             <input id="data" type="date" ref="dtInicio" v-model="projetoEditado.dtInicio"
                                 class="form-control" @change="editarProjeto('dtInicio', $event.target.value)">
-                            <label for="data">Data de Termino</label>
+                            <label for="data" style="margin-top: 1rem;">Data de Termino</label>
                             <input id="data" type="date" ref="dtTermino" v-model="projetoEditado.dtTermino"
                                 class="form-control" @change="editarProjeto('dtTermino', $event.target.value)">
                         </div>
-
-
                         <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                             <label for="setor">Setor Beneficiado</label>
                             <select id="setor" v-model="projetoEditado.setor_id" class="form-select"
@@ -291,12 +288,13 @@
     <!--END MODAL-->
 
     <!-- MODAL compartilhar Projeto-->
-    <div class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora" style="padding: none;">
-        <div class="modal-container"
-            style="width: 50rem; margin-bottom: 5rem; padding: none !important; height: 100rem;">
+
+    <div style="overflow: auto" class="modal-mask" v-if="modalCompartilharProjeto" @click="fecharModalFora">
+        <div style="height: 100rem ;width: 50rem; padding: 3rem; margin-bottom: 2rem; " class="modal-container">
+
             <div>
 
-                <h3 class="titulo">Compartilhar {{ projetoEditado.nome }} </h3>
+                <h3 class="titulo">Compartilhar: {{ projetoEditado.nome }} </h3>
                 <hr>
                 <br>
             </div>
@@ -311,12 +309,10 @@
                     <div style="height: fit-content; max-height: 15rem ; overflow: auto; background-color: #f1f1f1; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; position: absolute; margin-top: 3.5rem; width: 30rem;"
                         v-if="listaPessoasFiltrada">
                         <ul style="list-style: none;">
-                            <li @click="atualizarPermissão(item, 'adicionar')"
-                                v-for="item in listaPessoasFiltrada" :key="item.id">
+                            <li @click="atualizarPermissão(item, 'adicionar')" v-for="item in listaPessoasFiltrada"
+                                :key="item.id">
                                 <div style="display: flex; ; align-items: center; padding: 5px; border-radius: 10px; margin-right: 3rem;"
                                     :style="{ 'color': (this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id) ? 'grey' : 'black', 'cursor': (this.projetoEditado.permissao.map((item) => item.usuario_id)).includes(item.id) ? 'not-allowed' : '' }">
-                                    <!-- <img :src="'http://192.168.0.5:8000/storage/' + item.path_image" class="cropped1"
-                                        alt="N/A" style="margin-right: 1rem;"> -->
                                     {{ item.nomeCompleto }} {{ (this.projetoEditado.permissao.map((item) =>
                                 item.usuario_id)).includes(item.id) ? '(Já adicionado)' : '' }}
                                 </div>
@@ -378,6 +374,7 @@ export default {
             inputArquivo: false,
             idUsuario: null,
             pessoaSelecionada: null,
+            projetoSelecionado: null,
             listaProjetosFiltrada: null,
             listaPessoasFiltrada: null,
             pessoasComAcessoPorProjeto: [],
@@ -415,11 +412,11 @@ export default {
 
     methods: {
 
-        filtrarProjetos(texto) {
-            if (!texto) {
+        filtrarProjetos() {
+            if (!this.projetoSelecionado) {
                 this.listaProjetosFiltrada = this.projetos;
             } else {
-                const textoLowerCase = texto.toLowerCase();
+                const textoLowerCase = this.projetoSelecionado.toLowerCase();
                 this.listaProjetosFiltrada = this.projetos.filter(projeto => {
                     return projeto.nome.toLowerCase().includes(textoLowerCase);
                 });
@@ -616,7 +613,11 @@ export default {
 
                 axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
                     [itemAlterado]: novoValor,
+                    dtTermino: null
                 })
+                    .then(() => {
+                        this.getProjetos()
+                    })
             }
             if (novoValor == "Concluído") {
                 var dataAtual = new Date().toISOString().split('T')[0];
@@ -636,7 +637,8 @@ export default {
                 dtInicio: this.novoProjeto.dtInicio,
                 gerente_id: this.novoProjeto.gerente_id,
                 setor_id: this.novoProjeto.setor_id,
-                usuario_id: this.idUsuario
+                usuario_id: this.idUsuario,
+                status: "Proposto"
             })
                 .then((response) => {
                     this.getProjetos();
@@ -707,7 +709,7 @@ export default {
             axios.get('http://192.168.0.5:8000/api/setor', {
             })
                 .then((response) => {
-                    this.setores = response.data.data
+                    this.setores = response.data
                 })
                 .catch((error) => {
                     console.error(error);
@@ -720,7 +722,7 @@ export default {
             })
                 .then((response) => {
                     this.projetos = response.data;
-                    this.listaProjetosFiltrada = response.data;
+                    this.filtrarProjetos()
                 })
                 .catch((error) => {
                     console.error(error);
