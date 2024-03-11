@@ -403,6 +403,9 @@ export default {
     mounted() {
         this.getProjetos(),
             this.getGerenteseSetor()
+            localStorage.removeItem('ultimaSprintEditada'),
+            sessionStorage.removeItem('ultimaSprintEditada')
+
     },
 
     created() {
