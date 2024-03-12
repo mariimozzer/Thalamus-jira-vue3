@@ -43,7 +43,7 @@
                                 @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
                                 <td><select v-model="item.status" class="form-select"
-                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', 'cursor': (item.status == 'Concluído') ? 'not-allowed' : '' }"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
                                         @click.stop @change="editarProjetoInLine(item.id, 'status', item.status)">
                                         <option style="color: red;">Proposto</option>

@@ -21,7 +21,12 @@ import AlterarSenhaView from "@/views/Senha/AlterarSenhaView"
 import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
 import PainelKanbanViewOnlyVue from '@/views/PainelKanban-ViewOnly.vue'
 import axios from 'axios'
-import ControleDePCMs from '@/views/PCM/ControleDePCMs.vue'
+import VisualizaçãoCriaçãoPCM from '@/views/PCM/VisualizaçãoCriaçãoPCM.vue'
+import ControlePCM from '@/views/PCM/ControlePCM'
+import PCMVazio from '@/views/PCM/PCMVazio'
+import ControledePlanodeAção from '@/views/PA/ControleDePlanodeAção.vue'
+
+
 
 
 function guardMyroute(to, from, next) {
@@ -95,8 +100,27 @@ const routes = [
   {
     path: '/PCM',
     name: 'PCM',
-    component: ControleDePCMs,
+    component: VisualizaçãoCriaçãoPCM,
+  },
 
+  {
+    path: '/ControlePCM',
+    name: 'ControlePCM',
+    component: ControlePCM,
+  },
+
+  {
+    path: '/PCMv',
+    name: 'PCMv',
+    component: PCMVazio,
+  },
+
+  //Plano de Ação
+
+  {
+    path: '/ControlePA',
+    name: 'ControlePA',
+    component: ControledePlanodeAção,
   },
 
 
