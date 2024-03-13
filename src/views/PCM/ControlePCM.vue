@@ -11,7 +11,7 @@
                         <h3 style="text-align: center; margin: 0;">Propostas de Criação ou Mudança</h3>
                     </div>
                     <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
-                    @click="verPCMvazio" class="botaoAdicionarSprint">
+                        @click="verPCMvazio" class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
@@ -55,13 +55,15 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-success" style="display: flex; align-items: center;" disabled>
-                                            Aprovar<i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-up"></i>
+                                            <button class="button-aprovar" disabled>
+                                                Aprovar
+                                                <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-danger" style="display: flex; align-items: center;" disabled>
-                                                Reprovar <i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-down"></i>
+                                            <button type="button" class="button-reprovar" disabled>
+                                                Reprovar
+                                                <i class="fa-solid fa-thumbs-down"></i> 
                                             </button>
                                         </div>
 
@@ -93,13 +95,15 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-success" style="display: flex; align-items: center;" disabled>
-                                            Aprovar<i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-up"></i>
+                                            <button class="button-aprovar" disabled>
+                                                Aprovar
+                                                <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-danger" style="display: flex; align-items: center;" disabled>
-                                                Reprovar <i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-down"></i>
+                                            <button type="button" class="button-reprovar" disabled>
+                                                Reprovar
+                                                <i class="fa-solid fa-thumbs-down"></i> 
                                             </button>
                                         </div>
 
@@ -131,13 +135,15 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-success" style="display: flex; align-items: center;" >
-                                            Aprovar<i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-up"></i>
+                                            <button class="button-aprovar">
+                                                Aprovar
+                                                <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button class="btn btn-danger" style="display: flex; align-items: center;" >
-                                                Reprovar <i style="margin-left: 0.5rem;" class="fa-regular fa-thumbs-down"></i>
+                                            <button type="button" class="button-reprovar">
+                                                Reprovar
+                                                <i class="fa-solid fa-thumbs-down"></i> 
                                             </button>
                                         </div>
 
@@ -171,10 +177,10 @@ export default {
     },
 
     methods: {
-        verPCM(){
+        verPCM() {
             this.$router.push({ name: "PCM" })
         },
-        verPCMvazio(){
+        verPCMvazio() {
             this.$router.push({ name: "PCMv" })
         }
     }
@@ -183,5 +189,45 @@ export default {
 </script>
 
 <style>
+.button-reprovar:disabled {
+    width: 10rem;
+    background-color: #e0213194 !important;
+    color: rgb(255, 255, 255) !important;
+    padding: 5px !important;
+    /* margin: 6px 0 !important; */
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: not-allowed;
+}
+.button-reprovar {
+    width: 10rem;
+    background-color: #e02130 !important;
+    color: rgb(255, 255, 255) !important;
+    padding: 5px !important;
+    /* margin: 6px 0 !important; */
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+}
 
+.button-aprovar:disabled {
+    width: 10rem;
+    background-color: #429867a8 !important;
+    color: rgb(255, 255, 255) !important;
+    padding: 5px !important;
+    /* margin: 6px 0 !important; */
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: not-allowed;
+}
+.button-aprovar {
+    width: 10rem;
+    background-color: #429867 !important;
+    color: rgb(255, 255, 255) !important;
+    padding: 5px !important;
+    /* margin: 6px 0 !important; */
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+}
 </style>

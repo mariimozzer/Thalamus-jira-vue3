@@ -10,8 +10,8 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                     </div>
-                    <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
-                    @click="verPCMvazio" class="botaoAdicionarSprint">
+                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoPCM = true" class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
@@ -32,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr @click="verPCM" style="vertical-align: middle;">
+                            <tr @click="verBacklogs('25', 'Plano de Ação 01')" style="vertical-align: middle;">
                                 <td style="text-align: center; vertical-align: middle;">
                                     Correção de não conformidade
                                 </td>
@@ -70,6 +70,57 @@
         </div>
     </div>
 
+    <!-- modal novo Plano de Ação -->
+    <div style="overflow: auto" class="modal-mask" v-if="modalNovoPCM" @click="fecharModalFora">
+        <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
+            <div>
+                <div style="display: flex; justify-content: space-between">
+                    <h3 class="titulo">Cadastrar Plano de Ação </h3>
+                    <button type="button" class="btn-close" aria-label="Close"
+                        @click="this.modalNovoPrograma = false"></button>
+                </div>
+                <hr>
+                <br>
+                <div style="display: flex;">
+
+                    <div class="form-group" style="width: 30rem;">
+                        <label for="nome">Nome</label>
+                        <input id="nome" type="text" class="form-control">
+                    </div>
+
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="data">Data de Início</label>
+                        <input id="data" type="date" ref="dtInicio" class="form-control">
+
+                    </div>
+                </div>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="width: 30rem;">
+                        <label for="gerente">Gerente Responsável</label>
+                        <select id="gerente" class="form-select">
+                            <option>
+                                Teste
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="setor">Setor Responsável</label>
+                        <select id="setor" class="form-select">
+                            <option>
+                                Teste
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: right;">
+                    <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fim modal novo Programa -->
 </template>
 
 
@@ -81,6 +132,7 @@ export default {
 
     data() {
         return {
+            modalNovoPCM: false,
 
         }
     },
@@ -89,10 +141,23 @@ export default {
     },
 
     methods: {
-        verPCM(){
+        fecharModalFora(event) {
+            if (event.target.classList.contains('modal-mask')) {
+                this.modalNovoPCM = false;
+            }
+        },
+
+        verBacklogs(id, nomeProjeto) {
+                    this.$router.push({ name: "PA" })
+                    sessionStorage.setItem('idProjeto', id)
+                    sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+        },
+
+        verPCM() {
             this.$router.push({ name: "PCM" })
         },
-        verPCMvazio(){
+
+        verPCMvazio() {
             this.$router.push({ name: "PCMv" })
         }
     }
@@ -101,5 +166,17 @@ export default {
 </script>
 
 <style>
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 </style>

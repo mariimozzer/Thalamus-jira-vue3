@@ -1,12 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 //Projetos
-import ControleDeProjetos from '../views/ControleDeProjetos.vue'
+import ControleDeProjetos from '../views/Projetos/ControleDeProjetos.vue'
 
 //Backlogs
-import PainelKanbanView from '../views/PainelKanban'
-import SprintsView from '../views/SprintsView'
-import SprintsViewOnly from '@/views/SprintsView-Only.vue'
+import PainelKanbanView from '../views/Projetos/PainelKanban'
+import SprintsView from '../views/Projetos/SprintsView'
+import SprintsViewOnly from '@/views/Projetos/SprintsView-Only.vue'
+import PainelKanbanViewOnlyVue from '@/views/Projetos/PainelKanban-ViewOnly.vue'
 
 //Login
 import LoginViewVue from '@/views/Login/LoginView.vue'
@@ -19,12 +20,13 @@ import EsqueceuSenhaView from "@/views/Senha/EsqueceuSenhaView"
 import ValidarSenhaView from "@/views/Senha/ValidarSenhaView"
 import AlterarSenhaView from "@/views/Senha/AlterarSenhaView"
 import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
-import PainelKanbanViewOnlyVue from '@/views/PainelKanban-ViewOnly.vue'
 import axios from 'axios'
 import VisualizaçãoCriaçãoPCM from '@/views/PCM/VisualizaçãoCriaçãoPCM.vue'
 import ControlePCM from '@/views/PCM/ControlePCM'
 import PCMVazio from '@/views/PCM/PCMVazio'
 import ControledePlanodeAção from '@/views/PA/ControleDePlanodeAção.vue'
+import VisualizaçãoPlanodeAção from '@/views/PA/VisualizaçãoPlanodeAção.vue'
+import controleProgramas from '@/views/Programas/ControleProgramas'
 
 
 
@@ -104,13 +106,13 @@ const routes = [
   },
 
   {
-    path: '/ControlePCM',
+    path: '/PCM/Controle',
     name: 'ControlePCM',
     component: ControlePCM,
   },
 
   {
-    path: '/PCMv',
+    path: '/PCM/Vazio',
     name: 'PCMv',
     component: PCMVazio,
   },
@@ -118,11 +120,24 @@ const routes = [
   //Plano de Ação
 
   {
-    path: '/ControlePA',
+    path: '/PA/Controle',
     name: 'ControlePA',
     component: ControledePlanodeAção,
   },
 
+  {
+    path: '/PA',
+    name: 'PA',
+    component: VisualizaçãoPlanodeAção,
+  },
+
+  //programas
+
+  {
+    path: '/Programas/controle',
+    name: 'controleProgramas',
+    component: controleProgramas,
+  },
 
   //Projetos
   {

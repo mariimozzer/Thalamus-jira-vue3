@@ -1,4 +1,5 @@
 <template>
+
     <body style="background-color: #FAF9F6; min-height: 100vh">
         <div class="estilos">
             <div class="menu">
@@ -7,6 +8,13 @@
             <!-- <menuLateral></menuLateral> -->
             <div class="router">
                 <router-view />
+                <nav>
+                    <router-link to="/PCM/Controle">PCM</router-link> |
+                    <router-link to="/PA/Controle">PA</router-link> | 
+                    <router-link to="/Programas/controle">Programas</router-link> |
+                    <router-link to="/projetos">projetos</router-link> |
+                </nav>
+
                 <br><br>
             </div>
             <FooterComponent></FooterComponent>
