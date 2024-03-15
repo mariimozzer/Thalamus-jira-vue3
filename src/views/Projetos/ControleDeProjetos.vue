@@ -2,7 +2,7 @@
     <br><br><br><br>
     <div style="padding: 1rem;">
         <div class="container"
-            style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
 
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
@@ -116,7 +116,7 @@
     </div>
     <!-- modal novo projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalNovoProjeto" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
+        <div style="max-height: 80%; max-width: 900px ;width: 70%; padding: 3rem; " class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Cadastrar Projeto </h3>
@@ -158,6 +158,20 @@
                     </div>
                 </div>
 
+                <div style="display: flex;">
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="setor">Programa</label>
+                        <select id="setor" class="form-select">
+                            <option>
+                                Nenhum
+                            </option>
+                            <option>
+                                Ciclo
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
                 <div style="display: flex; justify-content: right;">
                     <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2"
                         @click="adicionarProjeto">Salvar</button>
@@ -170,7 +184,7 @@
 
     <!-- modal editar projeto -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarProjeto" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 50rem; padding: 3rem; margin-bottom: 2rem; overflow: hidden; "
+        <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
             class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
@@ -212,7 +226,7 @@
                             <input style="display: none;" ref="fileInput" class="form-control form-control-sm"
                                 type="file" @change="handleFileUpload">
 
-                            <ul style="list-style: none; padding-left: 0rem; overflow: auto; max-height: 7rem;">
+                            <ul style="list-style: none; padding-left: 0rem; overflow: auto; max-height: 8.5rem;">
                                 <li v-for="item in projetoEditado.anexos" :key="item"
                                     @mouseover="mostrarBotaoExcluirAnexo(item.id, true)"
                                     @mouseleave="mostrarBotaoExcluirAnexo(item.id, false)">
@@ -252,6 +266,17 @@
                                 @change="editarProjeto('setor_id', $event.target.value)">
                                 <option v-for="setor in setores" :key="setor.id" :value="setor.id">
                                     {{ setor.nome }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="setor">Programa</label>
+                            <select id="setor" class="form-select">
+                                <option>
+                                    Nenhum
+                                </option>
+                                <option>
+                                    Ciclo
                                 </option>
                             </select>
                         </div>
@@ -746,6 +771,7 @@ export default {
 </script>
 
 <style>
+
 .link {
     color: black;
     text-decoration: none;

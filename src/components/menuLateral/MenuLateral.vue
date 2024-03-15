@@ -1,22 +1,26 @@
 <template>
     <div>
-        <div class="submenu-administrativo1" style="text-align: center;">
+        <div class="submenu-administrativo1">
             <br><br><br><br><br>
 
-            <!-- <div v-for="item in sgp" :key="item.id">
-                <div v-if="item.filho.length > 0">
-
-                    <h6 style="color: rgb(255, 255, 255);"> {{ item.nome }}</h6>
-                    <div v-for="filho in item.filho" :key="filho.id" class="submenu-column">
-                        <a :href="devURL + filho.url" style="text-decoration: none; color: rgb(255, 255, 255);">
-                            <div class="categorias1">
-                                <span style="text-decoration: none; color: rgb(255, 255, 255);">{{ filho.nome }}</span>
+            <div style="min-width: fit-content;">
+                <div style="min-width: fit-content;">
+                    <div>
+                            <div class="categorias1" @click="verProgramas">
+                                <span style="text-decoration: none; color: rgb(255, 255, 255);">Programas</span>
                             </div>
-                        </a>
+                            <div class="categorias1"  @click="verPCM">
+                                <span style="text-decoration: none; color: rgb(255, 255, 255);">PCM</span>
+                            </div>
+                            <div class="categorias1" @click="verProjetos">
+                                <span style="text-decoration: none; color: rgb(255, 255, 255);">Projetos</span>
+                            </div>
+                            <div class="categorias1" @click="verPA">
+                                <span style="text-decoration: none; color: rgb(255, 255, 255);">Plano de Ação</span>
+                            </div>
                     </div>
                 </div>
-            </div> -->
-            TESTE
+            </div>
         </div>
     </div>
 </template>
@@ -37,6 +41,19 @@ export default {
     },
 
     methods: {
+        verProgramas() {
+            this.$router.push('/Programas/controle');
+        },
+        verPCM() {
+            this.$router.push('/PCM/Controle');
+        },
+        verProjetos() {
+            this.$router.push('/projetos');
+        },
+        verPA() {
+            this.$router.push('/PA/Controle');
+        },
+
 
         getAllSidebar() {
             //axios.get(`http://192.168.0.6:8000/api/menu/estrutura/7`)
@@ -63,9 +80,12 @@ export default {
 
 .submenu-administrativo1 {
     background-color: #333;
-    width: 300px;
-    height: 1920px;
-    position: absolute;
+    text-align: center;
+    min-width: fit-content;
+    width: 15%;
+    max-width: 15rem;
+    height: 100vh;
+    position: fixed;
     /* z-index: -1; */
     top: 0;
     left: 0px;
@@ -73,6 +93,7 @@ export default {
     /* scroll */
     padding: 20px;
     color: #f0f0f0;
+    z-index: 2 ;
 }
 
 /* @media only screen and (max-width: 768px) {
@@ -88,10 +109,6 @@ export default {
     margin-bottom: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.categorias1 {
-    width: 100%;
 }
 
 .dropdown {
@@ -117,7 +134,8 @@ export default {
     padding: 4px;
     background-color: #444;
     border: 1px solid #555;
-    width: 250px;
+    width: 100%;
+    min-width: fit-content;
     margin-bottom: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -127,5 +145,4 @@ export default {
     transform: translateY(0.1px);
     box-shadow: 0 0 10px var(--second-color);
     cursor: pointer;
-}
-</style>
+}</style>

@@ -2,7 +2,7 @@
     <br><br><br><br>
     <div style="padding: 1rem;">
         <div class="container"
-            style="border: 2px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
 
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
@@ -181,6 +181,27 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1800px) {
+
+.container {
+    margin-left: 12rem !important;
+    max-width: 1100px !important;
+}
+.botaoHome {
+    font-size: 30px;
+    margin-left: 6rem !important;
+    cursor: pointer;
+    position: absolute;
+}
+
+}
+.botaoHome {
+    font-size: 30px;
+    margin-left: 50rem;
+    cursor: pointer;
+    position: absolute;
+}
+
 .button-reprovar:disabled {
     width: 10rem;
     background-color: #e0213194 !important;

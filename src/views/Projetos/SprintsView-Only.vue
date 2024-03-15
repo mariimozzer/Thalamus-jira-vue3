@@ -4,6 +4,9 @@
         style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
         <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
+
+        <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
+            :title="'Ir para tela de projetos'"></i>
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
@@ -12,8 +15,7 @@
 
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
-        <h3
-            style="text-align: center; margin-bottom: 1rem; border-bottom: 2px rgb(56, 56, 56) solid; padding-bottom: 1rem;">
+        <h3 style="text-align: center; margin-top: 1rem;">
             Plano de Ação</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
@@ -191,8 +193,8 @@
                             </div>
 
                             <div style="width: 30%; padding-left: 0.5rem; padding-right: 1rem">
-                                <input :disabled="desativarEdicao" type="text" v-model="element.descricao"
-                                    style="width:100%; outline: none;">
+                                <input :disabled="desativarEdicao" :title="element.descricao" type="text" v-model="element.descricao"
+                                    style="width:100%; outline: none; cursor: help;">
                             </div>
 
                             <div style="width: 3rem; text-align: center">
@@ -919,7 +921,35 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.fa-solid {
+    margin-left: 3rem;
+}
+@media (max-width: 1800px) {
+    .botaoHome {
+    font-size: 30px;
+    margin-left: 14rem !important;
+    cursor: pointer;
+    position: absolute;
+}
+
+.container {
+    margin-left: 13.5rem !important;
+}
+
+.fa-solid {
+    margin-left: 13.5rem !important;
+}
+}
+
+.botaoHome {
+    font-size: 30px;
+    margin-left: 260px;
+    cursor: pointer;
+    position: absolute;
+}
+
 .hPoints {
     display: flex;
     border-radius: 50%;

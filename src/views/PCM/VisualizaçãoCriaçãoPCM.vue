@@ -1,26 +1,29 @@
 <template>
+    <div>
     <br><br><br><br>
     <!-- <div
         style="width: 100%; margin-top: 1rem; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; text-align: center;">
         <h1>PCM - Nº 240181</h1>
         Data de abertura: 14/11/2023
     </div> -->
-    <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; ">
+    <div class="Header"
+        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; align-items: center; ">
         <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
+            <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+            class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome" :title="'Ir para tela inicial'"></i>
             <h2>PCM - Nº 240181</h2>
         <i style="font-size: 30px; margin-right: 2rem; visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint"></i>
     </div>
-    <div style="text-align: center;">
+    <div style="text-align: center;" class="HeaderData">
         Data de abertura: 14/11/2023
     </div>
     <div class="container" style="padding: 2rem 0rem 0rem 0rem;">
         <div style="text-align: center;">
             <h5><b>Área do Solicitante</b></h5>
         </div>
-        <div style="border: 1px black solid; padding: 20px; border-radius: 20px;">
+        <div style="border: 1px black solid; padding: 20px; border-radius: 10px;">
             <div style="display: flex; align-content: center; justify-content: center;">
                 <div style="display: flex; align-items: center; width: fit-content;">
                     <strong>
@@ -86,10 +89,10 @@ O objetivo principal da Roboflex é soluções em hardware e software, em comple
         <div style="text-align: center;">
             <h5><b>Área do Responsável</b></h5>
         </div>
-        <div style="border: 1px black solid; padding: 20px; border-radius: 20px;">
+        <div>
             <div>
                 <div
-                    style="border: 1px solid black;padding-bottom: 10px;border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                    style="border: 1px solid black;padding-bottom: 10px;border-bottom-left-radius: 20px; border-bottom-right-radius: 10px; padding-bottom: 10px">
                     <table class="table">
                         <thead>
                             <tr>
@@ -218,6 +221,7 @@ O objetivo principal da Roboflex é soluções em hardware e software, em comple
         </div>
     </div>
     <br><br><br>
+    </div>
 </template>
 <script>
 export default {

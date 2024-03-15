@@ -5,16 +5,9 @@
             <div class="menu">
                 <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
             </div>
-            <!-- <menuLateral></menuLateral> -->
+            <menuLateral v-if="!$route.meta.hideMenu" :style="{'display': (!$route.meta.hideMenu) ? '' : 'none'}"></menuLateral>
             <div class="router">
                 <router-view />
-                <nav>
-                    <router-link to="/PCM/Controle">PCM</router-link> |
-                    <router-link to="/PA/Controle">PA</router-link> | 
-                    <router-link to="/Programas/controle">Programas</router-link> |
-                    <router-link to="/projetos">projetos</router-link> |
-                </nav>
-
                 <br><br>
             </div>
             <FooterComponent></FooterComponent>
@@ -25,7 +18,7 @@
 <script>
 import FooterComponent from "@/components/footer/FooterComponent"
 import MenuComponent from "./components/menu/MenuComponent.vue";
-// import menuLateral from './components/menuLateral/MenuLateral'
+import menuLateral from './components/menuLateral/MenuLateral'
 
 export default {
     data() {
@@ -38,7 +31,7 @@ export default {
     components: {
         FooterComponent: FooterComponent,
         MenuComponent: MenuComponent,
-        // menuLateral: menuLateral
+        menuLateral: menuLateral
     }
 }
 </script>
@@ -46,7 +39,7 @@ export default {
 
 <style>
 .menu {
-    z-index: 1;
+    z-index: 3;
     position: absolute;
     width: 100%;
     margin-top: 0;
@@ -106,14 +99,16 @@ nav a.router-link-exact-active {
 
 
 
-/* .router {
-    margin-left: 300px;
-    margin-bottom: 100px;
+.router {
+    margin-left: 30px;
     margin-top: 0px;
-} */
+}
+
+
 
 .footer {
     position: absolute;
+    z-index: 3;
 }
 
 .button-default {
@@ -191,9 +186,4 @@ thead {
     width: 0px;
 }
 
-/* .router {
-    margin-left: 300px;
-    margin-bottom: 100px;
-    margin-top: 0px;
-} */
 </style>

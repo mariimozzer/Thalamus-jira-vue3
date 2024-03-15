@@ -13,7 +13,7 @@ import PainelKanbanViewOnlyVue from '@/views/Projetos/PainelKanban-ViewOnly.vue'
 import LoginViewVue from '@/views/Login/LoginView.vue'
 
 //Home
-import HomeView from '@/views/Home/HomeView.vue'
+// import HomeView from '@/views/Home/HomeView.vue'
 
 //Senha
 import EsqueceuSenhaView from "@/views/Senha/EsqueceuSenhaView"
@@ -27,6 +27,7 @@ import PCMVazio from '@/views/PCM/PCMVazio'
 import ControledePlanodeAção from '@/views/PA/ControleDePlanodeAção.vue'
 import VisualizaçãoPlanodeAção from '@/views/PA/VisualizaçãoPlanodeAção.vue'
 import controleProgramas from '@/views/Programas/ControleProgramas'
+import homeGestãoDeProjetos from '../views/Home/HomeGestãoDeProjetos.vue'
 
 
 
@@ -92,10 +93,8 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: HomeView,
+    component: homeGestãoDeProjetos,
     beforeEnter: guardMyroute,
-
-
   },
 
   //PCM

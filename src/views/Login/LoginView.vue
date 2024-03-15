@@ -181,6 +181,21 @@ export default {
     border-radius: 20px;
 }
 
+@media (max-width: 1800px) {
+    .box-login {
+        max-width: 50%;
+        margin: auto;
+        border: 1px solid #ddd;
+        margin-top: 10px;
+        padding: 30px;
+        border-radius: 20px;
+        margin-left: 300px;
+    }
+    .logo {
+        font-size: 18px;
+    }
+}
+
 .logo {
     text-align: center;
     color: var(--first-color);

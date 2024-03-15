@@ -1,14 +1,17 @@
 <template>
     <br><br><br>
     <div
-    style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
-    <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-    class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
-    <h2>{{ nomeDoProjeto }}</h2>
-    <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
-    class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
-</div>
-<br><br><br>
+        style="width: 100%;margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
+        <i @click="verProjetos" style="font-size: 30px; margin-left: 3rem; cursor: pointer;"
+            class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
+
+        <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
+            :title="'Ir para tela de projetos'"></i>
+        <h2>{{ nomeDoProjeto }}</h2>
+        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
+            class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
+    </div>
+    <br><br><br>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
         <h3 style="text-align: center; margin-top: 1rem;">
@@ -21,18 +24,18 @@
                             <h5>
                                 <span style="display: flex;">
                                     <div style="background-color: rgba(255, 145, 0, 0.600)" class="hPoints">{{
-            somarHP(item)[0] }}
+                somarHP(item)[0] }}
                                     </div>
                                     <div style="background-color: rgba(0, 47, 255, 0.600)" class="hPoints">{{
-            somarHP(item)[1] }}
+                somarHP(item)[1] }}
                                     </div>
                                     <div style="background-color: rgba(0, 255, 0, 0.600)" class="hPoints">{{
-            somarHP(item)[2] }}
+                somarHP(item)[2] }}
                                     </div>
                                 </span>
                             </h5>
                         </div>
-                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint"  :title="'Ocultar Sprint'"
+                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint" :title="'Ocultar Sprint'"
                             style=" width: 2rem; margin-left: ">
                             <i style="font-size: 20px;" class="bi bi-eye-slash ocultar"
                                 :id="'botaoOcultar' + item.nome"></i>
@@ -83,7 +86,7 @@
                                     <button style="margin: 0.2rem;" @click="abrirModalIniciarSprint(item.id)"
                                         :disabled="item.dtInicio == null && item.dtTermino !== null"
                                         :style="{ 'cursor': (item.dtInicio == null && item.dtTermino !== null) ? 'not-allowed' : 'pointer', 'color': (item.dtInicio == null && item.dtTermino !== null) ? 'grey' : 'black' }">{{
-            item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
+                item.dtTermino == null ? 'Iniciar Sprint' : 'Finalizar Sprint' }}
                                     </button><br />
 
                                 </v-list-item>
@@ -107,7 +110,8 @@
                                             <v-list-item>
                                                 <div>
                                                     <h4>Tem certeza? Esta ação é Irreversível!</h4>
-                                                    <p>Ao excluir esta sprint, todos os backlogs contidos nela também
+                                                    <p>Ao excluir esta sprint, todos os backlogs contidos nela
+                                                        também
                                                         serão excluídos.</p>
                                                     <div style="display: flex; width: 100%;">
                                                         <Button @click="apagarSprint(item.id)"
@@ -328,8 +332,8 @@
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
                 <h3 style="text-align: center; margin-bottom: 1rem;">Sprints</h3>
-                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;" @click="criarNovaSprint" :title="'Adicionar nova sprint'"
-                    class="botaoAdicionarSprint">
+                <button style="width: 5rem; font-size: 30px; padding-right: 2rem;" @click="criarNovaSprint"
+                    :title="'Adicionar nova sprint'" class="botaoAdicionarSprint">
                     <i class="bi bi-plus-circle"></i></button>
             </div>
         </div>
@@ -1117,7 +1121,34 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.fa-solid {
+    margin-left: 3rem;
+}
+@media (max-width: 1800px) {
+    .botaoHome {
+    font-size: 30px;
+    margin-left: 14rem !important;
+    cursor: pointer;
+    position: absolute;
+}
+
+.container {
+    margin-left: 13.5rem !important;
+}
+
+.fa-solid {
+    margin-left: 13.5rem !important;
+}
+}
+
+.botaoHome {
+    font-size: 30px;
+    margin-left: 260px;
+    cursor: pointer;
+    position: absolute;
+}
+
 .hPoints {
     display: flex;
     border-radius: 50%;
