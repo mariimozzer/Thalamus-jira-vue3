@@ -159,14 +159,11 @@
                 </div>
 
                 <div style="display: flex;">
-                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="setor">Programa</label>
-                        <select id="setor" class="form-select">
+                    <div class="form-group" style="width: 20rem;">
+                        <label for="gerente">Programa</label>
+                        <select id="gerente" class="form-select">
                             <option>
-                                Nenhum
-                            </option>
-                            <option>
-                                Ciclo
+                                nenhum
                             </option>
                         </select>
                     </div>
