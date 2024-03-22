@@ -42,7 +42,15 @@
                          @mouseleave="mostrarBotao(item.id, false)">
     
                                 <td>{{ item.nome }}</td>
-                                <td>{{ item.status }}</td>
+                                <td><select v-model="item.status" class="form-select"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
                                 <td>{{ item.dtInicio }}</td>
                                 <td>{{ item.dtTermino }}</td>
                                 <td>{{ item.gerente_name }}</td>
@@ -248,6 +256,33 @@ export default {
     },
 
     methods: {
+
+        editarPlanoInline(idProjeto, itemAlterado, novoValor){
+            if (novoValor !== "Concluído") {
+
+
+        axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
+            [itemAlterado]: novoValor,
+            dtTermino: null
+        })
+            .then(() => {
+                this.getPlanoAcao()
+            })
+        }
+        if (novoValor == "Concluído") {
+        var dataAtual = new Date().toISOString().split('T')[0];
+            axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
+
+            [itemAlterado]: novoValor,
+            dtTermino: dataAtual
+        })
+            .then(() => {
+                this.getPlanoAcao()
+            })
+        }
+        },
+
+
         editarPlano(itemAlterado, novoValor) {
 
         axios.put(`${this.prodURL}/planoAcao/atualizar/${this.planoEditado.id}`, {
@@ -272,6 +307,7 @@ export default {
                     dtInicio: this.novoPlanoAcao.dtInicio,
                     gerente_id: this.novoPlanoAcao.gerente_id,
                     setor_id: this.novoPlanoAcao.setor_id,
+                    status: "Proposto"
                 })
 
                 .then((response) => {
