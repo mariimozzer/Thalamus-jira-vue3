@@ -50,6 +50,8 @@
 import axios from 'axios';
 import { createToaster } from "@meforma/vue-toaster";
 import api from '../../services/api';
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
 
 
 const toaster = createToaster({
@@ -78,6 +80,8 @@ export default {
             localSelecionado: null,
             localData: [],
             apiUrl: api.defaults.baseURL,
+            devURL: devURL,
+            prodURL: prodURL
 
         }
     },
@@ -110,7 +114,8 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://192.168.0.5:8000/api/login', {
+                // const response = await axios.post('http://192.168.0.5:8000/api/login', {
+                const response = await axios.post( `${this.prodURL}/login`, {
                     email: this.email,
                     password: this.password,
                 });
@@ -125,7 +130,9 @@ export default {
                 localStorage.setItem('LoggedUser', true);
 
                 // Atualizar permissões do usuário
-                const menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${userId}`;
+                // const menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${userId}`;
+                const menuUrl = `${this.prodURL}/menu/usuario/${userId}`;
+
                 const menuResponse = await axios.get(menuUrl);
                 const userPermissions = menuResponse.data.map((item) => item.nome.toLowerCase());
 
@@ -144,7 +151,7 @@ export default {
 
         async buscaLocal() {
             try {
-                const response = await fetch(`${this.apiUrl}/local`);
+                const response = await fetch(`${this.prodURL}/local`);
                 this.localData = await response.json();
             } catch (error) {
                 console.error('Error ao buscar empresas', error);

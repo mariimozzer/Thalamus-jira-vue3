@@ -1,22 +1,25 @@
 <template>
-    <br><br><br><br>
+    <br>
+    
+    <br><br><br>
+    
     <div style="padding: 1rem;">
-        <div class="container"
-            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
-
+        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                     </div>
-                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;"
-                        @click="this.modalNovoPCM = true" class="botaoAdicionarSprint">
-                        <i class="bi bi-plus-circle"></i>
-                    </button>
+    
+                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+    
                 </div>
             </div>
+    
             <br>
+    
             <div>
                 <div class="table responsive">
                     <table class="table table-hover">
@@ -29,128 +32,316 @@
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Envolvido</th>
                                 <th scope="col"></th>
+
                             </tr>
                         </thead>
+    
                         <tbody>
-                            <tr @click="verBacklogs('25', 'Plano de Ação 01')" style="vertical-align: middle;">
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Tratativa de não conformidade
-                                </td>
-
-                                <td style="text-align: center; color: green; vertical-align: middle;">
-                                    Concluído
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    05/02/2024
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    14/11/2023
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Darley Dias
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    P&D
-                                </td>
-
+                          <tr v-for="item in planosAcao" :key="item.id" style="text-align: center;"
+                          @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
+                         @mouseleave="mostrarBotao(item.id, false)">
+    
+                                <td>{{ item.nome }}</td>
+                                <td>{{ item.status }}</td>
+                                <td>{{ item.dtInicio }}</td>
+                                <td>{{ item.dtTermino }}</td>
+                                <td>{{ item.gerente_name }}</td>
+                                <td>{{ item.setor_nome }}</td>
                                 <td>
+                                    <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
+                                        <v-menu v-if="Array.isArray(planosAcao) && planosAcao.length > 0">
+                                            <template v-slot:activator="{ props }">
+                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
+                                            </template>
 
-
+                                            <v-list>
+            
+                                                <v-list-item>
+                                                    <button style="margin: 0.2rem;"
+                                                     
+                                                        @click="modalEditarPlano = true, this.planoEditado = item">Editar
+                                                    </button><br />
+                                                </v-list-item>
+                                               
+                                            </v-list>
+                                        </v-menu>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- modal novo Plano de Ação -->
-    <div style="overflow: auto" class="modal-mask" v-if="modalNovoPCM" @click="fecharModalFora">
-        <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
+    <!-- MODAL EDITAR PLANO DE AÇÃO -->
+    <div style="overflow: auto" class="modal-mask" v-if="modalEditarPlano" @click="fecharModalFora">
+        <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
+            class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
-                    <h3 class="titulo">Cadastrar Plano de Ação </h3>
-                    <button type="button" class="btn-close" aria-label="Close"
-                        @click="this.modalNovoPrograma = false"></button>
+                    <h3 class="titulo">Editar: {{ planoEditado.nome }} </h3>
+                    {{ planoEditado }}
+                    {{ planoEditado.gerente_name }}
+                    <button type="button" class="btn-close" aria-label="Close" 
+                        @click="this.getPlanoAcao, this.modalEditarPlano = false"></button>
                 </div>
                 <hr>
                 <br>
-                <div style="display: flex;">
 
-                    <div class="form-group" style="width: 30rem;">
-                        <label for="nome">Nome</label>
-                        <input id="nome" type="text" class="form-control">
+                <div style="display: flex; width: 100%;">
+                    <div style="display: flex; flex-flow: column; width: 50%">
+                        <div class="form-group">
+                            <label for="nome">Nome do Plano de Ação</label>
+                            <input id="nome" type="text" v-model="planoEditado.nome" class="form-control"
+                                @focusout="editarPlano('nome', planoEditado.nome)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gerente">Gerente Responsável</label>
+                            <select id="gerente" @change="editarPlano('gerente_id', $event.target.value)"
+                                v-model="planoEditado.gerente_id" class="form-select">
+                                <option v-for="item in gerente" :key="item.nome" :value="item.id">
+                                    {{ item.nomeCompleto }}
+                                </option>
+                            </select>
+                        </div>
+
+                       
+
                     </div>
+                    <div style="display: flex; flex-flow: column; width: 50%;">
 
-                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="data">Data de Início</label>
-                        <input id="data" type="date" ref="dtInicio" class="form-control">
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="data">Data de Início</label>
+                            <input id="data" type="date" ref="dtInicio" v-model="planoEditado.dtInicio"
+                                class="form-control" @change="editarPlano('dtInicio', $event.target.value)">
+                            <label for="data" style="margin-top: 1rem;">Data de Termino</label>
+                            <input id="data" type="date" ref="dtTermino" v-model="planoEditado.dtTermino"
+                                class="form-control" @change="editarPlano('dtTermino', $event.target.value)">
+                        </div>
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="setor">Setor Beneficiado</label>
+                            <select id="setor" v-model="planoEditado.setor_id" class="form-select"
+                                @change="editarPlano('setor_id', $event.target.value)">
+                                <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+                                    {{ setor.nome }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="setor">Programa</label>
+                            <select id="setor" class="form-select">
+                                <option>
+                                    Nenhum
+                                </option>
+                                <option>
+                                    Ciclo
+                                </option>
+                            </select>
+                        </div>
 
                     </div>
-                </div>
-
-                <div style="display: flex;">
-                    <div class="form-group" style="width: 30rem;">
-                        <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" class="form-select">
-                            <option>
-                                Teste
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="setor">Setor Responsável</label>
-                        <select id="setor" class="form-select">
-                            <option>
-                                Teste
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display: flex; justify-content: right;">
-                    <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- fim modal novo Programa -->
+    <!-- END MODAL EDITAR PLANO DE AÇÃO -->
+
+
+    <!-- MODAL NOVO PLANO DE AÇÃO -->
+    
+    <div style="overflow: auto" class="modal-mask" v-if="modalNovoPA" @click="fecharModalFora"> 
+        <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
+
+            <div>
+                <div style="display: flex; justify-content: space-between">
+                    <h3 class="titulo">Cadastrar Plano de Ação </h3>
+                    <button type="button"  @click="this.modalNovoPA = false" class="btn-close" aria-label="Close"></button>
+
+                </div>
+
+                <hr>
+                <br>
+    
+                <div style="display: flex;">
+
+                    <div class="form-group" style="width: 30rem;">
+                        <label for="nome">Nome</label>
+                        <input id="nome" v-model="novoPlanoAcao.nome" type="text" class="form-control">
+                    </div>
+    
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="data">Data de Início</label>
+                        <input id="data" v-model="novoPlanoAcao.dtInicio" type="date" ref="dtInicio" class="form-control">
+                    </div>
+                </div>
+    
+    
+                <div style="display: flex;">
+                    <div class="form-group" style="width: 30rem;">
+                        <label for="gerente">Gerente Responsável</label>
+                        <select id="gerente" v-model="novoPlanoAcao.gerente_id" class="form-select">
+                                <option v-for="item in gerente" :key="item.id" :value="item.id">
+                                    {{ item.nomeCompleto }}
+                                </option>
+                            </select>
+                    </div>
+    
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="setor">Setor Responsável</label>
+                        <select id="setor" v-model="novoPlanoAcao.setor_id" class="form-select">
+                                <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+                                    {{ setor.nome }}
+                                </option>
+                            </select>
+                        </div>
+                </div>
+    
+    
+                <div style="display: flex; justify-content: right;">
+                    <button @click="adicionarPlanoAcao" style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END MODAL NOVO PLANO DE AÇÃO -->
 </template>
 
 
 <script>
-
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
+import axios from 'axios'
 
 export default {
     name: "ControlePCM",
 
     data() {
         return {
-            modalNovoPCM: false,
+            modalNovoPA: false,
+            devURL: devURL,
+            prodURL: prodURL,
+            planosAcao: [],
+            novoPlanoAcao: {
+                "nome": '',
+                "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                "gerente_id": '',
+                "setor_id": ''
+            },
+            gerente: [],
+            setores: [],
+            modalEditarPlano: false,
+            planoEditado: null
 
         }
     },
 
     mounted() {
+        this.getPlanoAcao()
+        this.getGerenteseSetor()
+
     },
 
     methods: {
+        editarPlano(itemAlterado, novoValor) {
+
+        axios.put(`${this.prodURL}/planoAcao/atualizar/${this.planoEditado.id}`, {
+         [itemAlterado]: novoValor,
+        })  
+        },
+
+        
+        mostrarBotao(id, mostrar) {
+            if (mostrar == true) {
+                document.getElementById('botaoEdicao' + id).style.visibility = ''
+            }
+            if (mostrar == false) {
+                document.getElementById('botaoEdicao' + id).style.visibility = 'hidden'
+            }
+        },
+
+        adicionarPlanoAcao() {
+            axios.post(`${this.prodURL}/planoAcao/cadastrar`, {
+
+                    nome: this.novoPlanoAcao.nome,
+                    dtInicio: this.novoPlanoAcao.dtInicio,
+                    gerente_id: this.novoPlanoAcao.gerente_id,
+                    setor_id: this.novoPlanoAcao.setor_id,
+                })
+
+                .then((response) => {
+                    this.getPlanoAcao();
+                    this.modalNovoPA = false;
+                    this.novoPlanoAcao = {
+                        "nome": "",
+                        "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                        "gerente_id": "",
+                        "setor_id": "",
+                    };
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+        },
+
+        getGerenteseSetor() {
+            axios.get(`${this.prodURL}/usuario`, {
+
+                })
+                .then((response) => {
+                    this.gerente = response.data
+                    this.gerente = this.gerente.map(item => ({
+                        id: item.id,
+                        nomeCompleto: item.name
+                    }))
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+            axios.get(`${this.prodURL}/setor`, {
+
+                })
+                .then((response) => {
+                    this.setores = response.data
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+
+        getPlanoAcao() {
+            axios.get(`${this.prodURL}/planoAcao/listar`, {
+
+                })
+                .then((response) => {
+                    this.planosAcao = response.data;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
         fecharModalFora(event) {
             if (event.target.classList.contains('modal-mask')) {
-                this.modalNovoPCM = false;
+                this.modalNovoPA = false;
+                this.modalEditarPlano = false;
+                return this.getPlanoAcao()
             }
         },
 
         verBacklogs(id, nomeProjeto) {
-                    this.$router.push({ name: "PA" })
-                    sessionStorage.setItem('idProjeto', id)
-                    sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
+            this.$router.push({ name: "PA" })
+            sessionStorage.setItem('idProjeto', id)
+            sessionStorage.setItem('nomeDoProjeto', nomeProjeto)
         },
 
         verPCM() {
@@ -178,5 +369,4 @@ export default {
     align-items: center;
     justify-content: center;
 }
-
 </style>

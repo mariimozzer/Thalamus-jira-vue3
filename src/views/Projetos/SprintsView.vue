@@ -498,6 +498,9 @@
 import { ref } from 'vue';
 import draggable from "@/vuedraggableVue";
 import axios from "axios";
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
+
 
 export default {
     components: {
@@ -542,7 +545,9 @@ export default {
             idProjeto: sessionStorage.getItem('idProjeto'),
             nomeDoProjeto: sessionStorage.getItem('nomeDoProjeto'),
             gerente: [],
-            sprintEditada: null
+            sprintEditada: null,
+            devURL: devURL,
+            prodURL: prodURL
         }
     },
 
@@ -575,7 +580,10 @@ export default {
                 }
 
                 // Envie a requisição usando Axios
-                axios.post('http://192.168.0.5:8000/api/sprintTarefa/anexo/adicionar', formData)
+                // axios.post('http://192.168.0.5:8000/api/sprintTarefa/anexo/adicionar', formData)
+                axios.post(`${this.prodURL}/sprintTarefa/anexo/adicionar`, formData)
+
+                
                     .then(response => {
                         this.backlogeditado.anexos.push({
                             path: response.data.anexos_salvos[0].path,
@@ -591,7 +599,8 @@ export default {
         },
 
         excluirAnexo(id) {
-            axios.delete(`http://192.168.0.5:8000/api/sprintTarefa/anexo/remover/${id}`);
+            // axios.delete(`http://192.168.0.5:8000/api/sprintTarefa/anexo/remover/${id}`);
+            axios.delete(`${this.prodURL}/sprintTarefa/anexo/remover/${id}`)
             this.backlogeditado.anexos = this.backlogeditado.anexos.filter(anexo => anexo.id !== id)
         },
 
@@ -679,7 +688,8 @@ export default {
                     }
                 }
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    axios.put(`${this.prodURL}/sprintTarefa/atualizar/${idBacklog}`, {
                     sprint_id: idSprint,
                 })
                     .then(() => {
@@ -720,7 +730,9 @@ export default {
             //         console.error(error);
             //     });
 
-            axios.get('http://192.168.0.5:8000/api/usuario/', {
+            // axios.get('http://192.168.0.5:8000/api/usuario/', {
+                axios.get(`${this.prodURL}/usuario`, {
+
             })
                 .then((response) => {
                     this.gerente = response.data
@@ -744,7 +756,9 @@ export default {
         },
 
         getBacklogs() {
-            axios.get(`http://192.168.0.5:8000/api/sprint/buscar/${this.idProjeto}`, {})
+            // axios.get(`http://192.168.0.5:8000/api/sprint/buscar/${this.idProjeto}`, {})
+            axios.get(`${this.prodURL}/sprint/buscar/${this.idProjeto}`, {})
+
                 .then((response) => {
                     function compararSprints(a, b) {
                         if (a.nome === "Plano de ação") {
@@ -786,7 +800,9 @@ export default {
 
             if (status == 'Em andamento') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    axios.put(`${this.prodURL}/sprintTarefa/atualizar/${idBacklog}`, {
+
                     usuario_id: this.idUsuario,
                     dtInicioReal: data
                 })
@@ -797,7 +813,9 @@ export default {
 
             } if (status == 'Concluído') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    axios.put(`${this.prodURL}/sprintTarefa/atualizar/${idBacklog}`, {
+
                     usuario_id: this.idUsuario,
                     dtFimReal: data
 
@@ -808,7 +826,9 @@ export default {
 
             } if (status == 'Pendente') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                    axios.put(`${this.prodURL}/sprintTarefa/atualizar/${idBacklog}`, {
+
                     usuario_id: this.idUsuario,
                     dtInicioReal: null,
                     dtFimReal: null
@@ -832,7 +852,9 @@ export default {
 
         editarBacklog(itemAlterado, idBacklog, novoValor) {
 
-            axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+            // axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`${this.prodURL}/sprintTarefa/atualizar/${idBacklog}`, {
+
                 usuario_id: this.idUsuario,
                 [itemAlterado]: novoValor
             })
@@ -848,7 +870,9 @@ export default {
 
         editarSprint(itemAlterado, idSprint, novoValor) {
 
-            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${idSprint}`, {
+            // axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${idSprint}`, {
+                axios.put(`${this.prodURL}/sprint/atualizar/${idSprint}`, {
+
                 [itemAlterado]: novoValor,
             })
                 .then(() => {
@@ -936,7 +960,10 @@ export default {
             var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
             if (sprint.dtTermino !== null) {
 
-                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                    axios.put(`${this.prodURL}/sprint/atualizar/${this.idSprint}`, {
+
+                    
                     dtInicio: null,
                     dtTermino: data
                 })
@@ -961,7 +988,10 @@ export default {
                 this.showEditarSprint = true;
                 this.sprintEditada = sprint
             } else {
-                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                // axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                    axios.put(`${this.prodURL}/sprint/atualizar/${this.idSprint}`, {
+
+                    
                     dtInicio: this.sprintEditada.dtInicio,
                     dtTermino: this.sprintEditada.dtTermino
                 })
@@ -1001,7 +1031,9 @@ export default {
                 return
             }
 
-            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+            // axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
+                axios.put(`${this.prodURL}/sprint/atualizar/${this.idSprint}`, {
+
                 dtInicio: data,
                 dtTermino: this.dataTerminoSprint,
             })
@@ -1026,7 +1058,9 @@ export default {
                 nomeSprint = 'Sprint - 1';
             }
 
-            axios.post(`http://192.168.0.5:8000/api/sprint/cadastrar`, {
+            // axios.post(`http://192.168.0.5:8000/api/sprint/cadastrar`, {
+                axios.post(`${this.prodURL}/sprint/cadastrar/`, {
+
                 nome: nomeSprint,
                 projeto_id: this.idProjeto
             })
@@ -1042,7 +1076,9 @@ export default {
 
             if (this.somenteBacklogs().length !== 0) {
 
-                axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
+                // axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
+                    axios.post(`${this.prodURL}/sprintTarefa/cadastrar`, {
+
                     sprint_id: id,
                     codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
                     descricao: descricao

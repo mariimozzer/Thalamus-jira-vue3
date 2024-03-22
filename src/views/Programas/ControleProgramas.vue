@@ -29,22 +29,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="vertical-align: middle;" @click="this.modalProjetosAssociados = true">
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Ciclo
-                                </td>
+                            <tr v-for="item in programas" :key="item.id " style="text-align: center;">
+                                <td>{{ item.nome }}</td>
+                                <td>{{ item.status }}</td>
+                                <td>{{ item.dtInicio }}</td>
+                                <td>{{ item.gerente_nome }}</td>
 
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Em andamento
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    01/01/2024
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Helena Resende
-                                </td>
                             </tr>
                         </tbody>
 
@@ -94,7 +84,7 @@
     </div>
     <!--END MODAL-->
 
-    <!-- modal novo Programa -->
+    <!-- MODAL NOVO PROGRAMA -->
     <div style="overflow: auto" class="modal-mask" v-if="modalNovoPrograma" @click="fecharModalFora">
         <div style="max-height: 80%; width: 70%; padding: 3rem; " class="modal-container">
             <div>
@@ -109,12 +99,12 @@
 
                     <div class="form-group" style="width: 30rem;">
                         <label for="nome">Nome do Programa</label>
-                        <input id="nome" type="text" class="form-control">
+                        <input id="nome" v-model="novoPrograma.nome" type="text" class="form-control">
                     </div>
 
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="data">Data de Início</label>
-                        <input id="data" type="date" ref="dtInicio" class="form-control">
+                        <input id="data" v-model="novoPrograma.dtInicio" type="date" ref="dtInicio" class="form-control">
 
                     </div>
                 </div>
@@ -122,34 +112,28 @@
                 <div style="display: flex;">
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" class="form-select">
-                            <option>
-                                Teste
-                            </option>
+                        <select id="gerente" v-model="novoPrograma.gerente_id" class="form-select">
+                            <option v-for="item in gerente" :key="item.id" :value="item.id">
+                                    {{ item.nomeCompleto }}
+                                </option>
                         </select>
                     </div>
-                    <!-- <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                        <label for="setor">Setor Beneficiado</label>
-                        <select id="setor" class="form-select">
-                            <option>
-                                Teste
-                            </option>
-                        </select>
-                    </div> -->
                 </div>
 
                 <div style="display: flex; justify-content: right;">
-                    <button style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
+                    <button @click="adicionarPrograma" style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- fim modal novo Programa -->
+    <!-- END MODAL NOVO PROGRAMA -->
 </template>
 
 
 <script>
-
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
+import axios from 'axios'
 
 export default {
     name: "ControleProgramas",
@@ -158,10 +142,80 @@ export default {
         return {
             modalProjetosAssociados: false,
             modalNovoPrograma: false,
+            programas: [],
+            novoPrograma: {
+             "nome": '',
+             "status": '',
+             "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+             "gerente_nome": ''
+            },
+            devURL: devURL,
+            prodURL: prodURL,
+            gerente: []
         }
     },
 
+    mounted(){
+        this.getProgramas()
+        this.getGerente()
+    },
+
     methods: {
+
+        adicionarPrograma(){
+
+            axios.post(`${this.prodURL}/programa/cadastrar`, {
+
+            nome: this.novoPrograma.nome,
+            dtInicio: this.novoPrograma.dtInicio,
+            gerente_id: this.novoPrograma.gerente_id,
+            setor_id: this.novoPrograma.setor_id,
+            })
+
+            .then((response) => {
+            this.getProgramas();
+            this.modalNovoPrograma = false;
+            this.novoPrograma = {
+                "nome": "",
+                "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                "gerente_id": "",
+                "setor_id": "",
+            };
+            console.log(response.data);
+            })
+            .catch((error) => {
+            console.error(error);
+            });
+
+        },
+
+        getProgramas(){
+            axios.get(`${this.prodURL}/programa/listar`, {
+            })
+                .then((response) => {
+                    this.programas = response.data;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        getGerente(){
+            axios.get(`${this.prodURL}/usuario`, {
+
+        })
+        .then((response) => {
+            this.gerente = response.data
+            this.gerente = this.gerente.map(item => ({
+                id: item.id,
+                nomeCompleto: item.name
+            }))
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        },
+
         fecharModalFora(event) {
             if (event.target.classList.contains('modal-mask')) {
                 this.modalProjetosAssociados = false;

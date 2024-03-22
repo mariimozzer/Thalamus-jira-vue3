@@ -1,7 +1,8 @@
 import axios from "axios";
 
-  const baseURL= 'http://192.168.0.5:8000/api';
-   const devURL = 'http://192.168.0.6:8082';
+  const prodURL = 'http://192.168.0.5:8000/api';
+   const baseURL = 'http://192.168.0.6:8082';
+   const devURL = 'http://192.168.0.6:8000/api';
 
 
    const api = axios.create({
@@ -27,5 +28,8 @@ api.interceptors.request.use(
       return Promise.reject(error);
     }
   );
+
+  export {devURL};
+  export {prodURL}
 
 export default api;

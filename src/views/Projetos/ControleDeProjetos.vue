@@ -377,6 +377,8 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios'
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
 
 export default {
     name: "ControleDeProjetos",
@@ -418,7 +420,9 @@ export default {
             disabled: false,
             setores: [],
             projetoEditado: null,
-            userName: ''
+            userName: '',
+            devURL: devURL,
+            prodURL: prodURL
         }
     },
 
@@ -462,7 +466,8 @@ export default {
                 }
 
                 // Envie a requisição usando Axios
-                axios.post('http://192.168.0.5:8000/api/projeto/anexo/adicionar', formData)
+                // axios.post('http://192.168.0.5:8000/api/projeto/anexo/adicionar', formData)
+                axios.post(`${this.prodURL}/projeto/anexo/adicionar`, formData)
                     .then(response => {
                         this.projetoEditado.anexos.push({
                             path: response.data.anexos_salvos[0].path,
@@ -646,7 +651,9 @@ export default {
             }
             if (novoValor == "Concluído") {
                 var dataAtual = new Date().toISOString().split('T')[0];
-                axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
+                // axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
+                    axios.put(`${this.prodURL}/projeto/atualizar/${idProjeto}`, {
+
                     [itemAlterado]: novoValor,
                     dtTermino: dataAtual
                 })
@@ -657,7 +664,9 @@ export default {
         },
 
         adicionarProjeto() {
-            axios.post('http://192.168.0.5:8000/api/projeto/cadastrar', {
+            // axios.post('http://192.168.0.5:8000/api/projeto/cadastrar', {
+                axios.post(`${this.prodURL}/projeto/cadastrar`, {
+
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
                 gerente_id: this.novoProjeto.gerente_id,
@@ -718,7 +727,9 @@ export default {
         },
 
         getGerenteseSetor() {
-            axios.get('http://192.168.0.5:8000/api/usuario/', {
+            // axios.get('http://192.168.0.5:8000/api/usuario/', {
+                axios.get(`${this.prodURL}/usuario`, {
+
             })
                 .then((response) => {
                     this.gerente = response.data
@@ -731,7 +742,9 @@ export default {
                     console.error(error);
                 });
 
-            axios.get('http://192.168.0.5:8000/api/setor', {
+            // axios.get('http://192.168.0.5:8000/api/setor', {
+                axios.get(`${this.prodURL}/setor`, {
+
             })
                 .then((response) => {
                     this.setores = response.data
@@ -743,7 +756,9 @@ export default {
 
         getProjetos() {
             var id = parseFloat(localStorage.getItem('id'))
-            axios.get(`http://192.168.0.5:8000/api/projeto/usuario/${id}`, {
+            // axios.get(`http://192.168.0.5:8000/api/projeto/usuario/${id}`, {
+                axios.get(`${this.prodURL}/projeto/usuario/${id}`, {
+
             })
                 .then((response) => {
                     this.projetos = response.data;
