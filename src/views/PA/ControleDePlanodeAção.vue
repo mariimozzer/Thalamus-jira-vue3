@@ -53,9 +53,9 @@
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select></td>
-                                <td> <input type="date" :value="formatarDataHora(item.dtInicio)">
-                                    
-                                    {{ formatarDataHora(item.dtInicio) }}</td>
+                                <td> 
+                                    <input type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                                </td>
                                 <td>{{ item.dtTermino }}</td>
                                 <td>{{ item.gerente_name }}</td>
                                 <td>{{ item.setor_nome }}</td>
