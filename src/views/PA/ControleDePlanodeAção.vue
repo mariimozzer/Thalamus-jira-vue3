@@ -235,6 +235,16 @@
                             </option>
                         </select>
                     </div>
+
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="setor">Programa</label>
+                        <select id="setor" v-model="novoPlanoAcao.programas" class="form-select">
+                            <option v-for="item in programas" :key="item.id" :value="item.id">
+                                {{ item.nome }}
+                            </option>
+                        </select>
+                    </div>
+                 
                 </div>
 
 
@@ -269,13 +279,15 @@ export default {
                 "nome": '',
                 "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
                 "gerente_id": '',
-                "setor_id": ''
+                "setor_id": '',
+                "programa": ''
             },
             gerente: [],
             setores: [],
             modalEditarPlano: false,
             modalExcluirPlano: false,
-            planoEditado: null
+            planoEditado: null,
+            programas: []
 
         }
     },
@@ -283,10 +295,22 @@ export default {
     mounted() {
         this.getPlanoAcao()
         this.getGerenteseSetor()
+        this.getProgramas()
 
     },
 
     methods: {
+
+        getProgramas(){
+            axios.get(`${this.prodURL}/programa/listar`, {})
+                .then((response) => {
+                    this.programas = response.data;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+        },
 
         excluirPlano() {
             const userId = localStorage.getItem('id')
