@@ -51,8 +51,8 @@
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select></td>
-                                <td>{{ item.dtInicio }}</td>
-                                <td>{{ item.dtTermino }}</td>
+                                <td>{{ formatarDataHora(item.dtInicio) }}</td>
+                                <td>{{ formatarDataHora(item.dtTermino) }}</td>
                                 <td>{{ item.gerente_name }}</td>
                                 <td>{{ item.setor_nome }}</td>
                                 <td>
@@ -69,7 +69,7 @@
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
                                                      
-                                                        @click="modalEditarPlano = true, this.planoEditado = item">Editar
+                                                        @click="modalEditarPlano = true, this.planoEditado = item, this.planoEditado.dtTermino !== null ? this.planoEditado.dtTermino = this.planoEditado.dtTermino.slice(0,10) : '',this.planoEditado.dtInicio !== null ? this.planoEditado.dtInicio = this.planoEditado.dtInicio.slice(0,10) : ''">Editar
                                                     </button><br />
                                                 </v-list-item>
                                                
@@ -110,37 +110,13 @@
 
                         <div class="form-group">
                             <label for="gerente">Gerente Responsável</label>
-                            <select id="gerente" @change="editarPlano('gerente_id', $event.target.value)"
-                                v-model="planoEditado.gerente_id" class="form-select">
-                                <option v-for="item in gerente" :key="item.nome" :value="item.id">
-                                    {{ item.nomeCompleto }}
-                                </option>
-                            </select>
+                            <select id="gerente" v-model="planoEditado.gerente_name" class="form-select">
+                            <option v-for="item in gerente" :key="item.id" :value="item.nomeCompleto">
+                                {{ item.nomeCompleto }}
+                            </option>
+                        </select>
                         </div>
-
-                       
-
-                    </div>
-                    <div style="display: flex; flex-flow: column; width: 50%;">
-
-                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                            <label for="data">Data de Início</label>
-                            <input id="data" type="date" ref="dtInicio" v-model="planoEditado.dtInicio"
-                                class="form-control" @change="editarPlano('dtInicio', $event.target.value)">
-                            <label for="data" style="margin-top: 1rem;">Data de Termino</label>
-                            <input id="data" type="date" ref="dtTermino" v-model="planoEditado.dtTermino"
-                                class="form-control" @change="editarPlano('dtTermino', $event.target.value)">
-                        </div>
-                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
-                            <label for="setor">Setor Beneficiado</label>
-                            <select id="setor" v-model="planoEditado.setor_id" class="form-select"
-                                @change="editarPlano('setor_id', $event.target.value)">
-                                <option v-for="setor in setores" :key="setor.id" :value="setor.id">
-                                    {{ setor.nome }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <div class="form-group" >
                             <label for="setor">Programa</label>
                             <select id="setor" class="form-select">
                                 <option>
@@ -151,6 +127,27 @@
                                 </option>
                             </select>
                         </div>
+                       
+
+                    </div>
+                    <div style="display: flex; flex-flow: column; width: 50%;">
+
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="dataInicio">Data de Início</label>
+                        <input id="dataInicio" type="date" v-model="planoEditado.dtInicio" class="form-control" @change="editarPlano('dtInicio', $event.target.value)">
+                    </div>
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="dataTermino">Data de Término</label>
+                        <input id="dataTermino" type="date" v-model="planoEditado.dtTermino" class="form-control" @change="editarPlano('dtTermino', $event.target.value)">
+                    </div>
+
+                        <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                            <label for="setor">Setor Beneficiado</label>
+                            <select v-model="planoEditado.setor_nome" class="form-select">
+                            <option v-for="setor in setores" :key="setor.id" :value="setor.nome">{{ setor.nome }}</option>
+                        </select>
+                        </div>
+                       
 
                     </div>
                 </div>
@@ -192,11 +189,11 @@
                 <div style="display: flex;">
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" v-model="novoPlanoAcao.gerente_id" class="form-select">
-                                <option v-for="item in gerente" :key="item.id" :value="item.id">
-                                    {{ item.nomeCompleto }}
-                                </option>
-                            </select>
+                        <select id="gerente" v-model="planoEditado.gerente_name" class="form-select">
+                        <option v-for="item in gerente" :key="item.nome" :value="item.nome">
+                            {{ item.nome }}
+                        </option>
+                    </select>
                     </div>
     
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
@@ -224,6 +221,8 @@
 <script>
 import { devURL } from '../../services/api'
 import { prodURL } from '../../services/api'
+import moment from 'moment-timezone';
+
 import axios from 'axios'
 
 export default {
@@ -256,6 +255,13 @@ export default {
     },
 
     methods: {
+        formatarDataHora(valor) {
+            if (valor) {
+                const dataHoraGTM3 = moment.utc(valor).tz('America/Sao_Paulo');
+                return dataHoraGTM3.format('DD/MM/YYYY');
+            }
+            return '';
+        },
 
         editarPlanoInline(idProjeto, itemAlterado, novoValor){
             if (novoValor !== "Concluído") {
@@ -291,14 +297,16 @@ export default {
         },
 
         
-        mostrarBotao(id, mostrar) {
-            if (mostrar == true) {
-                document.getElementById('botaoEdicao' + id).style.visibility = ''
-            }
-            if (mostrar == false) {
-                document.getElementById('botaoEdicao' + id).style.visibility = 'hidden'
-            }
-        },
+    mostrarBotao(id, mostrar) {
+        if (mostrar) {
+            this.planoEditado = this.planosAcao.find(item => item.id === id);
+            document.getElementById('botaoEdicao' + id).style.visibility = '';
+        } else {
+            document.getElementById('botaoEdicao' + id).style.visibility = 'hidden';
+        }
+    },
+
+
 
         adicionarPlanoAcao() {
             axios.post(`${this.prodURL}/planoAcao/cadastrar`, {

@@ -43,7 +43,7 @@
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select></td>
-                                <td>{{ item.dtInicio }}</td>
+                                <td>  {{ formatarDataHora(item.dtInicio) }}</td>
                                 <td>{{ item.gerente_nome }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
@@ -134,14 +134,12 @@
         <div style="display: flex; justify-content: space-between;">
             <!-- Coluna de Projetos associados -->
             <div style="width: 48%;">
-                <div v-if="programaEditado.projeto.length > 0">
-                    <h5>Projetos disponíveis:</h5>
-                <div>
+                <h5>Projetos disponíveis:</h5>
                 <select id="projetos" class="form-select" @change="associarProjeto($event)">
                     <option value="" disabled selected>Selecione um projeto</option>
                     <option v-for="item in projetos" :key="item.id" :value="item.id">{{ item.nome }}</option>
                 </select>
-            </div>
+                <div v-if="programaEditado.projeto.length > 0">
             <br>
                 <h5>Projetos associados:</h5>
                 <ul style="height: 5rem;">
@@ -155,14 +153,15 @@
             </div>
             <!-- Coluna de Planos de Ação associados -->
             <div style="width: 48%;">
-            <div v-if="programaEditado.planoAcao.length > 0">
-                <h5>Planos de ação disponíveis:</h5>
-            <div>
+             <h5>Planos de ação disponíveis:</h5>
                 <select id="planosAcao" class="form-select" @change="associarPlanoAcao($event)">
                     <option value="" disabled selected>Selecione um plano de ação</option>
                     <option v-for="item in planosAcao" :key="item.id" :value="item.id">{{ item.nome }}</option>
                 </select>
-            </div>
+           
+
+            <div v-if="programaEditado.planoAcao.length > 0">
+           
             <br>
                 <h5>Planos de Ação associados:</h5>
                 <ul style="height: 5rem;">
@@ -228,6 +227,7 @@
 
 
 <script>
+import moment from 'moment-timezone';
 import { devURL } from '../../services/api'
 import { prodURL } from '../../services/api'
 import axios from 'axios'
@@ -281,7 +281,7 @@ export default {
         });
     },
 
-            associarPlanoAcao(event) {
+        associarPlanoAcao(event) {
         const planoAcaoId = event.target.value;
         axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
             id: planoAcaoId,
@@ -427,7 +427,15 @@ export default {
         },
         verPCMvazio() {
             this.$router.push({ name: "PCMv" })
-        }
+        },
+
+        formatarDataHora(valor) {
+            if (valor) {
+                const dataHoraGTM3 = moment.utc(valor).tz('America/Sao_Paulo');
+                return dataHoraGTM3.format('DD/MM/YYYY');
+            }
+            return '';
+        },
     }
 
 }
