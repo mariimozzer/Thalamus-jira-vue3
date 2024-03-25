@@ -40,9 +40,10 @@
                         <tbody>
                             <tr v-for="item in listaProjetosFiltrada" :key="item.id"
                                 @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
-                                @mouseleave="mostrarBotao(item.id, false)">
+                                @mouseleave="mostrarBotao(item.id, false)"
+                                >
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select"
+                                <td style="vertical-align: middle;"><select v-model="item.status" class="form-select"
                                         :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
                                         @click.stop @change="editarProjetoInLine(item.id, 'status', item.status)">
@@ -51,16 +52,16 @@
                                         <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select></td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center; vertical-align: middle;">
                                     <input v-if="Array.isArray(projetos) && projetos.length > 0" type="date"
                                         v-model="item.dtInicio" disabled style="text-align: center; width: 8rem;">
                                 </td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center; vertical-align: middle;">
                                     <input v-if="item.dtTermino" type="date" v-model="item.dtTermino" disabled
                                         style="text-align: center; width: 8rem;">
                                     <label v-if="!item.dtTermino" style="width: 8rem;">-</label>
                                 </td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center; vertical-align: middle;">
                                     <select id="gerente" v-model="item.gerente_id" disabled
                                         style="text-align: center; padding: none; width: 13rem;">
                                         <option v-for="pessoa in gerente" :key="pessoa.nomeCompleto" :value="pessoa.id">
@@ -68,8 +69,8 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td style="text-align: center;">{{ item.setor }}</td>
-                                <td>
+                                <td style="text-align: center; vertical-align: middle;">{{ item.setor }}</td>
+                                <td style="vertical-align: middle;">
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(projetos) && projetos.length > 0">
                                             <template v-slot:activator="{ props }">
@@ -96,7 +97,7 @@
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
                                                         :disabled="item.dtTermino || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
-                                                        :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) ? 'grey' : 'black' }"
+                                                        :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black', }"
                                                         @click="modalFinalizarProjeto = true, this.projetoEditado = item">
                                                         Finalizar
                                                     </button>

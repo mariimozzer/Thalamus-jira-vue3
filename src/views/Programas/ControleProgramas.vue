@@ -2,17 +2,19 @@
     <br>
     <br><br><br>
     <div style="padding: 1rem;">
-        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
-    
+        <div class="container"
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-    
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Programas</h3>
                     </div>
-                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
-                            <i class="bi bi-plus-circle"></i>
-                        </button>
+                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
                 </div>
             </div>
             <br>
@@ -25,25 +27,31 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Data de Inicio</th>
                                 <th scope="col">Data de Término</th>
-                                <th scope="col">Gerene Responsável</th>
+                                <th scope="col">Gerente Responsável</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody >
-                            <tr v-for="item in programas" style="text-align: center;" :key="item.id " @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
+                        <tbody>
+                            <tr v-for="item in programas" style="text-align: center;" :key="item.id"
+                                @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)"
+                                @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
-                                            <option style="color: red;">Proposto</option>
-                                            <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                            <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                            <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                        </select></td>
+                                <td><select v-model="item.status" class="form-select"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
                                 <td>
-                                    <input v-if="item.dtInicio" style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                                    <input v-if="item.dtInicio" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtInicio)" disabled>
                                 </td>
                                 <td>
-                                    <input v-if="item.dtFim" style="text-align: center;" type="date" :value="formatarDataHora(item.dtFim)" disabled>
+                                    <input v-if="item.dtFim" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtFim)" disabled>
                                     <strong v-if="!item.dtFim">-</strong>
                                 </td>
                                 <td>{{ item.gerente_nome }}</td>
@@ -51,22 +59,22 @@
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(programas) && programas.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                    <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                        class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                        v-bind="props"></v-btn>
-</template>
+                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
+                                            </template>
 
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0,10) : '',this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0,10) : ''">Editar
+                                                        @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0, 10) : '', this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0, 10) : ''">Editar
 
                                                     </button><br />
                                                     <button style="margin: 0.2rem;"
                                                         @click="modalExcluirPrograma = true, this.programaEditado = item">Excluir
                                                     </button><br />
                                                 </v-list-item>
-                                              
+
                                             </v-list>
                                         </v-menu>
                                     </div>
@@ -80,28 +88,29 @@
         </div>
     </div>
 
-        <!-- MODAL EXCLUIR PROGRAMAS -->
-        <div style="overflow: auto" class="modal-mask" v-if="modalExcluirPrograma" @click="fecharModalFora">
+    <!-- MODAL EXCLUIR PROGRAMAS -->
+    <div style="overflow: auto" class="modal-mask" v-if="modalExcluirPrograma" @click="fecharModalFora">
         <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
             class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
-                        <h6 class="titulo">Deseja excluir o programa {{programaEditado.nome}}?</h6>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn button-cancel" @click="fecharModalExcluirPrograma">Cancelar</button>
-                        &nbsp;&nbsp;
-                        <button type="button" class="btn btn-primary" @click="excluirPrograma"
-                            data-bs-dismiss="modal">Confirmar</button>
-                    </div>
+                    <h6 class="titulo">Deseja excluir o programa {{ programaEditado.nome }}?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-cancel"
+                        @click="fecharModalExcluirPrograma">Cancelar</button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-primary" @click="excluirPrograma"
+                        data-bs-dismiss="modal">Confirmar</button>
                 </div>
             </div>
         </div>
-        <!-- MODAL EXCLUIR PROGRAMAS -->
+    </div>
+    <!-- MODAL EXCLUIR PROGRAMAS -->
 
 
-       <!-- MODAL EDITAR PROGRAMAS -->
-       <div style="overflow: auto" class="modal-mask" v-if="modalEditarPrograma" @click="fecharModalFora">
+    <!-- MODAL EDITAR PROGRAMAS -->
+    <div style="overflow: auto" class="modal-mask" v-if="modalEditarPrograma" @click="fecharModalFora">
         <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
             class="modal-container">
             <div>
@@ -124,10 +133,10 @@
                         <div class="form-group">
                             <label for="gerente">Gerente Responsável</label>
                             <select id="gerente" v-model="programaEditado.gerente_nome" class="form-select">
-                            <option v-for="item in gerente" :key="item.id" :value="item.nomeCompleto">
-                                {{ item.nomeCompleto }}
-                            </option>
-                        </select>
+                                <option v-for="item in gerente" :key="item.id" :value="item.nomeCompleto">
+                                    {{ item.nomeCompleto }}
+                                </option>
+                            </select>
                         </div>
 
 
@@ -143,7 +152,7 @@
                             <input id="data" type="date" ref="dtFim" v-model="programaEditado.dtFim"
                                 class="form-control" @change="editarPrograma('dtFim', $event.target.value)">
                         </div>
-        
+
                     </div>
                 </div>
             </div>
@@ -151,55 +160,61 @@
     </div>
     <!-- END EDITAR PROGRAMAS MODAL  -->
 
-<!-- MODAL ASSOCIAÇÃO -->
-<div class="modal-mask" v-if="modalProjetosAssociados" @click="fecharModalFora">
-    <div style="height: fit-content;width: 45rem; padding: 3rem; margin-bottom: 2rem;" class="modal-container">
-        <div style="display: flex; justify-content: space-between;">
-            <!-- Coluna de Projetos associados -->
-            <div style="width: 48%;">
-                <h5>Projetos disponíveis:</h5>
-                <select id="projetos" class="form-select" @change="associarProjeto($event)">
-                    <option value="" disabled selected>Selecione um projeto</option>
-                    <option v-for="item in projetos" :key="item.id" :value="item.id">{{ item.nome }}</option>
-                </select>
-                <div v-if="programaEditado.projeto.length > 0">
-            <br>
-                <h5>Projetos associados:</h5>
-                <ul style="height: 5rem;">
-                    <li v-for="(projeto, index) in programaEditado.projeto" :key="index">{{ projeto.projeto_nome }}</li>
-                </ul>
-                 </div>
-                <div v-else>
-                    <p>Nenhum projeto associado.</p>
-                </div>
-         
-            </div>
-            <!-- Coluna de Planos de Ação associados -->
-            <div style="width: 48%;">
-             <h5>Planos de ação disponíveis:</h5>
-                <select id="planosAcao" class="form-select" @change="associarPlanoAcao($event)">
-                    <option value="" disabled selected>Selecione um plano de ação</option>
-                    <option v-for="item in planosAcao" :key="item.id" :value="item.id">{{ item.nome }}</option>
-                </select>
-           
+    <!-- MODAL ASSOCIAÇÃO -->
+    <div class="modal-mask" v-if="modalProjetosAssociados" @click="fecharModalFora">
+        <div style="height: fit-content;width: 45rem; padding: 3rem; margin-bottom: 2rem;" class="modal-container">
+            <div style="display: flex; justify-content: space-between;">
+                <!-- Coluna de Projetos associados -->
+                <div style="width: 48%;">
+                    <h5>Projetos disponíveis:</h5>
+                    <select id="projetos" class="form-select" @change="associarProjeto($event)">
+                        <option value="" disabled selected>Selecione um projeto</option>
+                        <option v-for="item in projetos" :key="item.id" :value="item.id">{{ item.nome }}</option>
+                    </select>
+                    <div v-if="programaEditado.projeto.length > 0">
+                        <br>
+                        <h5>Projetos associados:</h5>
+                        <ul style="height: 5rem;">
+                            <li v-for="(projeto, index) in programaEditado.projeto" :key="index">{{ projeto.projeto_nome
+                                }}
+                            </li>
+                        </ul>
+                        <br><br>
+                        {{ programaEditado.projeto }}
+                    </div>
+                    <div v-else>
+                        <p>Nenhum projeto associado.</p>
+                    </div>
 
-            <div v-if="programaEditado.planoAcao.length > 0">
-           
-            <br>
-                <h5>Planos de Ação associados:</h5>
-                <ul style="height: 5rem;">
-                    <li v-for="(plano, index) in programaEditado.planoAcao" :key="index">{{ plano.planoAcao_nome }}</li>
-                </ul>
+                </div>
+                <!-- Coluna de Planos de Ação associados -->
+                <div style="width: 48%;">
+                    <h5>Planos de ação disponíveis:</h5>
+                    <select id="planosAcao" class="form-select" @change="associarPlanoAcao($event)">
+                        <option value="" disabled selected>Selecione um plano de ação</option>
+                        <option v-for="item in planosAcao" :key="item.id" :value="item.id">{{ item.nome }}</option>
+                    </select>
+
+
+                    <div v-if="programaEditado.planoAcao.length > 0">
+
+                        <br>
+                        <h5>Planos de Ação associados:</h5>
+                        <ul style="height: 5rem;">
+                            <li v-for="(plano, index) in programaEditado.planoAcao" :key="index">{{ plano.planoAcao_nome
+                                }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        <p>Nenhum plano de ação associado.</p>
+                    </div>
+
+                </div>
             </div>
-            <div v-else>
-                <p>Nenhum plano de ação associado.</p>
-            </div>
-            
-        </div>
         </div>
     </div>
-</div>
-<!-- END MODAL ASSOCIAÇÃO -->
+    <!-- END MODAL ASSOCIAÇÃO -->
 
 
 
@@ -223,7 +238,8 @@
 
                     <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                         <label for="data">Data de Início</label>
-                        <input id="data" v-model="novoPrograma.dtInicio" type="date" ref="dtInicio" class="form-control">
+                        <input id="data" v-model="novoPrograma.dtInicio" type="date" ref="dtInicio"
+                            class="form-control">
 
                     </div>
                 </div>
@@ -233,8 +249,8 @@
                         <label for="gerente">Gerente Responsável</label>
                         <select id="gerente" v-model="novoPrograma.gerente_id" class="form-select">
                             <option v-for="item in gerente" :key="item.id" :value="item.id">
-                                    {{ item.nomeCompleto }}
-                                </option>
+                                {{ item.nomeCompleto }}
+                            </option>
                         </select>
                     </div>
 
@@ -246,7 +262,8 @@
                 </div>
 
                 <div style="display: flex; justify-content: right;">
-                    <button @click="adicionarPrograma" style="height: 2.5rem;" class="btn btn-primary float-right mr-2">Salvar</button>
+                    <button @click="adicionarPrograma" style="height: 2.5rem;"
+                        class="btn btn-primary float-right mr-2">Salvar</button>
                 </div>
             </div>
         </div>
@@ -296,9 +313,9 @@ export default {
     methods: {
 
         formatarDataHora(valor) {
-            if (valor){
+            if (valor) {
                 return valor.slice(0, 10)
-            }else{
+            } else {
                 return ''
             }
         },
@@ -311,8 +328,8 @@ export default {
             const userId = localStorage.getItem('id')
 
             axios.put(`${this.prodURL}/programa/excluir/${this.programaEditado.id}`, {
-                    usuario_id: userId
-                })
+                usuario_id: userId
+            })
                 .then(() => {
                     this.getProgramas();
                     this.modalExcluirPrograma = false;
@@ -326,9 +343,9 @@ export default {
         associarProjeto(event) {
             const projetoId = event.target.value;
             axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-                    id: projetoId,
-                    projeto: 1
-                })
+                id: projetoId,
+                projeto: 1
+            })
                 .then(() => {
                     this.programaEditado.projeto.push({
                         projeto_nome: event.target.options[event.target.selectedIndex].text
@@ -342,9 +359,9 @@ export default {
         associarPlanoAcao(event) {
             const planoAcaoId = event.target.value;
             axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-                    id: planoAcaoId,
-                    projeto: 0
-                })
+                id: planoAcaoId,
+                projeto: 0
+            })
                 .then(() => {
                     this.programaEditado.planoAcao.push({
                         planoAcao_nome: event.target.options[event.target.selectedIndex].text
@@ -399,9 +416,9 @@ export default {
 
             if (novoValor !== "Concluído") {
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
-                        [itemAlterado]: novoValor,
-                        dtTermino: null
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: null
+                })
                     .then(() => {
                         this.getProgramas()
                     })
@@ -410,9 +427,9 @@ export default {
                 var dataAtual = new Date().toISOString().split('T')[0];
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
 
-                        [itemAlterado]: novoValor,
-                        dtFim: dataAtual
-                    })
+                    [itemAlterado]: novoValor,
+                    dtFim: dataAtual
+                })
                     .then(() => {
                         this.getProgramas()
                     })
@@ -421,13 +438,13 @@ export default {
 
         adicionarPrograma() {
             axios.post(`${this.prodURL}/programa/cadastrar`, {
-                    nome: this.novoPrograma.nome,
-                    dtInicio: this.novoPrograma.dtInicio,
-                    dtFim: this.novoPrograma.dtFim,
-                    gerente_id: this.novoPrograma.gerente_id,
-                    setor_id: this.novoPrograma.setor_id,
-                    status: "Proposto"
-                })
+                nome: this.novoPrograma.nome,
+                dtInicio: this.novoPrograma.dtInicio,
+                dtFim: this.novoPrograma.dtFim,
+                gerente_id: this.novoPrograma.gerente_id,
+                setor_id: this.novoPrograma.setor_id,
+                status: "Proposto"
+            })
 
                 .then((response) => {
                     this.getProgramas();
@@ -460,7 +477,7 @@ export default {
         getGerente() {
             axios.get(`${this.prodURL}/usuario`, {
 
-                })
+            })
                 .then((response) => {
                     this.gerente = response.data
                     this.gerente = this.gerente.map(item => ({
@@ -499,6 +516,7 @@ export default {
         margin-left: 12rem !important;
         max-width: 1100px !important;
     }
+
     .botaoHome {
         font-size: 30px;
         margin-left: 6rem !important;
