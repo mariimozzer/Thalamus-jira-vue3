@@ -43,7 +43,7 @@
                         </button>
                     </div>
                     <div style="width: 60%; text-align: center;">
-                        <h3><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
+                        <h3><input v-if="item.nome != 'Backlogs'" type="text" v-model="item.nome"
                                 style="width: max-content; margin-left: 0.5rem; text-align: center;" disabled>
                         </h3>
                     </div>
@@ -608,9 +608,9 @@ export default {
             axios.get(`http://192.168.0.5:8000/api/sprint/buscar/${this.idProjeto}`, {})
                 .then((response) => {
                     function compararSprints(a, b) {
-                        if (a.nome === "Plano de ação") {
+                        if (a.nome === "Backlogs") {
                             return -1;
-                        } else if (b.nome === "Plano de ação") {
+                        } else if (b.nome === "Backlogs") {
                             return 1;
                         }
                         return b.id - a.id;
@@ -844,7 +844,7 @@ export default {
 
             var nomeSprint = "Sprint - 1";
 
-            if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
+            if (this.sprints[this.sprints.length - 1].nome != "Backlogs") {
                 nomeSprint = 'Sprint - ' + (parseInt((this.sprints[1].nome).match(/\d+$/)[0]) + 1);
             } else {
                 nomeSprint = 'Sprint - 1';
