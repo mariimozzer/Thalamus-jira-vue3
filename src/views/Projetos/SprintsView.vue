@@ -1157,14 +1157,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .fa-solid {
     margin-left: 3rem;
 }
+
 @media (max-width: 1800px) {
     .botaoHome {
     font-size: 30px;
-    margin-left: 14rem !important;
+    margin-left: 13rem !important;
     cursor: pointer;
     position: absolute;
 }
@@ -1176,6 +1177,7 @@ export default {
 .fa-solid {
     margin-left: 13.5rem !important;
 }
+
 }
 
 .botaoHome {

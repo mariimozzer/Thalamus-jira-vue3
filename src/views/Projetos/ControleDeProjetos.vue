@@ -427,7 +427,7 @@ export default {
     },
 
     mounted() {
-            this.getProjetos(),
+        this.getProjetos(),
             this.getGerenteseSetor()
             localStorage.removeItem('ultimaSprintEditada'),
             sessionStorage.removeItem('ultimaSprintEditada')
@@ -782,7 +782,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.fa-solid {
+    margin-left: 0rem !important;
+}
 
 .link {
     color: black;

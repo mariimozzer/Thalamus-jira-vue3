@@ -92,8 +92,6 @@
             <div>
                 <div style="display: flex; justify-content: space-between">
                     <h3 class="titulo">Editar: {{ planoEditado.nome }} </h3>
-                    {{ planoEditado }}
-                    {{ planoEditado.gerente_name }}
                     <button type="button" class="btn-close" aria-label="Close" 
                         @click="this.getPlanoAcao, this.modalEditarPlano = false"></button>
                 </div>

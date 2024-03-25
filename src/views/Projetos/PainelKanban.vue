@@ -2,11 +2,12 @@
     <br><br><br>
     <div
         style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center;">
-        <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+        
+        <i @click="verBacklogs" style="font-size: 30px; margin-left: 260px; cursor: pointer;"
             class="bi bi-list-task botaoAdicionarSprint" :title="'Ir para tela de sprints'"></i>
 
-        <i @click="verBacklogs" class="bi bi-list-task botaoAdicionarSprint botaoHome"
-            :title="'Ir para tela de sprints'"></i>
+        <!-- <i @click="verBacklogs" class="bi bi-list-task botaoAdicionarSprint botaoHome"
+            :title="'Ir para tela de sprints'"></i> -->
 
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
@@ -383,7 +384,37 @@ export default {
         max-width: 1250px;
         margin-left: 6rem;
     }
+
 }
+
+/* .fa-solid {
+    margin-left: 3rem;
+}
+
+@media (max-width: 1800px) {
+    .botaoHome {
+    font-size: 30px;
+    margin-left: 2rem !important;
+    cursor: pointer;
+    position: absolute;
+}
+
+.container {
+    margin-left: 13.5rem !important;
+}
+
+.fa-solid {
+    margin-left: 13.5rem !important;
+}
+
+} */
+
+/* .botaoHome {
+    font-size: 30px;
+    margin-left: 260px !important;
+    cursor: pointer;
+    position: absolute;
+} */
 
 
 .divFiltro {
