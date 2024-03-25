@@ -21,15 +21,16 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Nome</th>
+                                <th scope="col">Nome do Programa</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Data de Inicio</th>
-                                <th scope="col">Responsável</th>
+                                <th scope="col">Data de Término</th>
+                                <th scope="col">Gerene Responsável</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;">
-                            <tr v-for="item in programas" :key="item.id " style="text-align: center;" @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
+                        <tbody >
+                            <tr v-for="item in programas" style="text-align: center;" :key="item.id " @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
                                 <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
@@ -38,7 +39,8 @@
                                             <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                             <option style="color: rgb(0, 192, 0);">Concluído</option>
                                         </select></td>
-                                <td> {{ item.dtInicio }}</td>
+                                <td>{{ item.dtInicio }}</td>
+                                <td>{{ item.dtFim }}</td>
                                 <td>{{ item.gerente_nome }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
@@ -52,7 +54,8 @@
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalEditarPrograma = true, this.programaEditado = item">Editar
+                                                        @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0,10) : '',this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0,10) : ''">Editar
+
                                                     </button><br />
                                                     <button style="margin: 0.2rem;"
                                                         @click="modalExcluirPrograma = true, this.programaEditado = item">Excluir
@@ -78,7 +81,7 @@
             class="modal-container">
             <div>
                 <div style="display: flex; justify-content: space-between">
-                        <h6 class="titulo">Deseja excluit o programa {{programaEditado.nome}}?</h6>
+                        <h6 class="titulo">Deseja excluir o programa {{programaEditado.nome}}?</h6>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn button-cancel" @click="fecharModalExcluirPrograma">Cancelar</button>
@@ -115,12 +118,11 @@
 
                         <div class="form-group">
                             <label for="gerente">Gerente Responsável</label>
-                            <select id="gerente" @change="editarPrograma('gerente_id', $event.target.value)"
-                                v-model="programaEditado.gerente_id" class="form-select">
-                                <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                    {{ pessoa.nomeCompleto }}
-                                </option>
-                            </select>
+                            <select id="gerente" v-model="programaEditado.gerente_nome" class="form-select">
+                            <option v-for="item in gerente" :key="item.id" :value="item.nomeCompleto">
+                                {{ item.nomeCompleto }}
+                            </option>
+                        </select>
                         </div>
 
 
@@ -132,9 +134,9 @@
                             <label for="data">Data de Início</label>
                             <input id="data" type="date" ref="dtInicio" v-model="programaEditado.dtInicio"
                                 class="form-control" @change="editarPrograma('dtInicio', $event.target.value)">
-                            <label for="data" style="margin-top: 1rem;">Data de Termino</label>
-                            <input id="data" type="date" ref="dtTermino" v-model="programaEditado.dtTermino"
-                                class="form-control" @change="editarPrograma('dtTermino', $event.target.value)">
+                            <label for="data" style="margin-top: 1rem;">Data de Término</label>
+                            <input id="data" type="date" ref="dtFim" v-model="programaEditado.dtFim"
+                                class="form-control" @change="editarPrograma('dtFim', $event.target.value)">
                         </div>
         
                     </div>
@@ -230,6 +232,12 @@
                                 </option>
                         </select>
                     </div>
+
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="data">Data de Término</label>
+                        <input id="data" v-model="novoPrograma.dtFim" type="date" ref="dtFim" class="form-control">
+
+                    </div>
                 </div>
 
                 <div style="display: flex; justify-content: right;">
@@ -261,7 +269,8 @@ export default {
                 "nome": '',
                 "status": '',
                 "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-                "gerente_nome": ''
+                "gerente_nome": '',
+                "dtFim": ''
             },
             devURL: devURL,
             prodURL: prodURL,
@@ -391,7 +400,7 @@ export default {
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
 
                         [itemAlterado]: novoValor,
-                        dtTermino: dataAtual
+                        dtFim: dataAtual
                     })
                     .then(() => {
                         this.getProgramas()
@@ -403,6 +412,7 @@ export default {
             axios.post(`${this.prodURL}/programa/cadastrar`, {
                     nome: this.novoPrograma.nome,
                     dtInicio: this.novoPrograma.dtInicio,
+                    dtFim: this.novoPrograma.dtFim,
                     gerente_id: this.novoPrograma.gerente_id,
                     setor_id: this.novoPrograma.setor_id,
                     status: "Proposto"
@@ -416,6 +426,7 @@ export default {
                         "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
                         "gerente_id": "",
                         "setor_id": "",
+                        "dtFim": ""
                     };
                     console.log(response.data);
                 })
