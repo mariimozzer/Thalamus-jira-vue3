@@ -54,9 +54,12 @@
                                         <option style="color: rgb(0, 192, 0);">Concluído</option>
                                     </select></td>
                                 <td> 
-                                    <input type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                                    <input style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
                                 </td>
-                                <td>{{ item.dtTermino }}</td>
+                                <td>
+                                    <input v-if="item.dtTermino" style="text-align: center;" type="date" :value="formatarDataHora(item.dtTermino)" disabled>
+                                    <strong v-if="!item.dtTermino">-</strong>
+                                </td>
                                 <td>{{ item.gerente_name }}</td>
                                 <td>{{ item.setor_nome }}</td>
                                 <td>
@@ -110,9 +113,6 @@
         </div>
     </div>
     <!-- MODAL EXCLUIR PLANO DE AÇÃO -->
-
-
-
 
     <!-- MODAL EDITAR PLANO DE AÇÃO -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarPlano" @click="fecharModalFora">
@@ -217,13 +217,12 @@
                     </div>
                 </div>
 
-
                 <div style="display: flex;">
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" v-model="planoEditado.gerente_name" class="form-select">
-                            <option v-for="item in gerente" :key="item.nome" :value="item.nome">
-                                {{ item.nome }}
+                        <select id="gerente" v-model="novoPlanoAcao.gerente_nome" class="form-select">
+                            <option v-for="item in gerente" :key="item.nomeCompleto">
+                                {{ item.nomeCompleto }}
                             </option>
                         </select>
                     </div>
@@ -309,7 +308,11 @@ export default {
         },
 
         formatarDataHora(valor) {
-            return valor.slice(0, 10)
+            if (valor){
+                return valor.slice(0, 10)
+            }else{
+                return ''
+            }
         },
 
         editarPlanoInline(idProjeto, itemAlterado, novoValor) {
@@ -409,7 +412,6 @@ export default {
                     console.error(error);
                 });
         },
-
 
         getPlanoAcao() {
             axios.get(`${this.prodURL}/planoAcao/listar`, {

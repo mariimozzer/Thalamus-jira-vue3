@@ -39,8 +39,13 @@
                                             <option style="color: rgb(0, 47, 255);">Em andamento</option>
                                             <option style="color: rgb(0, 192, 0);">Concluído</option>
                                         </select></td>
-                                <td>{{ item.dtInicio }}</td>
-                                <td>{{ item.dtFim }}</td>
+                                <td>
+                                    <input v-if="item.dtInicio" style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                                </td>
+                                <td>
+                                    <input v-if="item.dtFim" style="text-align: center;" type="date" :value="formatarDataHora(item.dtFim)" disabled>
+                                    <strong v-if="!item.dtFim">-</strong>
+                                </td>
                                 <td>{{ item.gerente_nome }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
@@ -251,7 +256,6 @@
 
 
 <script>
-import moment from 'moment-timezone';
 import { devURL } from '../../services/api'
 import { prodURL } from '../../services/api'
 import axios from 'axios'
@@ -291,6 +295,13 @@ export default {
 
     methods: {
 
+        formatarDataHora(valor) {
+            if (valor){
+                return valor.slice(0, 10)
+            }else{
+                return ''
+            }
+        },
 
         fecharModalExcluirPrograma() {
             this.modalExcluirPrograma = false;
@@ -476,14 +487,6 @@ export default {
         },
         verPCMvazio() {
             this.$router.push({ name: "PCMv" })
-        },
-
-        formatarDataHora(valor) {
-            if (valor) {
-                const dataHoraGTM3 = moment.utc(valor).tz('America/Sao_Paulo');
-                return dataHoraGTM3.format('DD/MM/YYYY');
-            }
-            return '';
         },
     }
 
