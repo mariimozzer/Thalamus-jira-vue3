@@ -15,7 +15,7 @@
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
         <h3 style="text-align: center; margin-top: 1rem;">
-            Plano de Ação</h3>
+            Backlogs</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">
@@ -326,7 +326,7 @@
                 </div>
             </div>
 
-            <div v-if="item.nome == 'Plano de ação'"
+            <div v-if="item.nome == 'Backlogs'"
                 style="margin-top: 1rem; width: 100%;display: flex;flex-flow: row; align-items: center; justify-content: space-between;">
                 <button style="width: 5rem;font-size: 30px;padding-left: 2rem; visibility: hidden"
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
