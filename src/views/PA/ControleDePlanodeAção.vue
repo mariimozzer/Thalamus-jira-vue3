@@ -12,8 +12,8 @@
                     </div>
     
                     <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
-                                <i class="bi bi-plus-circle"></i>
-                            </button>
+                                    <i class="bi bi-plus-circle"></i>
+                                </button>
     
                 </div>
             </div>
@@ -25,51 +25,49 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Nome do Projeto </th>
+                                <th scope="col">Nome do Plano de Ação </th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Data de Início</th>
-                                <th scope="col">Data de Termino</th>
+                                <th scope="col">Data de Término</th>
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Envolvido</th>
                                 <th scope="col"></th>
-
+    
                             </tr>
                         </thead>
     
                         <tbody>
-                          <tr v-for="item in planosAcao" :key="item.id" style="text-align: center;"
-                          @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
-                         @mouseleave="mostrarBotao(item.id, false)">
+                            <tr v-for="item in planosAcao" :key="item.id" style="text-align: center;" @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
     
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select"
-                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
-                                        @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
-                                        <option style="color: red;">Proposto</option>
-                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                    </select></td>
-                                <td>{{ formatarDataHora(item.dtInicio) }}</td>
-                                <td>{{ formatarDataHora(item.dtTermino) }}</td>
+                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
+                                            <option style="color: red;">Proposto</option>
+                                            <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                            <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                            <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                        </select></td>
+                                <td>{{ item.dtInicio }}</td>
+                                <td>{{ item.dtTermino }}</td>
                                 <td>{{ item.gerente_name }}</td>
                                 <td>{{ item.setor_nome }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(planosAcao) && planosAcao.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                    v-bind="props"></v-btn>
-                                            </template>
+                                                    <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                        class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                        v-bind="props"></v-btn>
+</template>
 
                                             <v-list>
             
                                                 <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                     
+                                                    <button style="margin: 0.2rem;"                       
                                                         @click="modalEditarPlano = true, this.planoEditado = item, this.planoEditado.dtTermino !== null ? this.planoEditado.dtTermino = this.planoEditado.dtTermino.slice(0,10) : '',this.planoEditado.dtInicio !== null ? this.planoEditado.dtInicio = this.planoEditado.dtInicio.slice(0,10) : ''">Editar
+                                                    </button><br />
+                                                    <button style="margin: 0.2rem;"
+                                                        @click="modalExcluirPlano = true, this.planoEditado = item">Excluir
                                                     </button><br />
                                                 </v-list-item>
                                                
@@ -84,6 +82,28 @@
             </div>
         </div>
     </div>
+
+  <!-- MODAL EXCLUIR PLANO DE AÇÃO -->
+  <div style="overflow: auto" class="modal-mask" v-if="modalExcluirPlano" @click="fecharModalFora">
+        <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
+            class="modal-container">
+            <div>
+                <div style="display: flex; justify-content: space-between">
+                        <h6 class="titulo">Deseja excluir o plano de ação {{planoEditado.nome}}?</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn button-cancel" @click="fecharModalExcluirPrograma">Cancelar</button>
+                        &nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" @click="excluirPlano"
+                            data-bs-dismiss="modal">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL EXCLUIR PLANO DE AÇÃO -->
+
+
+
 
     <!-- MODAL EDITAR PLANO DE AÇÃO -->
     <div style="overflow: auto" class="modal-mask" v-if="modalEditarPlano" @click="fecharModalFora">
@@ -241,6 +261,7 @@ export default {
             gerente: [],
             setores: [],
             modalEditarPlano: false,
+            modalExcluirPlano: false,
             planoEditado: null
 
         }
@@ -253,6 +274,26 @@ export default {
     },
 
     methods: {
+
+        excluirPlano() {
+            const userId = localStorage.getItem('id')
+
+            axios.put(`${this.prodURL}/planoAcao/excluir/${this.planoEditado.id}`, {
+                    usuario_id: userId
+                })
+                .then(() => {
+                    this.getPlanoAcao();
+                    this.modalExcluirPlano = false;
+                })
+                .catch((error) => {
+                    console.error('Erro ao excluir plano:', error);
+                });
+        },
+
+        fecharModalExcluirPrograma() {
+            this.modalExcluirPlano = false;
+        },
+
         formatarDataHora(valor) {
             if (valor) {
                 const dataHoraGTM3 = moment.utc(valor).tz('America/Sao_Paulo');
@@ -261,48 +302,48 @@ export default {
             return '';
         },
 
-        editarPlanoInline(idProjeto, itemAlterado, novoValor){
+        editarPlanoInline(idProjeto, itemAlterado, novoValor) {
             if (novoValor !== "Concluído") {
 
 
-        axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
-            [itemAlterado]: novoValor,
-            dtTermino: null
-        })
-            .then(() => {
-                this.getPlanoAcao()
-            })
-        }
-        if (novoValor == "Concluído") {
-        var dataAtual = new Date().toISOString().split('T')[0];
-            axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
+                axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
+                        [itemAlterado]: novoValor,
+                        dtTermino: null
+                    })
+                    .then(() => {
+                        this.getPlanoAcao()
+                    })
+            }
+            if (novoValor == "Concluído") {
+                var dataAtual = new Date().toISOString().split('T')[0];
+                axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
 
-            [itemAlterado]: novoValor,
-            dtTermino: dataAtual
-        })
-            .then(() => {
-                this.getPlanoAcao()
-            })
-        }
+                        [itemAlterado]: novoValor,
+                        dtTermino: dataAtual
+                    })
+                    .then(() => {
+                        this.getPlanoAcao()
+                    })
+            }
         },
 
 
         editarPlano(itemAlterado, novoValor) {
 
-        axios.put(`${this.prodURL}/planoAcao/atualizar/${this.planoEditado.id}`, {
-         [itemAlterado]: novoValor,
-        })  
+            axios.put(`${this.prodURL}/planoAcao/atualizar/${this.planoEditado.id}`, {
+                [itemAlterado]: novoValor,
+            })
         },
 
-        
-    mostrarBotao(id, mostrar) {
-        if (mostrar) {
-            this.planoEditado = this.planosAcao.find(item => item.id === id);
-            document.getElementById('botaoEdicao' + id).style.visibility = '';
-        } else {
-            document.getElementById('botaoEdicao' + id).style.visibility = 'hidden';
-        }
-    },
+
+        mostrarBotao(id, mostrar) {
+            if (mostrar) {
+                this.planoEditado = this.planosAcao.find(item => item.id === id);
+                document.getElementById('botaoEdicao' + id).style.visibility = '';
+            } else {
+                document.getElementById('botaoEdicao' + id).style.visibility = 'hidden';
+            }
+        },
 
 
 
@@ -376,6 +417,7 @@ export default {
             if (event.target.classList.contains('modal-mask')) {
                 this.modalNovoPA = false;
                 this.modalEditarPlano = false;
+                this.modalExcluirPlano = false;
                 return this.getPlanoAcao()
             }
         },

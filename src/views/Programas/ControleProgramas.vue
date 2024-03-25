@@ -1,19 +1,18 @@
 <template>
-    <br><br><br><br>
+    <br>
+    <br><br><br>
     <div style="padding: 1rem;">
-        <div class="container"
-            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
-
+        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+    
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-
+    
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Programas</h3>
                     </div>
-                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;"
-                        @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
-                        <i class="bi bi-plus-circle"></i>
-                    </button>
+                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
                 </div>
             </div>
             <br>
@@ -22,42 +21,44 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Nome</th>
+                                <th scope="col">Nome do Programa</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Data de Inicio</th>
-                                <th scope="col">Responsável</th>
+                                <th scope="col">Data de Término</th>
+                                <th scope="col">Gerene Responsável</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;">
-                            <tr v-for="item in programas" :key="item.id " style="text-align: center;"
-                                @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)"
-                                @mouseleave="mostrarBotao(item.id, false)">
+                        <tbody >
+                            <tr v-for="item in programas" style="text-align: center;" :key="item.id " @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select"
-                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
-                                        @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
-                                        <option style="color: red;">Proposto</option>
-                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                    </select></td>
-                                <td>  {{ formatarDataHora(item.dtInicio) }}</td>
+                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
+                                            <option style="color: red;">Proposto</option>
+                                            <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                            <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                            <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                        </select></td>
+                                <td>{{ item.dtInicio }}</td>
+                                <td>{{ item.dtFim }}</td>
                                 <td>{{ item.gerente_nome }}</td>
                                 <td>
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(programas) && programas.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                    v-bind="props"></v-btn>
-                                            </template>
+                                                    <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                        class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                        v-bind="props"></v-btn>
+</template>
 
                                             <v-list>
                                                 <v-list-item>
                                                     <button style="margin: 0.2rem;"
-                                                        @click="modalEditarPrograma = true, this.programaEditado = item">Editar
+                                                        @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0,10) : '',this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0,10) : ''">Editar
+
+                                                    </button><br />
+                                                    <button style="margin: 0.2rem;"
+                                                        @click="modalExcluirPrograma = true, this.programaEditado = item">Excluir
                                                     </button><br />
                                                 </v-list-item>
                                               
@@ -73,6 +74,26 @@
             </div>
         </div>
     </div>
+
+        <!-- MODAL EXCLUIR PROGRAMAS -->
+        <div style="overflow: auto" class="modal-mask" v-if="modalExcluirPrograma" @click="fecharModalFora">
+        <div style="max-height: 85%; width: 50rem; padding: 3rem; margin-bottom: 3rem; overflow: hidden; "
+            class="modal-container">
+            <div>
+                <div style="display: flex; justify-content: space-between">
+                        <h6 class="titulo">Deseja excluir o programa {{programaEditado.nome}}?</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn button-cancel" @click="fecharModalExcluirPrograma">Cancelar</button>
+                        &nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" @click="excluirPrograma"
+                            data-bs-dismiss="modal">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL EXCLUIR PROGRAMAS -->
+
 
        <!-- MODAL EDITAR PROGRAMAS -->
        <div style="overflow: auto" class="modal-mask" v-if="modalEditarPrograma" @click="fecharModalFora">
@@ -97,12 +118,11 @@
 
                         <div class="form-group">
                             <label for="gerente">Gerente Responsável</label>
-                            <select id="gerente" @change="editarPrograma('gerente_id', $event.target.value)"
-                                v-model="programaEditado.gerente_id" class="form-select">
-                                <option v-for="pessoa in gerente" :key="pessoa.nome" :value="pessoa.id">
-                                    {{ pessoa.nomeCompleto }}
-                                </option>
-                            </select>
+                            <select id="gerente" v-model="programaEditado.gerente_nome" class="form-select">
+                            <option v-for="item in gerente" :key="item.id" :value="item.nomeCompleto">
+                                {{ item.nomeCompleto }}
+                            </option>
+                        </select>
                         </div>
 
 
@@ -114,13 +134,11 @@
                             <label for="data">Data de Início</label>
                             <input id="data" type="date" ref="dtInicio" v-model="programaEditado.dtInicio"
                                 class="form-control" @change="editarPrograma('dtInicio', $event.target.value)">
-                            <label for="data" style="margin-top: 1rem;">Data de Termino</label>
-                            <input id="data" type="date" ref="dtTermino" v-model="programaEditado.dtTermino"
-                                class="form-control" @change="editarPrograma('dtTermino', $event.target.value)">
+                            <label for="data" style="margin-top: 1rem;">Data de Término</label>
+                            <input id="data" type="date" ref="dtFim" v-model="programaEditado.dtFim"
+                                class="form-control" @change="editarPrograma('dtFim', $event.target.value)">
                         </div>
-                      
-                       
-
+        
                     </div>
                 </div>
             </div>
@@ -214,6 +232,12 @@
                                 </option>
                         </select>
                     </div>
+
+                    <div class="form-group" style="width: 20rem; margin-left: 2rem;">
+                        <label for="data">Data de Término</label>
+                        <input id="data" v-model="novoPrograma.dtFim" type="date" ref="dtFim" class="form-control">
+
+                    </div>
                 </div>
 
                 <div style="display: flex; justify-content: right;">
@@ -239,25 +263,27 @@ export default {
         return {
             modalProjetosAssociados: false,
             modalNovoPrograma: false,
+            modalExcluirPrograma: false,
             programas: [],
             novoPrograma: {
-             "nome": '',
-             "status": '',
-             "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-             "gerente_nome": ''
+                "nome": '',
+                "status": '',
+                "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                "gerente_nome": '',
+                "dtFim": ''
             },
             devURL: devURL,
             prodURL: prodURL,
             gerente: [],
             modalEditarPrograma: false,
-            programaEditado: null, 
+            programaEditado: null,
             projetos: [],
             planosAcao: [],
-         
+
         }
     },
 
-    mounted(){
+    mounted() {
         this.getProgramas()
         this.getGerente()
         this.getProjetosPlanoAcao()
@@ -265,60 +291,81 @@ export default {
 
     methods: {
 
-        associarProjeto(event) {
-        const projetoId = event.target.value;
-        axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-            id: projetoId,
-            projeto: 1 
-        })
-        .then(() => {
-            this.programaEditado.projeto.push({
-                projeto_nome: event.target.options[event.target.selectedIndex].text
-            });
-        })
-        .catch((error) => {
-            console.error('Erro ao associar projeto:', error);
-        });
-    },
 
-        associarPlanoAcao(event) {
-        const planoAcaoId = event.target.value;
-        axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-            id: planoAcaoId,
-            projeto: 0 
-        })
-        .then(() => {
-            this.programaEditado.planoAcao.push({
-                planoAcao_nome: event.target.options[event.target.selectedIndex].text
-            });
-        })
-        .catch((error) => {
-            console.error('Erro ao associar plano de ação:', error);
-        });
-          },
-        
-
-        getProjetosPlanoAcao(){          
-            axios.get(`${this.prodURL}/planoacao-projeto/listar/sem-programa`)
-            .then((response) => {
-                const data = response.data;
-                this.projetos = data.projeto;
-                this.planosAcao = data.planoAcao;
-            })
-            .catch((error) => {
-                console.error('Erro', error);
-            });
+        fecharModalExcluirPrograma() {
+            this.modalExcluirPrograma = false;
         },
 
-        programasAssociados(id){
+        excluirPrograma() {
+            const userId = localStorage.getItem('id')
+
+            axios.put(`${this.prodURL}/programa/excluir/${this.programaEditado.id}`, {
+                    usuario_id: userId
+                })
+                .then(() => {
+                    this.getProgramas();
+                    this.modalExcluirPrograma = false;
+                })
+                .catch((error) => {
+                    console.error('Erro ao excluir programa:', error);
+                });
+        },
+
+
+        associarProjeto(event) {
+            const projetoId = event.target.value;
+            axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
+                    id: projetoId,
+                    projeto: 1
+                })
+                .then(() => {
+                    this.programaEditado.projeto.push({
+                        projeto_nome: event.target.options[event.target.selectedIndex].text
+                    });
+                })
+                .catch((error) => {
+                    console.error('Erro ao associar projeto:', error);
+                });
+        },
+
+        associarPlanoAcao(event) {
+            const planoAcaoId = event.target.value;
+            axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
+                    id: planoAcaoId,
+                    projeto: 0
+                })
+                .then(() => {
+                    this.programaEditado.planoAcao.push({
+                        planoAcao_nome: event.target.options[event.target.selectedIndex].text
+                    });
+                })
+                .catch((error) => {
+                    console.error('Erro ao associar plano de ação:', error);
+                });
+        },
+
+
+        getProjetosPlanoAcao() {
+            axios.get(`${this.prodURL}/planoacao-projeto/listar/sem-programa`)
+                .then((response) => {
+                    const data = response.data;
+                    this.projetos = data.projeto;
+                    this.planosAcao = data.planoAcao;
+                })
+                .catch((error) => {
+                    console.error('Erro', error);
+                });
+        },
+
+        programasAssociados(id) {
             axios.get(`${this.prodURL}/programa/buscar/${id}`)
-            .then(response => {
-                this.programaEditado = response.data;
-                this.modalProjetosAssociados = true;
-            })
-            .catch(error => {
-                console.error('Erro ao obter detalhes do programa:', error);
-            });
+                .then(response => {
+                    this.programaEditado = response.data;
+                    this.modalProjetosAssociados = true;
+                })
+                .catch(error => {
+                    console.error('Erro ao obter detalhes do programa:', error);
+                });
         },
 
         mostrarBotao(id, mostrar) {
@@ -330,66 +377,67 @@ export default {
             }
         },
 
-        editarPrograma(itemAlterado, novoValor){
+        editarPrograma(itemAlterado, novoValor) {
             axios.put(`${this.prodURL}/programa/atualizar/${this.programaEditado.id}`, {
                 [itemAlterado]: novoValor,
             })
         },
 
 
-        editarProgramaInline(idProjeto, itemAlterado, novoValor){
-          
+        editarProgramaInline(idProjeto, itemAlterado, novoValor) {
+
             if (novoValor !== "Concluído") {
-            axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
-                [itemAlterado]: novoValor,
-                dtTermino: null
-            })
-                .then(() => {
-                    this.getProgramas()
-                })
+                axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
+                        [itemAlterado]: novoValor,
+                        dtTermino: null
+                    })
+                    .then(() => {
+                        this.getProgramas()
+                    })
             }
             if (novoValor == "Concluído") {
-            var dataAtual = new Date().toISOString().split('T')[0];
+                var dataAtual = new Date().toISOString().split('T')[0];
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
 
-                [itemAlterado]: novoValor,
-                dtTermino: dataAtual
-            })
-                .then(() => {
-                    this.getProgramas()
-                })
+                        [itemAlterado]: novoValor,
+                        dtFim: dataAtual
+                    })
+                    .then(() => {
+                        this.getProgramas()
+                    })
             }
         },
 
-        adicionarPrograma(){
+        adicionarPrograma() {
             axios.post(`${this.prodURL}/programa/cadastrar`, {
-            nome: this.novoPrograma.nome,
-            dtInicio: this.novoPrograma.dtInicio,
-            gerente_id: this.novoPrograma.gerente_id,
-            setor_id: this.novoPrograma.setor_id,
-            status: "Proposto"
-            })
+                    nome: this.novoPrograma.nome,
+                    dtInicio: this.novoPrograma.dtInicio,
+                    dtFim: this.novoPrograma.dtFim,
+                    gerente_id: this.novoPrograma.gerente_id,
+                    setor_id: this.novoPrograma.setor_id,
+                    status: "Proposto"
+                })
 
-            .then((response) => {
-            this.getProgramas();
-            this.modalNovoPrograma = false;
-            this.novoPrograma = {
-                "nome": "",
-                "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-                "gerente_id": "",
-                "setor_id": "",
-            };
-            console.log(response.data);
-            })
-            .catch((error) => {
-            console.error(error);
-            });
+                .then((response) => {
+                    this.getProgramas();
+                    this.modalNovoPrograma = false;
+                    this.novoPrograma = {
+                        "nome": "",
+                        "dtInicio": new Date().getFullYear() + '-' + '0' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                        "gerente_id": "",
+                        "setor_id": "",
+                        "dtFim": ""
+                    };
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
 
         },
 
-        getProgramas(){
-            axios.get(`${this.prodURL}/programa/listar`, {
-            })
+        getProgramas() {
+            axios.get(`${this.prodURL}/programa/listar`, {})
                 .then((response) => {
                     this.programas = response.data;
                 })
@@ -398,20 +446,20 @@ export default {
                 });
         },
 
-        getGerente(){
+        getGerente() {
             axios.get(`${this.prodURL}/usuario`, {
 
-        })
-        .then((response) => {
-            this.gerente = response.data
-            this.gerente = this.gerente.map(item => ({
-                id: item.id,
-                nomeCompleto: item.name
-            }))
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+                })
+                .then((response) => {
+                    this.gerente = response.data
+                    this.gerente = this.gerente.map(item => ({
+                        id: item.id,
+                        nomeCompleto: item.name
+                    }))
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         fecharModalFora(event) {
@@ -419,6 +467,7 @@ export default {
                 this.modalProjetosAssociados = false;
                 this.modalNovoPrograma = false
                 this.modalEditarPrograma = false
+                this.modalExcluirPrograma = false
             }
         },
 
@@ -443,25 +492,23 @@ export default {
 
 <style>
 @media (max-width: 1800px) {
-
-.container {
-    margin-left: 12rem !important;
-    max-width: 1100px !important;
-}
-.botaoHome {
-    font-size: 30px;
-    margin-left: 6rem !important;
-    cursor: pointer;
-    position: absolute;
-}
-
+    .container {
+        margin-left: 12rem !important;
+        max-width: 1100px !important;
+    }
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 6rem !important;
+        cursor: pointer;
+        position: absolute;
+    }
 }
 
 .modal-container {
     max-height: 80%;
     width: 70%;
     padding: 3rem;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .botaoHome {
