@@ -14,7 +14,7 @@
                     </div>
 
                     <div style="width: 100%;">
-                        <h3 style="text-align: center; margin: 0;">Seus Projetos</h3>
+                        <h3 style="text-align: center; margin: 0;">Projetos</h3>
                     </div>
                     <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
                         @click="this.modalNovoProjeto = true" class="botaoAdicionarSprint">

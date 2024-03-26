@@ -1,13 +1,13 @@
 <template>
     <div>
-    <br><br><br><br>
+    <br><br><br>
     <!-- <div
         style="width: 100%; margin-top: 1rem; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; text-align: center;">
         <h1>PCM - Nº 240181</h1>
         Data de abertura: 14/11/2023
     </div> -->
     <div class="Header"
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; align-items: center; ">
+        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; align-items: center;border-bottom: 2px solid rgb(0, 0, 0); ">
         <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
             <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
@@ -16,9 +16,9 @@
         <i style="font-size: 30px; margin-right: 2rem; visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint"></i>
     </div>
-    <div style="text-align: center;" class="HeaderData">
+    <!-- <div style="text-align: center;" class="HeaderData">
         Data de abertura: 14/11/2023
-    </div>
+    </div> -->
     <div class="container" style="padding: 2rem 0rem 0rem 0rem;">
         <div style="text-align: center;">
             <h5><b>Área do Solicitante</b></h5>

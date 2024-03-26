@@ -7,6 +7,13 @@
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
 
+                    <div class="input-group mb-3" style="width: 16rem; position: absolute;">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar PCM" aria-label="Username"
+                            aria-describedby="basic-addon1" v-model="projetoSelecionado" @input="filtrarProjetos()">
+                    </div>
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Propostas de Criação ou Mudança</h3>
                     </div>
@@ -70,88 +77,7 @@
                                     </div>
                                 </td>
                             </tr>
-
-                            <tr @click="verPCMvazio" style="vertical-align: middle;">
-                                <td style="text-align: center; vertical-align: middle;">
-                                    PCM240999
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Nova sede no Nepal
-                                </td>
-
-                                <td style="text-align: center; color: red; vertical-align: middle;">
-                                    Reprovado
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    30/02/2023
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Fulano da Silva
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    <div style="display: flex;" @click.stop>
-                                        <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar" disabled>
-                                                Aprovar
-                                                <i class="fa-solid fa-thumbs-up"></i>
-                                            </button>
-                                        </div>
-                                        <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar" disabled>
-                                                Reprovar
-                                                <i class="fa-solid fa-thumbs-down"></i> 
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr @click="verPCMvazio" style="vertical-align: middle;">
-                                <td style="text-align: center; vertical-align: middle;">
-                                    PCM999999
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Nova maquina de CNC
-                                </td>
-
-                                <td style="text-align: center; color: orange; vertical-align: middle;">
-                                    Proposto
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    01/03/2024
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    Tunico (irmão do Tinoco)
-                                </td>
-
-                                <td style="text-align: center; vertical-align: middle;">
-                                    <div style="display: flex;" @click.stop>
-                                        <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar">
-                                                Aprovar
-                                                <i class="fa-solid fa-thumbs-up"></i>
-                                            </button>
-                                        </div>
-                                        <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar">
-                                                Reprovar
-                                                <i class="fa-solid fa-thumbs-down"></i> 
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
-
                     </table>
                 </div>
             </div>
@@ -169,6 +95,10 @@ export default {
 
     data() {
         return {
+            PCMSelecionado: null,
+            listaPCMsFiltrada: null,
+
+
 
         }
     },
@@ -177,6 +107,17 @@ export default {
     },
 
     methods: {
+        filtrarProgramas() {
+            if (!this.PCMSelecionado) {
+                this.listaPCMsFiltrada = this.PCMs;
+            } else {
+                const textoLowerCase = this.PCMSelecionado.toLowerCase();
+                this.listaPCMsFiltrada = this.PCMS.filter(PCM => {
+                    return PCM.nome.toLowerCase().includes(textoLowerCase);
+                });
+            }
+        },
+
         verPCM() {
             this.$router.push({ name: "PCM" })
         },
@@ -188,10 +129,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.fa-solid {
+    margin-left: 0rem !important;
+}
+
 .button-reprovar:disabled {
     width: 10rem;
-    background-color: #e0213194 !important;
+    background-color: #e02131a9 !important;
     color: rgb(255, 255, 255) !important;
     padding: 5px !important;
     /* margin: 6px 0 !important; */
@@ -212,7 +157,7 @@ export default {
 
 .button-aprovar:disabled {
     width: 10rem;
-    background-color: #429867a8 !important;
+    background-color: #429867c2 !important;
     color: rgb(255, 255, 255) !important;
     padding: 5px !important;
     /* margin: 6px 0 !important; */

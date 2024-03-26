@@ -8,6 +8,14 @@
             style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
+
+                    <div class="input-group mb-3" style="width: 20rem; position: absolute;">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Plano de Ação" aria-label="Username"
+                            aria-describedby="basic-addon1" v-model="planoSelecionado" @input="filtrarPlanosdeAção()">
+                    </div>
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                     </div>
@@ -39,7 +47,7 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="item in planosAcao" :key="item.id" style="text-align: center;"
+                            <tr v-for="item in listaPlanosFiltrada" :key="item.id" style="text-align: center;"
                                 @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
                                 @mouseleave="mostrarBotao(item.id, false)">
 
@@ -58,7 +66,7 @@
                                 </td>
                                 <td>
                                     <input v-if="item.dtTermino" style="text-align: center;" type="date" :value="formatarDataHora(item.dtTermino)" disabled>
-                                    <strong v-if="!item.dtTermino">-</strong>
+                                    <span v-if="!item.dtTermino">-</span>
                                 </td>
                                 <td>{{ item.gerente_name }}</td>
                                 <td>{{ item.setor_nome }}</td>
@@ -271,6 +279,8 @@ export default {
 
     data() {
         return {
+            planoSelecionado: null,
+            listaPlanosFiltrada: null,
             modalNovoPA: false,
             devURL: devURL,
             prodURL: prodURL,
@@ -300,6 +310,17 @@ export default {
     },
 
     methods: {
+
+        filtrarPlanosdeAção() {
+            if (!this.planoSelecionado) {
+                this.listaPlanosFiltrada = this.planosAcao;
+            } else {
+                const textoLowerCase = this.planoSelecionado.toLowerCase();
+                this.listaPlanosFiltrada = this.planosAcao.filter(planoAcao => {
+                    return planoAcao.nome.toLowerCase().includes(textoLowerCase);
+                });
+            }
+        },
 
         getProgramas(){
             axios.get(`${this.prodURL}/programa/listar`, {})
@@ -443,6 +464,7 @@ export default {
             })
                 .then((response) => {
                     this.planosAcao = response.data;
+                    this.filtrarPlanosdeAção()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -476,7 +498,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.fa-solid {
+    margin-left: 0rem !important;
+}
 .modal-mask {
     position: fixed;
     z-index: 9998;

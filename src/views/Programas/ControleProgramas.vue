@@ -8,6 +8,13 @@
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
 
+                    <div class="input-group mb-3" style="width: 20rem; position: absolute;">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Programa" aria-label="Username"
+                            aria-describedby="basic-addon1" v-model="programaSelecionado" @input="filtrarProgramas()">
+                    </div>
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Programas</h3>
                     </div>
@@ -32,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in programas" style="text-align: center;" :key="item.id"
+                            <tr v-for="item in listaProgramasFiltrada" style="text-align: center;" :key="item.id"
                                 @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)"
                                 @mouseleave="mostrarBotao(item.id, false)">
                                 <td>{{ item.nome }}</td>
@@ -282,6 +289,9 @@ export default {
 
     data() {
         return {
+            programaSelecionado: null,
+            listaProgramasFiltrada: null,
+
             modalProjetosAssociados: false,
             modalNovoPrograma: false,
             modalExcluirPrograma: false,
@@ -311,6 +321,16 @@ export default {
     },
 
     methods: {
+        filtrarProgramas() {
+            if (!this.programaSelecionado) {
+                this.listaProgramasFiltrada = this.programas;
+            } else {
+                const textoLowerCase = this.programaSelecionado.toLowerCase();
+                this.listaProgramasFiltrada = this.programas.filter(programa => {
+                    return programa.nome.toLowerCase().includes(textoLowerCase);
+                });
+            }
+        },
 
         formatarDataHora(valor) {
             if (valor) {
@@ -468,6 +488,7 @@ export default {
             axios.get(`${this.prodURL}/programa/listar`, {})
                 .then((response) => {
                     this.programas = response.data;
+                    this.filtrarProgramas()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -511,6 +532,9 @@ export default {
 </script>
 
 <style>
+.fa-solid {
+    margin-left: 0rem !important;
+}
 @media (max-width: 1800px) {
     .container {
         margin-left: 12rem !important;
