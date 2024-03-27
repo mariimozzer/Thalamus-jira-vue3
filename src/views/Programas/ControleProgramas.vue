@@ -27,7 +27,6 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Id</th>
                                 <th scope="col">Nome do Programa</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Data de Inicio</th>
@@ -38,7 +37,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in listaProgramasFiltrada" style="text-align: center;" :key="item.id" @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
-                                <td>{{ item.id }}</td>
                                 <td>{{ item.nome }}</td>
                                 <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
@@ -453,8 +451,12 @@ export default {
                 .then(() => {
                     if (tipo === 'projeto') {
                         this.programaEditado.projeto = this.programaEditado.projeto.filter(plano => plano.associacao_id !== id);
+                        this.getProjetosPlanoAcao()
+
                     } else {
                         this.programaEditado.planoAcao = this.programaEditado.planoAcao.filter(plano => plano.associacao_id !== id);
+                        this.getProjetosPlanoAcao()
+
                     }
                 })
                 .catch((error) => {
