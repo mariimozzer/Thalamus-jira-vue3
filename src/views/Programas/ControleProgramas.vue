@@ -196,7 +196,7 @@
                 <div style="width: 48%;">
                     <h5>Projetos disponíveis:</h5>
                     <select id="projetos" class="form-select" @change="associarProjeto($event)">
-                        <option value="" disabled selected>Selecione um projeto</option>
+                        <option hidden selected>Selecione um projeto</option>
                         <option v-for="item in projetos" :key="item.id" :value="item.id">{{ item.nome }}</option>
                     </select>
                     <div v-if="programaEditado.projeto.length > 0">
@@ -204,8 +204,8 @@
                         <h5>Projetos associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
                     <!-- <li    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;"  -->
-              <li  v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{ projeto.projeto_nome }} 
-                        <span @click="desassociarPlano('projeto', projeto.associacao_id, $index)" style="cursor: pointer; color: red; text-align: right;" class="bi bi-dash-circle"></span>
+              <li  v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{ projeto.projeto_nome }}
+                        <span @click="desassociarPlano('projeto', projeto.associacao_id)" style="cursor: pointer; color: red; text-align: right;" class="bi bi-dash-circle"></span>
                         </li>
                 </ul>
                         <br><br>
@@ -221,7 +221,7 @@
                 <div style="width: 48%;">
                     <h5>Planos de ação disponíveis:</h5>
                     <select id="planosAcao" class="form-select" @change="associarPlanoAcao($event)">
-                        <option value="" disabled selected>Selecione um plano de ação</option>
+                        <option hidden selected>Selecione um plano de ação</option>
                         <option v-for="item in planosAcao" :key="item.id" :value="item.id">{{ item.nome }}</option>
                     </select>
 
@@ -232,8 +232,7 @@
                         <h5>Planos de Ação associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
                             <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> {{ plano.planoAcao_nome
-                                }}    <span @click="desassociarPlano('plano', plano.associacao_id, $index)" class="bi bi-dash-circle" style="cursor: pointer; color: red; text-align: right;"></span>
-
+                                }}    <span @click="desassociarPlano('plano', plano.associacao_id)" class="bi bi-dash-circle" style="cursor: pointer; color: red; text-align: right;"></span>
                             </li>
                         </ul>
                     </div>
@@ -415,7 +414,6 @@ export default {
                     this.programaEditado.projeto.push({
                         projeto_nome: event.target.options[event.target.selectedIndex].text
 
-                        
                     }
 
                     ); this.getProjetosPlanoAcao()
@@ -447,9 +445,7 @@ export default {
                 });
         },
 
-        desassociarPlano(tipo, id, selectedIndex) {
-            console.log('Desassociar plano chamado com tipo:', tipo, 'id:', id, 'selectedIndex:', selectedIndex);
-
+        desassociarPlano(tipo, id) {
             axios.post(`${this.prodURL}/programa/associar/excluir/${this.programaEditado.id}`, {
                     id: id,
                     projeto: tipo === 'projeto' ? 1 : 0
@@ -460,12 +456,12 @@ export default {
                     } else {
                         this.programaEditado.planoAcao = this.programaEditado.planoAcao.filter(plano => plano.associacao_id !== id);
                     }
-                    const nome = selectedIndex >= 0 ? (tipo === 'projeto' ? this.programaEditado.projeto[selectedIndex].projeto_nome : this.programaEditado.planoAcao[selectedIndex].planoAcao_nome) : '';
-                    console.log(`${tipo === 'projeto' ? 'Projeto' : 'Plano de Ação'} ${nome} desassociado com sucesso.`);
                 })
                 .catch((error) => {
                     console.error(`Erro ao desassociar ${tipo === 'projeto' ? 'projeto' : 'plano de ação'}:`, error);
                 });
+
+                this.getProjetosPlanoAcao()
         },
 
 

@@ -23,7 +23,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <br>
             <div>
                 <div class="table responsive">
@@ -39,13 +39,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr @click="verPCM" style="vertical-align: middle;" v-for="item in listaPCMsFiltrada" :key="item.id">
+                            <tr @click="verPCM(item.id)" style="vertical-align: middle;"
+                                v-for="item in listaPCMsFiltrada" :key="item.id">
                                 <td style="text-align: center; vertical-align: middle;">
                                     {{ item.codigo }}
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    Falta
+                                    {{ item.nome }}
                                 </td>
 
                                 <td style="text-align: center; color: green; vertical-align: middle;">
@@ -53,25 +54,26 @@
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    Falta
+                                    <input type="date" disabled style="text-align: center"
+                                        :value="formatarDataHora(item.dtInicio)">
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    {{ item.responsavel_nome }}
+                                    {{ nomeEsobrenome(item.responsavel_nome) }}
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar" disabled>
+                                            <button class="button-aprovar" >
                                                 Aprovar
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar" disabled>
+                                            <button type="button" class="button-reprovar" >
                                                 Reprovar
-                                                <i class="fa-solid fa-thumbs-down"></i> 
+                                                <i class="fa-solid fa-thumbs-down"></i>
                                             </button>
                                         </div>
 
@@ -113,6 +115,75 @@ export default {
     },
 
     methods: {
+        formatarDataHora(valor) {
+            if (valor) {
+                if (valor) {
+                    return valor.slice(0, 10)
+                } else {
+                    return ''
+                }
+            }
+        },
+
+        salvarPCM() {
+            const novaArray = this.itensDaAnalise.map(item => ({
+                impactoViabilidade_id: item.id,
+                concordo: item.concordo,
+                justificativa: item.justificativa
+            }));
+
+            axios.post(`${this.prodURL}/pcm/cadastrar`, {
+
+                codigo: this.codigo,
+                finalidade: this.finalidade,
+                area: this.area,
+                setor_id: this.setor_id,
+                nome: this.nome,
+                dtInicio: this.dtInicio,
+                descricao_problema: this.descricao_problema,
+                possivel_solucao: this.possivel_solucao,
+                proposito_mudanca: this.proposito_mudanca,
+                dtLimiteImplementacao: this.dtLimiteImplementacao,
+                solicitante_id: this.solicitante_id,
+                estimativa_custo: this.estimativa_custo,
+                custo_justificativa: this.custo_justificativa,
+                parecer_responsavel: this.parecer_responsavel,
+                responsavel_id: this.responsavel_id,
+                responsavel_justificativa: this.responsavel_justificativa,
+                meio_mudanca: this.meio_mudanca,
+                cadastro_omie: this.cadastro_omie,
+                impacto_viabilidade: novaArray,
+                status: 'Aguardando Aprovação'
+
+            })
+                .then((response) => {
+                    console.log(response.data)
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        nomeEsobrenome(nome) {
+            if (nome) {
+                const nomeESobrenome = nome.split(" ");
+
+
+                if (nomeESobrenome.length >= 2) {
+                    const primeiroNome = nomeESobrenome[0];
+                    const segundoNome = nomeESobrenome[1];
+
+                    if (segundoNome.length <= 3 || segundoNome == 'Paula') {
+                        return `${primeiroNome} ${segundoNome} ${nomeESobrenome[2] || ''}`;
+                    } else {
+                        return `${primeiroNome} ${segundoNome}`;
+                    }
+                } else {
+                    return nome;
+                }
+            }
+        },
+
         filtrarPCMs() {
             if (!this.PCMSelecionado) {
                 this.listaPCMsFiltrada = this.PCMs;
@@ -124,7 +195,7 @@ export default {
             }
         },
 
-        getPCMs(){
+        getPCMs() {
             axios.get(`${this.prodURL}/pcm/listar`, {})
                 .then((response) => {
                     this.PCMs = response.data;
@@ -135,9 +206,11 @@ export default {
                 });
         },
 
-        verPCM() {
+        verPCM(id) {
+            localStorage.setItem('idPCM', id);
             this.$router.push({ name: "PCM" })
         },
+
         verPCMvazio() {
             this.$router.push({ name: "PCMv" })
         }
@@ -161,6 +234,7 @@ export default {
     border-radius: 6px !important;
     cursor: not-allowed;
 }
+
 .button-reprovar {
     width: 10rem;
     background-color: #e02130 !important;
@@ -182,6 +256,7 @@ export default {
     border-radius: 6px !important;
     cursor: not-allowed;
 }
+
 .button-aprovar {
     width: 10rem;
     background-color: #429867 !important;

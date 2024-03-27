@@ -456,7 +456,8 @@ export default {
                 dtInicio: this.novoPlanoAcao.dtInicio,
                 gerente_id: this.novoPlanoAcao.gerente_id,
                 setor_id: this.novoPlanoAcao.setor_id,
-                status: "Proposto"
+                status: "Proposto",
+                usuario_id: localStorage.getItem('id')
             })
 
                 .then((response) => {

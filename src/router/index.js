@@ -23,7 +23,7 @@ import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
 import axios from 'axios'
 import VisualizaçãoCriaçãoPCM from '@/views/PCM/VisualizaçãoCriaçãoPCM.vue'
 import ControlePCM from '@/views/PCM/ControlePCM'
-import PCMVazio from '@/views/PCM/PCMVazio'
+import CadastroPCM from '@/views/PCM/CadastroPCM.vue'
 import ControledePlanodeAção from '@/views/PA/ControleDePlanodeAção.vue'
 import VisualizaçãoPlanodeAção from '@/views/PA/VisualizaçãoPlanodeAção.vue'
 import controleProgramas from '@/views/Programas/ControleProgramas'
@@ -113,7 +113,7 @@ const routes = [
   {
     path: '/PCM/Cadastro',
     name: 'PCMv',
-    component: PCMVazio,
+    component: CadastroPCM,
   },
 
   //Plano de Ação

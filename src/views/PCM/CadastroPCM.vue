@@ -24,7 +24,7 @@
                         Finalidade
                         <br>
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="finalidade" @change="atualizarPCM('finalidade', finalidade)">
+                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="finalidade">
                         <option>Criação</option>
                         <option>Mudança</option>
                     </select>
@@ -36,7 +36,7 @@
                         Área
                         <br>
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="area" @change="atualizarPCM('area', area)">
+                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="area">
                         <option>Processo</option>
                         <option>Produto</option>
                     </select>
@@ -46,7 +46,7 @@
                     <strong style="width: 15rem; text-align: center">
                         Setor para encaminhamento da demanda
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem; width: 15rem;  margin-top: 0.5rem" @change="atualizarPCM('setor_id', setor_id)"
+                    <select class="form-select" style="margin-left: 0.5rem; width: 15rem;  margin-top: 0.5rem"
                         v-model="setor_id">
                         <option v-for="setor in setores" :key="setor.id" :value="setor.id">{{ setor.nome }}</option>
                     </select>
@@ -58,36 +58,35 @@
                         Data de abertura
                         <br>
                     </strong>
-                    <input v-model="dtInicio" type="date" class="form-control" style=" margin-top: 0.5rem" @focusout="atualizarPCM('dtInicio', dtInicio)">
+                    <input v-model="dtInicio" type="date" class="form-control" style=" margin-top: 0.5rem">
                 </div>
             </div>
 
             <div class="input-group" style="margin-top: 1rem;">
                 <span class="input-group-text"><b>Descrição do Problema:</b> </span>
-                <textarea class="form-control" v-model="descricao_problema" style="height: 8rem;" @focusout="atualizarPCM('descricao_problema', descricao_problema)"></textarea>
+                <textarea class="form-control" v-model="descricao_problema" style="height: 8rem;"></textarea>
             </div>
             <div class="input-group" style="margin-top: 1rem;">
                 <span class="input-group-text" style="width: 13rem;"><b>Possível solução: </b> </span>
-                <textarea class="form-control" v-model="possivel_solucao" style="height: 6rem;" @focusout="atualizarPCM('possivel_solucao', possivel_solucao)"></textarea>
+                <textarea class="form-control" v-model="possivel_solucao" style="height: 6rem;"></textarea>
             </div>
             <div class="input-group" style="margin-top: 1rem;">
                 <span class="input-group-text" style="width: 13rem;"><b>Propósito da mudança:</b> </span>
-                <textarea class="form-control" v-model="proposito_mudanca" @focusout="atualizarPCM('proposito_mudanca', proposito_mudanca)">
+                <textarea class="form-control" v-model="proposito_mudanca">
                 </textarea>
             </div>
 
             <div style="display: flex ;align-content: center; justify-content: center; margin-top: 1rem;">
                 <div style="display: flex; align-items: center; flex-flow: column">
                     <strong>Data limite de implementação</strong>
-                    <input v-model="dtLimiteImplementacao" @change="atualizarPCM('dtLimiteImplementacao', dtLimiteImplementacao)" type="date" class="form-control"
+                    <input v-model="dtLimiteImplementacao" type="date" class="form-control"
                         style="width: 9rem; margin-left: 0.5rem; margin-top: 0.5rem">
                 </div>
                 <div style="display: flex; align-items: center; margin-left: 1rem; flex-flow: column;">
                     <strong>Responsável pela solicitação</strong>
                     <select class="form-select" style="margin-left: 0.5rem; width: 15rem; margin-top: 0.5rem"
-                        v-model="solicitante_id" @change="atualizarPCM('solicitante_id', solicitante_id)">
-                        <option v-for="item in usuarios" :key="item.id" :value="item.id">{{
-                nomeEsobrenome(item.nomeCompleto) }}
+                        v-model="solicitante_id">
+                        <option v-for="item in usuarios" :key="item.id" :value="item.id">{{ nomeEsobrenome(item.nomeCompleto) }}
                         </option>
                     </select>
                 </div>
@@ -116,7 +115,7 @@
                         </thead>
                         <tbody>
 
-                            <tr v-for="item, index in impacto_viabilidade" :key="index">
+                            <tr v-for="item, index in itensDaAnalise" :key="index">
                                 <th style="border: 1px solid black; border-left: none ;vertical-align: middle;">{{ index
                 + 1 }}.</th>
                                 <td style="border: 1px solid black; vertical-align: middle;">
@@ -128,19 +127,19 @@
                                 <td style="border: 1px solid black;vertical-align: middle;">
                                     <div style="display: flex;" v-if="item !== 'Estimativa de Custo da Mudança'">
                                         <input type="radio" class="btn-check" :name="'options' + index"
-                                            :id="'optionSim' + index" autocomplete="off" v-model="item.concordo" @change="atualizarPCM('impacto_viabilidade', impacto_viabilidade)"
+                                            :id="'optionSim' + index" autocomplete="off" v-model="item.concordo"
                                             value="1">
                                         <label class="btn" :for="'optionSim' + index">Sim</label>
 
                                         <input type="radio" class="btn-check" :name="'options' + index"
-                                            :id="'optionNão' + index" autocomplete="off" v-model="item.concordo" @change="atualizarPCM('impacto_viabilidade', impacto_viabilidade)"
+                                            :id="'optionNão' + index" autocomplete="off" v-model="item.concordo"
                                             value="0">
                                         <label class="btn" :for="'optionNão' + index">Não</label>
                                     </div>
                                 </td>
 
                                 <td style="border: 1px solid black; border-right: none;">
-                                    <textarea class="form-control" v-model="item.justificativa" @change="atualizarPCM('impacto_viabilidade', impacto_viabilidade)"></textarea>
+                                    <textarea class="form-control" v-model="item.justificativa"></textarea>
                                 </td>
                             </tr>
 
@@ -154,14 +153,14 @@
 
                                 <td style="border: 1px solid black;vertical-align: middle;">
                                     <strong>
-                                        <money3 v-bind="config" v-model="estimativa_custo" @change="atualizarPCM('estimativa_custo', estimativa_custo)"
+                                        <money3 v-bind="config" v-model="estimativa_custo"
                                             style="width: 8rem;border: none; outline: none;">
                                         </money3>
                                     </strong>
                                 </td>
 
                                 <td style="border: 1px solid black; border-right: none;">
-                                    <textarea v-model="custo_justificativa" @change="atualizarPCM('custo_justificativa', custo_justificativa)" class="form-control"></textarea>
+                                    <textarea v-model="custo_justificativa" class="form-control"></textarea>
                                 </td>
                             </tr>
 
@@ -173,7 +172,7 @@
                             <strong>
                                 Parecer do Responsável
                             </strong>
-                            <select v-model="parecer_responsavel" class="form-select" @change="atualizarPCM('parecer_responsavel', parecer_responsavel)"
+                            <select v-model="parecer_responsavel" class="form-select"
                                 style="margin-left: 0.5rem;  margin-top: 0.5rem"
                                 :style="{ 'color': (parecer_responsavel == 'Proposta viável') ? 'green' : 'red' }">
                                 <option style="color: green;">Proposta viável</option>
@@ -186,9 +185,8 @@
                                 Nome
                             </strong>
                             <select class="form-select" style="margin-left: 0.5rem; width: 13rem;  margin-top: 0.5rem"
-                                v-model="responsavel_id" @change="atualizarPCM('responsavel_id', responsavel_id)" >
-                                <option v-for="item in usuarios" :key="item.id" :value="item.id">{{
-                nomeEsobrenome(item.nomeCompleto) }}
+                                v-model="responsavel_id">
+                                <option v-for="item in usuarios" :key="item.id" :value="item.id">{{ nomeEsobrenome(item.nomeCompleto) }}
                                 </option>
                             </select>
                         </div>
@@ -196,7 +194,7 @@
 
                     <div class="input-group" style="margin-top: 1rem; padding-inline: 10px;">
                         <span class="input-group-text" style="width: 13rem;"><b>Justificativa:</b> </span>
-                        <textarea v-model="responsavel_justificativa" @focusout="atualizarPCM('responsavel_justificativa', responsavel_justificativa)" class="form-control"></textarea>
+                        <textarea v-model="responsavel_justificativa" class="form-control"></textarea>
                     </div>
 
                 </div>
@@ -208,7 +206,7 @@
                             <strong>
                                 Meio da mudança
                             </strong>
-                            <select v-model="meio_mudanca" @change="atualizarPCM('meio_mudanca', meio_mudanca)" class="form-select" style="margin-top: 0.5rem">
+                            <select v-model="meio_mudanca" class="form-select" style="margin-top: 0.5rem">
                                 <option>Plano de Ação</option>
                                 <option>Projeto</option>
                             </select>
@@ -220,11 +218,11 @@
                             </strong>
                             <div style="display: flex; margin-top: 0.5rem">
                                 <input type="radio" class="btn-check" name="cadastroOmie" id="omieSim"
-                                    autocomplete="off" v-model="cadastro_omie" @change="atualizarPCM('cadastro_omie', cadastro_omie)" value="1">
+                                    autocomplete="off" v-model="cadastro_omie" value="1">
                                 <label class="btn" for="omieSim">Sim</label>
 
                                 <input type="radio" class="btn-check" name="cadastroOmie" id="omieNão"
-                                    autocomplete="off" v-model="cadastro_omie" @change="atualizarPCM('cadastro_omie', cadastro_omie)" value="0">
+                                    autocomplete="off" v-model="cadastro_omie" value="0">
                                 <label class="btn" for="omieNão">Não</label>
                             </div>
                             <!-- <select v-model="cadastro_omie" class="form-select" style="width: 5rem;">
@@ -239,8 +237,7 @@
                         <div style="display: flex; align-items: center; margin-left: 1rem; flex-flow: column">
                             <strong>Responsável pelo cadastro no sistema</strong>
                             <select class="form-select" style="margin-left: 0.5rem; width: 15rem;  margin-top: 0.5rem">
-                                <option v-for="item in usuarios" :key="item.id" :value="item.id">{{
-                nomeEsobrenome(item.nomeCompleto) }}
+                                <option v-for="item in usuarios" :key="item.id" :value="item.id">{{ nomeEsobrenome(item.nomeCompleto) }}
                                 </option>
                                 <option value="" selected></option>
                             </select>
@@ -270,7 +267,11 @@
                 </div>
             </div>
         </div>
-{{ teste }}
+
+        <div style="display: flex; justify-content: center; margin-top: 1rem;">
+            <button @click="salvarPCM" style="height: 2.5rem; width: 7rem;"
+                class="btn btn-primary float-right mr-2">Salvar</button>
+        </div>
     </div>
     <br><br><br>
 </template>
@@ -287,8 +288,6 @@ export default {
 
     data() {
         return {
-            idPCM: localStorage.getItem('idPCM'),
-
             codigo: "PCM - Nº 99999",
             finalidade: "",
             area: "",
@@ -311,6 +310,7 @@ export default {
             cadastro_omie: null,
             impacto_viabilidade: [],
 
+            itensDaAnalise: [],
 
             setores: null,
             usuarios: null,
@@ -318,7 +318,7 @@ export default {
             devURL: devURL,
             prodURL: prodURL,
 
-            teste: 'teste',
+            teste: 'nada',
 
             config: {
                 masked: false,
@@ -330,12 +330,22 @@ export default {
         }
     },
 
-    created(){
-        this.getSetores(),
-            this.getPCM()
+    mounted() {
+        this.getTabelaAnaliseImpacto(),
+            this.getSetores()
     },
 
     methods: {
+        formatarDataHora(valor) {
+            if (valor) {
+                if (valor) {
+                    return valor.slice(0, 10)
+                } else {
+                    return ''
+                }
+            }
+        },
+
         nomeEsobrenome(nome) {
             const nomeESobrenome = nome.split(" ");
 
@@ -354,56 +364,44 @@ export default {
             }
         },
 
-        atualizarPCM(itemEditado, valor){
-            axios.put(`${this.prodURL}/pcm/atualizar/${this.idPCM}`, {
-                [itemEditado]: valor
+        salvarPCM() {
+            const novaArray = this.itensDaAnalise.map(item => ({
+                impactoViabilidade_id: item.id,
+                concordo: item.concordo,
+                justificativa: item.justificativa
+            }));
+
+            axios.post(`${this.prodURL}/pcm/cadastrar`, {
+
+                codigo: this.codigo,
+                finalidade: this.finalidade,
+                area: this.area,
+                setor_id: this.setor_id,
+                nome: this.nome,
+                dtInicio: this.dtInicio,
+                descricao_problema: this.descricao_problema,
+                possivel_solucao: this.possivel_solucao,
+                proposito_mudanca: this.proposito_mudanca,
+                dtLimiteImplementacao: this.dtLimiteImplementacao,
+                solicitante_id: this.solicitante_id,
+                estimativa_custo: this.estimativa_custo,
+                custo_justificativa: this.custo_justificativa,
+                parecer_responsavel: this.parecer_responsavel,
+                responsavel_id: this.responsavel_id,
+                responsavel_justificativa: this.responsavel_justificativa,
+                meio_mudanca: this.meio_mudanca,
+                cadastro_omie: this.cadastro_omie,
+                impacto_viabilidade: novaArray,
+                status: 'Aguardando Aprovação'
+
             })
-                .then(() => {
-                    this.teste = itemEditado + valor
+                .then((response) => {
+                    console.log(response.data)
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         },
-
-        // salvarPCM() {
-        //     const novaArray = this.itensDaAnalise.map(item => ({
-        //         impactoViabilidade_id: item.id,
-        //         concordo: item.concordo,
-        //         justificativa: item.justificativa
-        //     }));
-
-        //     axios.post(`${this.prodURL}/pcm/cadastrar`, {
-
-        //         codigo: this.codigo,
-        //         finalidade: this.finalidade,
-        //         area: this.area,
-        //         setor_id: this.setor_id,
-        //         nome: this.nome,
-        //         dtInicio: this.dtInicio,
-        //         descricao_problema: this.descricao_problema,
-        //         possivel_solucao: this.possivel_solucao,
-        //         proposito_mudanca: this.proposito_mudanca,
-        //         dtLimiteImplementacao: this.dtLimiteImplementacao,
-        //         solicitante_id: this.solicitante_id,
-        //         estimativa_custo: this.estimativa_custo,
-        //         custo_justificativa: this.custo_justificativa,
-        //         parecer_responsavel: this.parecer_responsavel,
-        //         responsavel_id: this.responsavel_id,
-        //         responsavel_justificativa: this.responsavel_justificativa,
-        //         meio_mudanca: this.meio_mudanca,
-        //         cadastro_omie: this.cadastro_omie,
-        //         impacto_viabilidade: novaArray,
-        //         status: 'Aguardando Aprovação'
-
-        //     })
-        //         .then((response) => {
-        //             console.log(response.data)
-        //         })
-        //         .catch((error) => {
-        //             console.error(error);
-        //         });
-        // },
 
         getSetores() {
             axios.get(`${this.prodURL}/usuario`, {
@@ -430,32 +428,14 @@ export default {
                 });
         },
 
-        getPCM() {
-            axios.get(`${this.prodURL}/pcm/buscar/${this.idPCM}`, {})
+        getTabelaAnaliseImpacto() {
+            axios.get(`${this.prodURL}/pcm/impacto-viabilidade`, {})
                 .then((response) => {
-
-                    this.codigo = response.data.codigo;
-                    this.finalidade = response.data.finalidade;
-                    this.area = response.data.area;
-                    this.setor_id = response.data.setor_id;
-                    this.nome = response.data.nome;
-                    this.dtInicio = response.data.dtInicio;
-                    this.descricao_problema = response.data.descricao_problema;
-                    this.possivel_solucao = response.data.possivel_solucao;
-                    this.proposito_mudanca = response.data.proposito_mudanca;
-                    this.dtLimiteImplementacao = response.data.dtLimiteImplementacao;
-                    this.solicitante_id = response.data.solicitante_id;
-                    this.solicitante_nome = response.data.solicitante_nome;
-                    this.estimativa_custo = response.data.estimativa_custo;
-                    this.custo_justificativa = response.data.custo_justificativa;
-                    this.parecer_responsavel = response.data.parecer_responsavel;
-                    this.responsavel_id = response.data.responsavel_id;
-                    this.responsavel_nome = response.data.responsavel_nome;
-                    this.responsavel_justificativa = response.data.responsavel_justificativa;
-                    this.meio_mudanca = response.data.meio_mudanca;
-                    this.cadastro_omie = response.data.cadastro_omie;
-                    this.impacto_viabilidade = response.data.impacto_viabilidade;
-
+                    this.itensDaAnalise = response.data.map(item => ({
+                        ...item,
+                        concordo: '', // Valor inicial de "concordo"
+                        justificativa: '' // Valor inicial de "justificativa"
+                    }));
                 })
                 .catch((error) => {
                     console.error(error);
