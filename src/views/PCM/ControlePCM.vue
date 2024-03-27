@@ -18,7 +18,7 @@
                         <h3 style="text-align: center; margin: 0;">Propostas de Criação ou Mudança</h3>
                     </div>
                     <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
-                        @click="verPCMvazio" class="botaoAdicionarSprint">
+                        @click="novoPCM" class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
@@ -65,13 +65,13 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar" >
+                                            <button class="button-aprovar">
                                                 Aprovar
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar" >
+                                            <button type="button" class="button-reprovar">
                                                 Reprovar
                                                 <i class="fa-solid fa-thumbs-down"></i>
                                             </button>
@@ -86,7 +86,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 
@@ -107,6 +106,8 @@ export default {
             PCMs: null,
             devURL: devURL,
             prodURL: prodURL,
+
+            teste: null
         }
     },
 
@@ -125,39 +126,27 @@ export default {
             }
         },
 
-        salvarPCM() {
-            const novaArray = this.itensDaAnalise.map(item => ({
-                impactoViabilidade_id: item.id,
-                concordo: item.concordo,
-                justificativa: item.justificativa
-            }));
+        novoPCM() {
+            var PCMsOrdenados = this.PCMs.sort((a, b) => {
+                if (a.codigo < b.codigo) {
+                    return 1; // retorna 1 para indicar que a deve vir depois de b
+                } else if (a.codigo > b.codigo) {
+                    return -1; // retorna -1 para indicar que a deve vir antes de b
+                } else {
+                    return 0; // retorna 0 se os valores são iguais
+                }
+            });
+            var novoCodigo = parseInt(PCMsOrdenados[0].codigo.substring(3));
 
             axios.post(`${this.prodURL}/pcm/cadastrar`, {
 
-                codigo: this.codigo,
-                finalidade: this.finalidade,
-                area: this.area,
-                setor_id: this.setor_id,
-                nome: this.nome,
-                dtInicio: this.dtInicio,
-                descricao_problema: this.descricao_problema,
-                possivel_solucao: this.possivel_solucao,
-                proposito_mudanca: this.proposito_mudanca,
-                dtLimiteImplementacao: this.dtLimiteImplementacao,
-                solicitante_id: this.solicitante_id,
-                estimativa_custo: this.estimativa_custo,
-                custo_justificativa: this.custo_justificativa,
-                parecer_responsavel: this.parecer_responsavel,
-                responsavel_id: this.responsavel_id,
-                responsavel_justificativa: this.responsavel_justificativa,
-                meio_mudanca: this.meio_mudanca,
-                cadastro_omie: this.cadastro_omie,
-                impacto_viabilidade: novaArray,
+                codigo: `PCM${novoCodigo + 1}`,
+                dtInicio: new Date().toISOString().split('T')[0],
+                impacto_viabilidade: [],
                 status: 'Aguardando Aprovação'
-
             })
                 .then((response) => {
-                    console.log(response.data)
+                    this.verPCM(response.data.id)
                 })
                 .catch((error) => {
                     console.error(error);
