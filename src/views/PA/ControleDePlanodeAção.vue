@@ -160,7 +160,6 @@
                     <div style="display: flex; flex-flow: column; width: 50%">
 
 
-                        {{ planoEditado }}
                         <div class="form-group">
                             <label for="nome">Nome do Plano de Ação</label>
                             <input id="nome" type="text" v-model="planoEditado.nome" class="form-control"
