@@ -191,7 +191,7 @@
     <!-- MODAL ASSOCIAÇÃO -->
 
     <div class="modal-mask" v-if="modalProjetosAssociados" @click="fecharModalFora">
-        <div style="height: fit-content;width: 45rem; padding: 3rem; margin-bottom: 2rem;" class="modal-container">
+        <div style="height: fit-content;width: 70rem; padding: 3rem; margin-bottom: 2rem;" class="modal-container">
             <div style="display: flex; justify-content: space-between;">
                 <!-- Coluna de Projetos associados -->
                 <div style="width: 48%;">
@@ -204,9 +204,9 @@
                         <br>
                         <h5>Projetos associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
-                    <li    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;" 
-                    v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{ projeto.projeto_nome }} 
-                        <span @click="desassociarPlano('projeto', projeto.associacao_id, $index)" style="cursor: pointer;">&#10006;</span>
+                    <!-- <li    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;"  -->
+              <li  v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{ projeto.projeto_nome }} 
+                        <span @click="desassociarPlano('projeto', projeto.associacao_id, $index)" style="cursor: pointer; color: red; text-align: right;" class="bi bi-dash-circle"></span>
                         </li>
                 </ul>
                         <br><br>
@@ -233,7 +233,7 @@
                         <h5>Planos de Ação associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
                             <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> {{ plano.planoAcao_nome
-                                }}    <span @click="desassociarPlano('plano', plano.associacao_id, $index)" style="cursor: pointer;">&#10006;</span>
+                                }}    <span @click="desassociarPlano('plano', plano.associacao_id, $index)" class="bi bi-dash-circle" style="cursor: pointer; color: red; text-align: right;"></span>
 
                             </li>
                         </ul>
