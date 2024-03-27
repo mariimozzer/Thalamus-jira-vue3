@@ -1,56 +1,64 @@
 <template>
-    <br><br><br><br>
-    <!-- <div
-        style="width: 100%; margin-top: 1rem; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; text-align: center;">
-        <h1>PCM - Nº 240181</h1>
-        Data de abertura: 14/11/2023
-    </div> -->
+    <br><br><br>
     <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; ">
-        <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+        style="width: 100%;margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
+        <i @click="verPCMs" style="font-size: 30px; margin-left: 3rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
-            <h2>PCM - Nº 240182</h2>
-        <i style="font-size: 30px; margin-right: 2rem; visibility: hidden;"
-            class="bi bi-kanban botaoAdicionarSprint"></i>
+
+        <i @click="verPCMs" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
+            :title="'Ir para tela de projetos'"></i>
+        <h2>PCM - Nº 240181</h2>
+        <i  style="font-size: 30px; margin-right: 3rem; cursor: pointer; visibility: hidden;"
+            class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
     </div>
-    <div style="text-align: center;">
-        Data de abertura: <input type="date" disabled :value="new Date().toISOString().split('T')[0]">
-    </div>
+    <br><br><br>
     <div class="container" style="padding: 2rem 0rem 0rem 0rem;">
         <div style="text-align: center;">
             <h5><b>Área do Solicitante</b></h5>
         </div>
         <div style="border: 1px black solid; padding: 20px; border-radius: 20px;">
-            <div style="display: flex; align-content: center; justify-content: center;">
-                <div style="display: flex; align-items: center; width: fit-content;">
+            <div style="display: flex; align-content: center; justify-content: center; margin-left: 5rem">
+                <div style="display: flex; align-items: center; width: fit-content; flex-flow: column">
                     <strong>
-                        Finalidade:
+                        <br>
+                        Finalidade
+                        <br>
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem;">
+                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem">
                         <option value="" hidden></option>
                         <option>Criação</option>
                         <option>Mudança</option>
                     </select>
                 </div>
-                <div style="display: flex; align-items: center; width: fit-content; margin-left: 1rem;">
+                <div style="display: flex; align-items: center; width: fit-content; margin-left: 1rem; flex-flow: column;">
                     <strong>
-                        Área:
+                        <br>
+                        Área
+                        <br>
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem;">
+                    <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem">
                         <option value="" hidden></option>
                         <option>Processo</option>
                         <option>Produto</option>
                     </select>
                 </div>
-                <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                    <strong style="width: 21rem;">
-                        Setor para encaminhamento da demanda :
+                <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem; flex-flow: column;">
+                    <strong style="width: 15rem; text-align: center">
+                        Setor para encaminhamento da demanda
                     </strong>
-                    <select class="form-select" style="margin-left: 0.5rem; width: 9rem;">
+                    <select class="form-select" style="margin-left: 0.5rem; width: 15rem;  margin-top: 0.5rem">
                         <option value="" hidden></option>
                         <option>P&D</option>
                         <option>Comercial</option>
                     </select>
+                </div>
+                <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem; flex-flow: column;">
+                    <strong>
+                        <br>
+                        Data de abertura 
+                        <br>
+                    </strong>
+                    <input type="date" class="form-control" style=" margin-top: 0.5rem">
                 </div>
             </div>
 
@@ -254,3 +262,33 @@ export default {
     }
 }
 </script>
+<style scoped>
+.fa-solid {
+    margin-left: 3rem;
+}
+
+@media (max-width: 1800px) {
+    .botaoHome {
+    font-size: 30px;
+    margin-left: 13rem !important;
+    cursor: pointer;
+    position: absolute;
+}
+
+.container {
+    margin-left: 13.5rem !important;
+}
+
+.fa-solid {
+    margin-left: 13.5rem !important;
+}
+
+}
+
+.botaoHome {
+    font-size: 30px;
+    margin-left: 260px;
+    cursor: pointer;
+    position: absolute;
+}
+</style>

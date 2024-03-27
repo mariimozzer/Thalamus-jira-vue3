@@ -13,19 +13,10 @@
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
     </div>
 
-    <!-- <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
-        <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
-        <h2>{{ nomeDoProjeto }}</h2>
-        <i style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
-            class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
-    </div> -->
-
     <br><br><br>
-    <div style="width: 100%; padding: 1rem;" class="container">
+    <div style="width: 100%; padding: 1rem;" class="container" >
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
-            <div class="divFundoTabela">
+            <div class="divFundoTabela" v-if="Array.isArray(sprints)">
                 <div class="row">
                     <div style="width: 20%;">
                         <div style="width: 10rem;">
@@ -314,6 +305,7 @@
                     <i class="bi bi-grip-horizontal"></i>
                 </div>
             </div>
+            <div v-else>{{ sprints }}</div>
         </div>
     </div>
 
@@ -838,7 +830,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .fa-solid {
     margin-left: 3rem;
 }

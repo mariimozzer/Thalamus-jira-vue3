@@ -54,8 +54,8 @@
                                     <input v-if="item.dtFim" style="text-align: center;" type="date" :value="formatarDataHora(item.dtFim)" disabled>
                                     <strong v-if="!item.dtFim">-</strong>
                                 </td>
-                                <td>{{ item.gerente_nome }}</td>
-                                <td>
+                                <td style="vertical-align: middle;">{{ item.gerente_nome }}</td>
+                                <td style="vertical-align: middle;">
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(programas) && programas.length > 0">
                                             <template v-slot:activator="{ props }">
@@ -78,7 +78,6 @@
                                                         @click="modalExcluirPrograma = true, this.programaEditado = item">Excluir
                                                     </button><br />
                                                 </v-list-item>
-
                                             </v-list>
                                         </v-menu>
                                     </div>
@@ -633,57 +632,6 @@ export default {
     width: 70%;
     padding: 3rem;
     overflow-y: auto;
-}
-
-.botaoHome {
-    font-size: 30px;
-    margin-left: 50rem;
-    cursor: pointer;
-    position: absolute;
-}
-
-.button-reprovar:disabled {
-    width: 10rem;
-    background-color: #e0213194 !important;
-    color: rgb(255, 255, 255) !important;
-    padding: 5px !important;
-    /* margin: 6px 0 !important; */
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: not-allowed;
-}
-
-.button-reprovar {
-    width: 10rem;
-    background-color: #e02130 !important;
-    color: rgb(255, 255, 255) !important;
-    padding: 5px !important;
-    /* margin: 6px 0 !important; */
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: pointer;
-}
-
-.button-aprovar:disabled {
-    width: 10rem;
-    background-color: #429867a8 !important;
-    color: rgb(255, 255, 255) !important;
-    padding: 5px !important;
-    /* margin: 6px 0 !important; */
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: not-allowed;
-}
-
-.button-aprovar {
-    width: 10rem;
-    background-color: #429867 !important;
-    color: rgb(255, 255, 255) !important;
-    padding: 5px !important;
-    /* margin: 6px 0 !important; */
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: pointer;
 }
 
 .modal-mask {

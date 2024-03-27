@@ -111,7 +111,7 @@ const routes = [
   },
 
   {
-    path: '/PCM/Vazio',
+    path: '/PCM/Cadastro',
     name: 'PCMv',
     component: PCMVazio,
   },

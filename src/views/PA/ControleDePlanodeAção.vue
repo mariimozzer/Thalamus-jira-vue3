@@ -1,32 +1,36 @@
 <template>
     <br>
-    
+
     <br><br><br>
-    
+
     <div style="padding: 1rem;">
-        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+        <div class="container"
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-    
+
                     <div class="input-group mb-3" style="width: 20rem; position: absolute;">
                         <span class="input-group-text" id="basic-addon1"><i
-                                    class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control" placeholder="Pesquisar Plano de Ação" aria-label="Username" aria-describedby="basic-addon1" v-model="planoSelecionado" @input="filtrarPlanosdeAção()">
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Plano de Ação"
+                            aria-label="Username" aria-describedby="basic-addon1" v-model="planoSelecionado"
+                            @input="filtrarPlanosdeAção()">
                     </div>
-    
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                     </div>
-    
-                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
-                            <i class="bi bi-plus-circle"></i>
-                        </button>
-    
+
+                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+
                 </div>
             </div>
-    
+
             <br>
-    
+
             <div>
                 <div class="table responsive">
                     <table class="table table-hover">
@@ -39,37 +43,43 @@
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Envolvido</th>
                                 <th scope="col"></th>
-    
+
                             </tr>
                         </thead>
-    
+
                         <tbody>
-                            <tr v-for="item in listaPlanosFiltrada" :key="item.id" style="text-align: center;" @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
-    
+                            <tr v-for="item in listaPlanosFiltrada" :key="item.id" style="text-align: center;"
+                                @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
+                                @mouseleave="mostrarBotao(item.id, false)">
+
                                 <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
-                                            <option style="color: red;">Proposto</option>
-                                            <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                            <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                            <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                        </select></td>
+                                <td><select v-model="item.status" class="form-select"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
                                 <td>
-                                    <input style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                                    <input style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtInicio)" disabled>
                                 </td>
-                                <td>
-                                    <input v-if="item.dtTermino" style="text-align: center;" type="date" :value="formatarDataHora(item.dtTermino)" disabled>
+                                <td style="vertical-align: middle;">
+                                    <input v-if="item.dtTermino" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtTermino)" disabled>
                                     <span v-if="!item.dtTermino">-</span>
                                 </td>
-                                <td>{{ item.gerente_name }}</td>
-                                <td>{{ item.setor_nome }}</td>
-                                <td>
+                                <td style="vertical-align: middle;">{{ item.gerente_name }}</td>
+                                <td style="vertical-align: middle;">{{ item.setor_nome }}</td>
+                                <td style="vertical-align: middle;">
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(planosAcao) && planosAcao.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                    <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                        class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                        v-bind="props"></v-btn>
+                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
                                             </template>
 
                                             <v-list>
@@ -109,8 +119,8 @@
             <div style="width: 100%;">
                 <div>
                     <label>Data de término do plano de ação:</label>
-                    <input :class="{ shake: disabled }" v-model="dataTerminoPlano" id="dataTermino"
-                        class="form-control" type="date">
+                    <input :class="{ shake: disabled }" v-model="dataTerminoPlano" id="dataTermino" class="form-control"
+                        type="date">
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="finalizarPlano()">
@@ -274,7 +284,7 @@
     </div>
 
     <!-- END MODAL NOVO PLANO DE AÇÃO -->
-    
+
 </template>
 
 
@@ -369,8 +379,8 @@ export default {
             const userId = localStorage.getItem('id')
 
             axios.put(`${this.prodURL}/planoAcao/excluir/${this.planoEditado.id}`, {
-                    usuario_id: userId
-                })
+                usuario_id: userId
+            })
                 .then(() => {
                     this.getPlanoAcao();
                     this.modalExcluirPlano = false;
@@ -386,9 +396,11 @@ export default {
 
         formatarDataHora(valor) {
             if (valor) {
-                return valor.slice(0, 10)
-            } else {
-                return ''
+                if (valor) {
+                    return valor.slice(0, 10)
+                } else {
+                    return ''
+                }
             }
         },
 
@@ -397,9 +409,9 @@ export default {
 
 
                 axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
-                        [itemAlterado]: novoValor,
-                        dtTermino: null
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: null
+                })
                     .then(() => {
                         this.getPlanoAcao()
                     })
@@ -408,9 +420,9 @@ export default {
                 var dataAtual = new Date().toISOString().split('T')[0];
                 axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
 
-                        [itemAlterado]: novoValor,
-                        dtTermino: dataAtual
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: dataAtual
+                })
                     .then(() => {
                         this.getPlanoAcao()
                     })
@@ -440,12 +452,12 @@ export default {
         adicionarPlanoAcao() {
             axios.post(`${this.prodURL}/planoAcao/cadastrar`, {
 
-                    nome: this.novoPlanoAcao.nome,
-                    dtInicio: this.novoPlanoAcao.dtInicio,
-                    gerente_id: this.novoPlanoAcao.gerente_id,
-                    setor_id: this.novoPlanoAcao.setor_id,
-                    status: "Proposto"
-                })
+                nome: this.novoPlanoAcao.nome,
+                dtInicio: this.novoPlanoAcao.dtInicio,
+                gerente_id: this.novoPlanoAcao.gerente_id,
+                setor_id: this.novoPlanoAcao.setor_id,
+                status: "Proposto"
+            })
 
                 .then((response) => {
                     this.getPlanoAcao();
@@ -467,7 +479,7 @@ export default {
         getGerenteseSetor() {
             axios.get(`${this.prodURL}/usuario`, {
 
-                })
+            })
                 .then((response) => {
                     this.gerente = response.data
                     this.gerente = this.gerente.map(item => ({
@@ -481,7 +493,7 @@ export default {
 
             axios.get(`${this.prodURL}/setor`, {
 
-                })
+            })
                 .then((response) => {
                     this.setores = response.data
                 })
@@ -493,7 +505,7 @@ export default {
         getPlanoAcao() {
             axios.get(`${this.prodURL}/planoAcao/listar`, {
 
-                })
+            })
                 .then((response) => {
                     this.planosAcao = response.data;
                     this.filtrarPlanosdeAção()
@@ -525,9 +537,9 @@ export default {
 
         verPCMvazio() {
             this.$router.push({ name: "PCMv" })
-        }
-    }
+        },
 
+    }
 }
 </script>
 
@@ -535,6 +547,7 @@ export default {
 .fa-solid {
     margin-left: 0rem !important;
 }
+
 
 .modal-mask {
     position: fixed;
