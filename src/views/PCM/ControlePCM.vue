@@ -11,7 +11,7 @@
                         <span class="input-group-text" id="basic-addon1"><i
                                 class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" class="form-control" placeholder="Pesquisar PCM" aria-label="Username"
-                            aria-describedby="basic-addon1" v-model="projetoSelecionado" @input="filtrarProjetos()">
+                            aria-describedby="basic-addon1" v-model="projetoSelecionado" @input="filtrarPCMs()">
                     </div>
 
                     <div style="width: 100%;">
@@ -23,6 +23,7 @@
                     </button>
                 </div>
             </div>
+            
             <br>
             <div>
                 <div class="table responsive">
@@ -38,25 +39,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr @click="verPCM" style="vertical-align: middle;">
+                            <tr @click="verPCM" style="vertical-align: middle;" v-for="item in listaPCMsFiltrada" :key="item.id">
                                 <td style="text-align: center; vertical-align: middle;">
-                                    PCM240181
+                                    {{ item.codigo }}
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    THALAMUS
+                                    Falta
                                 </td>
 
                                 <td style="text-align: center; color: green; vertical-align: middle;">
-                                    Aprovado
+                                    {{ item.status }}
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    14/11/2023
+                                    Falta
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
-                                    Darley Dias
+                                    {{ item.responsavel_nome }}
                                 </td>
 
                                 <td style="text-align: center; vertical-align: middle;">
@@ -89,6 +90,9 @@
 
 <script>
 
+import axios from 'axios';
+import { devURL } from '../../services/api'
+import { prodURL } from '../../services/api'
 
 export default {
     name: "ControlePCM",
@@ -98,16 +102,18 @@ export default {
             PCMSelecionado: null,
             listaPCMsFiltrada: null,
 
-
-
+            PCMs: null,
+            devURL: devURL,
+            prodURL: prodURL,
         }
     },
 
     mounted() {
+        this.getPCMs()
     },
 
     methods: {
-        filtrarProgramas() {
+        filtrarPCMs() {
             if (!this.PCMSelecionado) {
                 this.listaPCMsFiltrada = this.PCMs;
             } else {
@@ -116,6 +122,17 @@ export default {
                     return PCM.nome.toLowerCase().includes(textoLowerCase);
                 });
             }
+        },
+
+        getPCMs(){
+            axios.get(`${this.prodURL}/pcm/listar`, {})
+                .then((response) => {
+                    this.PCMs = response.data;
+                    this.filtrarPCMs()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         verPCM() {

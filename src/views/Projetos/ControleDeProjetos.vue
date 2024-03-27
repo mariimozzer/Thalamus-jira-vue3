@@ -33,16 +33,15 @@
                                 <th scope="col">Data de Início</th>
                                 <th scope="col">Data de Termino</th>
                                 <th scope="col">Gerente Responsável</th>
-                                <th scope="col">Setor Beneficiário</th>
+                                <th scope="col">Setor Beneficiado</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in listaProjetosFiltrada" :key="item.id"
                                 @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
-                                @mouseleave="mostrarBotao(item.id, false)"
-                                >
-                                <td>{{ item.nome }}</td>
+                                @mouseleave="mostrarBotao(item.id, false)">
+                                <td style="vertical-align: middle;">{{ item.nome }}</td>
                                 <td style="vertical-align: middle;"><select v-model="item.status" class="form-select"
                                         :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
                                         style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
@@ -80,27 +79,25 @@
                                             </template>
 
                                             <v-list>
-                                                <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
-                                                        @click="modalCompartilharProjeto = true, this.projetoEditado = item"
-                                                        :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }">
-                                                        Compartilhar</button><br />
+                                                <v-list-item
+                                                    @click="modalCompartilharProjeto = true, this.projetoEditado = item"
+                                                    :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                    :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }">
+                                                    Compartilhar
+                                                    <br />
                                                 </v-list-item>
-                                                <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
-                                                        :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }"
-                                                        @click="modalEditarProjeto = true, this.projetoEditado = item">Editar
-                                                    </button><br />
+                                                <v-list-item
+                                                    :disabled="(this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                    :style="{ 'cursor': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black' }"
+                                                    @click="modalEditarProjeto = true, this.projetoEditado = item">
+                                                    Editar
+                                                    <br />
                                                 </v-list-item>
-                                                <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        :disabled="item.dtTermino || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
-                                                        :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black', }"
-                                                        @click="modalFinalizarProjeto = true, this.projetoEditado = item">
-                                                        Finalizar
-                                                    </button>
+                                                <v-list-item
+                                                    :disabled="item.dtTermino || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1"
+                                                    :style="{ 'cursor': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'not-allowed' : 'pointer', 'color': (item.dtTermino) || (this.projetos.find(projeto => projeto.id == item.id).permissao).find(pessoa => pessoa.usuario_id == this.idUsuario).nivel == 1 ? 'grey' : 'black', }"
+                                                    @click="modalFinalizarProjeto = true, this.projetoEditado = item">
+                                                    Finalizar
                                                     <br />
                                                 </v-list-item>
                                             </v-list>
@@ -430,7 +427,7 @@ export default {
     mounted() {
         this.getProjetos(),
             this.getGerenteseSetor()
-            localStorage.removeItem('ultimaSprintEditada'),
+        localStorage.removeItem('ultimaSprintEditada'),
             sessionStorage.removeItem('ultimaSprintEditada')
 
     },
@@ -653,7 +650,7 @@ export default {
             if (novoValor == "Concluído") {
                 var dataAtual = new Date().toISOString().split('T')[0];
                 // axios.put(`http://192.168.0.5:8000/api/projeto/atualizar/${idProjeto}`, {
-                    axios.put(`${this.prodURL}/projeto/atualizar/${idProjeto}`, {
+                axios.put(`${this.prodURL}/projeto/atualizar/${idProjeto}`, {
 
                     [itemAlterado]: novoValor,
                     dtTermino: dataAtual
@@ -666,7 +663,7 @@ export default {
 
         adicionarProjeto() {
             // axios.post('http://192.168.0.5:8000/api/projeto/cadastrar', {
-                axios.post(`${this.prodURL}/projeto/cadastrar`, {
+            axios.post(`${this.prodURL}/projeto/cadastrar`, {
 
                 nome: this.novoProjeto.nome,
                 dtInicio: this.novoProjeto.dtInicio,
@@ -729,7 +726,7 @@ export default {
 
         getGerenteseSetor() {
             // axios.get('http://192.168.0.5:8000/api/usuario/', {
-                axios.get(`${this.prodURL}/usuario`, {
+            axios.get(`${this.prodURL}/usuario`, {
 
             })
                 .then((response) => {
@@ -744,7 +741,7 @@ export default {
                 });
 
             // axios.get('http://192.168.0.5:8000/api/setor', {
-                axios.get(`${this.prodURL}/setor`, {
+            axios.get(`${this.prodURL}/setor`, {
 
             })
                 .then((response) => {
@@ -758,7 +755,7 @@ export default {
         getProjetos() {
             var id = parseFloat(localStorage.getItem('id'))
             // axios.get(`http://192.168.0.5:8000/api/projeto/usuario/${id}`, {
-                axios.get(`${this.prodURL}/projeto/usuario/${id}`, {
+            axios.get(`${this.prodURL}/projeto/usuario/${id}`, {
 
             })
                 .then((response) => {
