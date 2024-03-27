@@ -240,8 +240,8 @@
                 <div style="display: flex;">
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" v-model="novoPlanoAcao.gerente_nome" class="form-select">
-                            <option v-for="item in gerente" :key="item.nomeCompleto">
+                        <select id="gerente" v-model="novoPlanoAcao.gerente_id" class="form-select">
+                            <option v-for="item in gerente" :key="item.nomeCompleto" :value="item.id">
                                 {{ item.nomeCompleto }}
                             </option>
                         </select>
