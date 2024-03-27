@@ -311,12 +311,11 @@
 
             <div style="display: flex;align-items: center;width: fit-content;margin-left: 1rem;flex-flow: column;">
               <strong>Nome</strong>
-              <input v-model="nome" type="text" class="form-control" style="width: 10rem; margin-left: 0.5rem" />
+              <input v-model="nome" @focusout="atualizarPCM('nome', nome)" type="text" class="form-control" style="width: 10rem; margin-left: 0.5rem" />
             </div>
           </div>
         </div>
       </div>
-      {{ objetoSemIndiceDescricao(impacto_viabilidade[0]) }}
     </div>
   </div>
   <br /><br /><br />
@@ -423,45 +422,6 @@ export default {
         });
     },
 
-    // salvarPCM() {
-    //     const novaArray = this.itensDaAnalise.map(item => ({
-    //         impactoViabilidade_id: item.id,
-    //         concordo: item.concordo,
-    //         justificativa: item.justificativa
-    //     }));
-
-    //     axios.post(`${this.prodURL}/pcm/cadastrar`, {
-
-    //         codigo: this.codigo,
-    //         finalidade: this.finalidade,
-    //         area: this.area,
-    //         setor_id: this.setor_id,
-    //         nome: this.nome,
-    //         dtInicio: this.dtInicio,
-    //         descricao_problema: this.descricao_problema,
-    //         possivel_solucao: this.possivel_solucao,
-    //         proposito_mudanca: this.proposito_mudanca,
-    //         dtLimiteImplementacao: this.dtLimiteImplementacao,
-    //         solicitante_id: this.solicitante_id,
-    //         estimativa_custo: this.estimativa_custo,
-    //         custo_justificativa: this.custo_justificativa,
-    //         parecer_responsavel: this.parecer_responsavel,
-    //         responsavel_id: this.responsavel_id,
-    //         responsavel_justificativa: this.responsavel_justificativa,
-    //         meio_mudanca: this.meio_mudanca,
-    //         cadastro_omie: this.cadastro_omie,
-    //         impacto_viabilidade: novaArray,
-    //         status: 'Aguardando Aprovação'
-
-    //     })
-    //         .then((response) => {
-    //             console.log(response.data)
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // },
-
     getSetores() {
       axios
         .get(`${this.prodURL}/usuario`, {})
@@ -510,12 +470,13 @@ export default {
           this.responsavel_justificativa = response.data.responsavel_justificativa;
           this.meio_mudanca = response.data.meio_mudanca;
           this.cadastro_omie = response.data.cadastro_omie;
-          this.impacto_viabilidade = response.data.impacto_viabilidade.map((item) => ({
-            ...item,
-            concordo: "", // Valor inicial de "concordo"
-            justificativa: "", // Valor inicial de "justificativa"
-          }));
+          this.impacto_viabilidade = response.data.impacto_viabilidade
+          this.responsavelCadastro_id = response.data.responsavelCadastro_id;
+          this.responsavelCadastro_nome = response.data.responsavelCadastro_nome;
+          this.dtCadastro = response.data.dtCadastro;
+          this.codigo_cadastro = response.data.codigo_cadastro;
         })
+          
         .catch((error) => {
           console.error(error);
         });

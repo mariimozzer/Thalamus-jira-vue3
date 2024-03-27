@@ -408,8 +408,9 @@ export default {
                     id: projetoId,
                     projeto: 1
                 })
-                .then(() => {
+                .then((response) => {
                     this.programaEditado.projeto.push({
+                        associacao_id: response.data.associacao_id,
                         projeto_nome: event.target.options[event.target.selectedIndex].text
 
                     }
@@ -429,8 +430,9 @@ export default {
                     id: planoAcaoId,
                     projeto: 0
                 })
-                .then(() => {
+                .then((response) => {
                     this.programaEditado.planoAcao.push({
+                        associacao_id: response.data.associacao_id,
                         planoAcao_nome: event.target.options[event.target.selectedIndex].text
                     });             
                     this.getProjetosPlanoAcao()

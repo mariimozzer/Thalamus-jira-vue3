@@ -65,13 +65,13 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar">
+                                            <button class="button-aprovar" :disabled="item.aprovada !== null">
                                                 Aprovar
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar">
+                                            <button type="button" class="button-reprovar" :disabled="item.aprovada !== null">
                                                 Reprovar
                                                 <i class="fa-solid fa-thumbs-down"></i>
                                             </button>
