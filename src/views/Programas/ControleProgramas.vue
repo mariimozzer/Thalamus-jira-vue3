@@ -235,14 +235,13 @@
                     </select>
 
 
-                    <div v-if="programaEditado.planoAcao.length > 0">
+                    <div v-if="programaEditado.planoAcao.length > 0 && programaEditado.planoAcao[0].associacao_id !== null">
 
                         <br>
                         <h5>Planos de Ação associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
-                            <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> {{
-                                plano.planoAcao_nome
-                            }} <span @click="desassociarPlano('plano', plano.associacao_id)"
+                            <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> 
+                                    {{ plano.planoAcao_nome }} <span @click="desassociarPlano('plano', plano.associacao_id)"
                                     class="bi bi-dash-circle"
                                     style="cursor: pointer; color: red; text-align: right;"></span>
                             </li>
