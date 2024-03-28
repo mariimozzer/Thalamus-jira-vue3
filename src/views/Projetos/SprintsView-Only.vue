@@ -7,6 +7,7 @@
 
         <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
             :title="'Ir para tela de projetos'"></i>
+            
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 3rem; cursor: pointer;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
@@ -923,31 +924,23 @@ export default {
 
 <style scoped>
 
-.fa-solid {
-    margin-left: 3rem;
-}
 @media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem ;
+        max-width: 1100px ;
+    }
+
     .botaoHome {
-    font-size: 30px;
-    margin-left: 14rem !important;
-    cursor: pointer;
-    position: absolute;
+    margin-left: 200px !important;
 }
 
-.container {
-    margin-left: 13.5rem !important;
-}
-
-.fa-solid {
-    margin-left: 13.5rem !important;
-}
 }
 
 .botaoHome {
-    font-size: 30px;
-    margin-left: 260px;
-    cursor: pointer;
-    position: absolute;
+    font-size: 30px ;
+    margin-left: 250px;
+    cursor: pointer ;
+    position: absolute ;
 }
 
 .hPoints {

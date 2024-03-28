@@ -1,17 +1,7 @@
 <template>
   <br /><br /><br />
-  <div style="
-      width: 100%;
-      margin-top: 1rem;
-      justify-content: space-between;
-      display: flex;
-      margin-bottom: none;
-      border-bottom: 2px solid rgb(0, 0, 0);
-      align-items: center;
-      position: fixed;
-      background-color: #faf9f6;
-      z-index: 1;
-    ">
+  <div
+    style="width: 100%;margin-top: 1rem;justify-content: space-between;display: flex;margin-bottom: none;border-bottom: 2px solid rgb(0, 0, 0);align-items: center;position: fixed;background-color: #faf9f6;z-index: 1;">
     <i @click="verPCMs" style="font-size: 30px; margin-left: 3rem; cursor: pointer"
       class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
 
@@ -198,7 +188,7 @@
 
                 <td style="border: 1px solid black; border-right: none">
                   <textarea class="form-control" v-model="item.justificativa"
-                    @change="atualizarPCM('impacto_viabilidade', impacto_viabilidade)"></textarea>
+                    @change="atualizarPCM('impacto_viabilidade', objetoSemIndiceDescricao(item))"></textarea>
                 </td>
               </tr>
 
@@ -273,7 +263,8 @@
                 <option>Projeto</option>
               </select>
             </div>
-            <div style="  display: flex;  align-items: center;  width: fit-content;  margin-left: 2rem;  flex-flow: column;">
+            <div
+              style="  display: flex;  align-items: center;  width: fit-content;  margin-left: 2rem;  flex-flow: column;">
               <strong> Necessidade de Cadastro no Omie? </strong>
               <div style="display: flex; margin-top: 0.5rem">
                 <input type="radio" class="btn-check" name="cadastroOmie" id="omieSim" autocomplete="off"
@@ -287,7 +278,8 @@
             </div>
           </div>
 
-          <div v-if="cadastro_omie == '1'" style="display: flex;align-content: center;justify-content: center;margin-top: 1rem;">
+          <div v-if="cadastro_omie == '1'"
+            style="display: flex;align-content: center;justify-content: center;margin-top: 1rem;">
             <div style="display: flex;align-items: center;margin-left: 1rem;flex-flow: column;">
               <strong>Responsável pelo cadastro no sistema</strong>
               <select class="form-select" style="margin-left: 0.5rem; width: 15rem; margin-top: 0.5rem"
@@ -298,12 +290,14 @@
                 </option>
               </select>
             </div>
-            <div style=" display: flex; align-items: center; width: fit-content;  margin-left: 1rem;  flex-flow: column; ">
+            <div
+              style=" display: flex; align-items: center; width: fit-content;  margin-left: 1rem;  flex-flow: column; ">
               <strong> Data </strong>
               <input type="date" class="form-control" style="width: 9rem; margin-left: 0.5rem" v-model="dtCadastro"
                 @change="atualizarPCM('dtCadastro', dtCadastro)" />
             </div>
-            <div style="  display: flex; align-items: center; width: fit-content; margin-left: 1rem; flex-flow: column;">
+            <div
+              style="  display: flex; align-items: center; width: fit-content; margin-left: 1rem; flex-flow: column;">
               <strong>Código</strong>
               <input type="text" v-model="codigo_cadastro" @change="atualizarPCM('codigo_cadastro', codigo_cadastro)"
                 class="form-control" style="width: 10rem; margin-left: 0.5rem" />
@@ -311,7 +305,8 @@
 
             <div style="display: flex;align-items: center;width: fit-content;margin-left: 1rem;flex-flow: column;">
               <strong>Nome</strong>
-              <input v-model="nome" @focusout="atualizarPCM('nome', nome)" type="text" class="form-control" style="width: 10rem; margin-left: 0.5rem" />
+              <input v-model="nome" @focusout="atualizarPCM('nome', nome)" type="text" class="form-control"
+                style="width: 10rem; margin-left: 0.5rem" />
             </div>
           </div>
         </div>
@@ -476,7 +471,7 @@ export default {
           this.dtCadastro = response.data.dtCadastro;
           this.codigo_cadastro = response.data.codigo_cadastro;
         })
-          
+
         .catch((error) => {
           console.error(error);
         });
@@ -489,30 +484,21 @@ export default {
 };
 </script>
 <style scoped>
-.fa-solid {
-  margin-left: 3rem;
-}
-
 @media (max-width: 1800px) {
-  .botaoHome {
-    font-size: 30px;
-    margin-left: 13rem !important;
-    cursor: pointer;
-    position: absolute;
-  }
-
   .container {
-    margin-left: 13.5rem !important;
+    margin-left: 13rem;
+    max-width: 1100px;
   }
 
-  .fa-solid {
-    margin-left: 13.5rem !important;
+  .botaoHome {
+    margin-left: 200px !important;
   }
+
 }
 
 .botaoHome {
   font-size: 30px;
-  margin-left: 260px;
+  margin-left: 250px;
   cursor: pointer;
   position: absolute;
 }

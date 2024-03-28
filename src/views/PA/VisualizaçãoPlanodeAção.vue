@@ -8,13 +8,14 @@
 
         <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
             :title="'Ir para tela inicial'"></i>
+
         <h2>{{ nomeDoProjeto }}</h2>
         <i style="font-size: 30px; margin-right: 3rem; cursor: pointer;visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
     </div>
 
     <br><br><br>
-    <div style="width: 100%; padding: 1rem;" class="container" >
+    <div style="width: 100%; padding: 1rem;" class="container">
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela" v-if="Array.isArray(sprints)">
                 <div class="row">
@@ -831,33 +832,23 @@ export default {
 </script>
 
 <style scoped>
-.fa-solid {
-    margin-left: 3rem;
-}
-
 @media (max-width: 1800px) {
+    .container {
+        margin-left: 13rem ;
+        max-width: 1100px ;
+    }
+
     .botaoHome {
-    font-size: 30px;
-    margin-left: 13rem !important;
-    cursor: pointer;
-    position: absolute;
-}
-
-.container {
-    margin-left: 13.5rem !important;
-}
-
-.fa-solid {
-    margin-left: 13.5rem !important;
+    margin-left: 200px !important;
 }
 
 }
 
 .botaoHome {
-    font-size: 30px;
-    margin-left: 260px;
-    cursor: pointer;
-    position: absolute;
+    font-size: 30px ;
+    margin-left: 250px;
+    cursor: pointer ;
+    position: absolute ;
 }
 
 .hPoints {
@@ -878,7 +869,7 @@ export default {
 }
 
 .divFundoTabela {
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 15px;
     background-color: rgb(255, 255, 255);
     margin-bottom: 2rem;

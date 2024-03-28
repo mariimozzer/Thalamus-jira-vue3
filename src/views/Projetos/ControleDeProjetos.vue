@@ -781,6 +781,25 @@ export default {
 </script>
 
 <style scoped>
+input:disabled{
+    color:black
+}
+select:disabled{
+    color:black
+}
+@media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem !important;
+        max-width: 1100px !important;
+    }
+
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 6rem !important;
+        cursor: pointer;
+        position: absolute;
+    }
+}
 .fa-solid {
     margin-left: 0rem !important;
 }
@@ -851,5 +870,13 @@ li {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.modal-container {
+    max-height: 90%;
+    width: 70%;
+    padding: 3rem;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 20px;
 }
 </style>

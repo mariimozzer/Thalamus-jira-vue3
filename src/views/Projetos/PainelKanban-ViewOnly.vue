@@ -1,9 +1,9 @@
 <template>
     <br><br><br>
     <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; ">
+    style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
         <i @click="verBacklogs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="bi bi-list-task botaoAdicionarSprint" :title="'Ir para tela de sprints'"></i>
+            class=" fa-solid bi bi-list-task botaoAdicionarSprint" :title="'Ir para tela de sprints'"></i>
 
         <i @click="verBacklogs" class="bi bi-list-task botaoAdicionarSprint botaoHome"
             :title="'Ir para tela de sprints'"></i>
@@ -12,7 +12,7 @@
         <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint"></i>
     </div>
-    <br>
+    <br><br><br>
     <div style="width: 100%; justify-content: center; align-content: center; display: flex;">
         <div class="container" style="margin-top: 0px !important; padding-top: 0px !important;">
             <div style="width: 100%; text-align: center; color: red;">
@@ -326,9 +326,60 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .conteudoKanban {
     max-width: 1500px;
+}
+
+.fa-solid {
+    margin-left: 3rem;
+}
+
+@media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem !important;
+        max-width: 1100px !important;
+    }
+
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 6rem !important;
+        cursor: pointer;
+        position: absolute;
+    }
+}
+
+@media (max-width: 1800px) {
+
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 13rem !important;
+        cursor: pointer;
+        position: absolute;
+        display: none !important
+    }
+
+    .conteudoKanban {
+        max-width: 1250px;
+        margin-left: 6rem;
+    }
+
+    .container {
+        margin-left: 13.5rem !important;
+    }
+
+    .fa-solid {
+        margin-left: 13.5rem !important;
+    }
+
+
+}
+
+.botaoHome {
+    font-size: 30px !important;
+    margin-left: 250px !important;
+    cursor: pointer !important;
+    position: absolute !important;
 }
 
 .divFiltro {
@@ -340,7 +391,7 @@ export default {
     background-color: white;
     border: 1px solid black;
     margin: 0.3rem;
-    border-radius: 20px;
+    border-radius: 5px !important;
 }
 
 
@@ -348,7 +399,7 @@ export default {
     background-color: rgb(247, 247, 247);
     border: 2px solid black;
     height: 100%;
-    border-radius: 20px;
+    border-radius: 10px !important;
 }
 
 .colunas {

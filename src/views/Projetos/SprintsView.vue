@@ -2,11 +2,13 @@
     <br><br><br>
     <div
         style="width: 100%;margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
-        <i @click="verProjetos" style="font-size: 30px; margin-left: 3rem; cursor: pointer;"
+        
+        <i @click="verProjetos" style="font-size: 30px; margin-left: 2cap; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
 
         <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
             :title="'Ir para tela de projetos'"></i>
+            
         <h2>{{ nomeDoProjeto }}</h2>
         <i @click="verPainel" style="font-size: 30px; margin-right: 3rem; cursor: pointer;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
@@ -350,7 +352,8 @@
                 <div>
                     <label>Data prevista de termino:</label>
                     <input :class="{ shake: disabled }" v-model="dataTerminoSprint" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                        <!-- :min="new Date().toISOString().split('T')[0]"  -->
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="iniciarSprint()"><i
@@ -375,13 +378,15 @@
                 <div>
                     <label>Data prevista de inicio:</label>
                     <input :class="{ shake: disabled }" v-model="sprintEditada.dtInicio" id="dataInicio"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                    <!-- :min="new Date().toISOString().split('T')[0]" -->
                 </div>
                 <br>
                 <div>
                     <label>Data prevista de termino:</label>
                     <input :class="{ shake: disabled }" v-model="sprintEditada.dtTermino" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                        <!-- :min="new Date().toISOString().split('T')[0]"  -->
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint, true)"><i
@@ -1157,34 +1162,25 @@ export default {
 }
 </script>
 
-<style>
-.fa-solid {
-    margin-left: 3rem;
-}
+<style scoped>
 
 @media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem ;
+        max-width: 1100px ;
+    }
+
     .botaoHome {
-    font-size: 30px;
-    margin-left: 13rem !important;
-    cursor: pointer;
-    position: absolute;
-}
-
-.container {
-    margin-left: 13.5rem !important;
-}
-
-.fa-solid {
-    margin-left: 13.5rem !important;
+    margin-left: 200px !important;
 }
 
 }
 
 .botaoHome {
-    font-size: 30px;
-    margin-left: 260px;
-    cursor: pointer;
-    position: absolute;
+    font-size: 30px ;
+    margin-left: 250px;
+    cursor: pointer ;
+    position: absolute ;
 }
 
 .hPoints {

@@ -17,8 +17,8 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Propostas de Criação ou Mudança</h3>
                     </div>
-                    <button :title="'Adicionar Projeto'" style="width: max-content; font-size: 30px;"
-                        @click="novoPCM" class="botaoAdicionarSprint">
+                    <button :title="'Adicionar PCM'" style="width: max-content; font-size: 30px;" @click="novoPCM"
+                        class="botaoAdicionarSprint">
                         <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
@@ -49,7 +49,8 @@
                                     {{ item.nome }}
                                 </td>
 
-                                <td style="text-align: center; color: green; vertical-align: middle;">
+                                <td style="text-align: center; vertical-align: middle;"
+                                    :style="{ 'color': (item.status == 'Aguardando Aprovação') ? 'rgb(255, 145, 0)' : (item.status == 'Reprovado') ? '#e02130' : (item.status == 'Aprovado') ? 'rgb(0, 192, 0)' : 'red', }">
                                     {{ item.status }}
                                 </td>
 
@@ -65,13 +66,16 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <div style="display: flex;" @click.stop>
                                         <div style="margin-left: 1rem;">
-                                            <button class="button-aprovar" :disabled="item.aprovada !== null">
+                                            <button class="button-aprovar" :disabled="item.aprovada !== null"
+                                                @click="atualizarPCM('status', 'Aprovado', item.id)">
                                                 Aprovar
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </div>
                                         <div style="margin-left: 1rem;">
-                                            <button type="button" class="button-reprovar" :disabled="item.aprovada !== null">
+                                            <button type="button" class="button-reprovar"
+                                                @click="atualizarPCM('status', 'Reprovado', item.id)"
+                                                :disabled="item.aprovada !== null">
                                                 Reprovar
                                                 <i class="fa-solid fa-thumbs-down"></i>
                                             </button>
@@ -116,6 +120,34 @@ export default {
     },
 
     methods: {
+
+        atualizarPCM(itemEditado, valor, id) {
+            if (valor == 'Aprovado') {
+                axios.put(`${this.prodURL}/pcm/atualizar/${id}`, {
+                    [itemEditado]: valor,
+                    aprovada: 1
+                })
+                    .then(() => {
+                        this.getPCMs()
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+            if (valor == 'Reprovado') {
+                axios.put(`${this.prodURL}/pcm/atualizar/${id}`, {
+                    [itemEditado]: valor,
+                    aprovada: 0
+                })
+                    .then(() => {
+                        this.getPCMs()
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        },
+
         formatarDataHora(valor) {
             if (valor) {
                 if (valor) {
@@ -211,6 +243,27 @@ export default {
 <style scoped>
 .fa-solid {
     margin-left: 0rem !important;
+}
+
+input:disabled{
+    color:black
+}
+select:disabled{
+    color:black
+}
+
+@media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem !important;
+        max-width: 1100px !important;
+    }
+
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 6rem !important;
+        cursor: pointer;
+        position: absolute;
+    }
 }
 
 .button-reprovar:disabled {

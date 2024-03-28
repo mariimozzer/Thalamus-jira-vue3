@@ -1,32 +1,36 @@
 <template>
     <br>
-    
+
     <br><br><br>
-    
+
     <div style="padding: 1rem;">
-        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+        <div class="container"
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-    
+
                     <div class="input-group mb-3" style="width: 20rem; position: absolute;">
                         <span class="input-group-text" id="basic-addon1"><i
-                                        class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control" placeholder="Pesquisar Plano de Ação" aria-label="Username" aria-describedby="basic-addon1" v-model="planoSelecionado" @input="filtrarPlanosdeAção()">
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Plano de Ação"
+                            aria-label="Username" aria-describedby="basic-addon1" v-model="planoSelecionado"
+                            @input="filtrarPlanosdeAção()">
                     </div>
-    
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Plano de Ação</h3>
                     </div>
-    
-                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
-                                <i class="bi bi-plus-circle"></i>
-                            </button>
-    
+
+                    <button :title="'Adicionar Plano de Ação'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoPA = true" class="botaoAdicionarSprint">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+
                 </div>
             </div>
-    
+
             <br>
-    
+
             <div>
                 <div class="table responsive">
                     <table class="table table-hover">
@@ -39,51 +43,57 @@
                                 <th scope="col">Gerente Responsável</th>
                                 <th scope="col">Setor Envolvido</th>
                                 <th scope="col"></th>
-    
+
                             </tr>
                         </thead>
-    
+
                         <tbody>
-                            <tr v-for="item in listaPlanosFiltrada" :key="item.id" style="text-align: center;" @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)" @mouseleave="mostrarBotao(item.id, false)">
-    
-                                <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
-                                                <option style="color: red;">Proposto</option>
-                                                <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                                <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                                <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                            </select></td>
-                                <td>
-                                    <input style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                            <tr v-for="item in listaPlanosFiltrada" :key="item.id" style="text-align: center;"
+                                @mouseover="mostrarBotao(item.id, true)" @click="verBacklogs(item.id, item.nome)"
+                                @mouseleave="mostrarBotao(item.id, false)">
+
+                                <td style="vertical-align: middle;">{{ item.nome }}</td>
+                                <td style="vertical-align: middle;"><select v-model="item.status" class="form-select"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarPlanoInline(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
+                                <td style="vertical-align: middle;">
+                                    <input style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtInicio)" disabled>
                                 </td>
-                                <td>
-                                    <input v-if="item.dtTermino" style="text-align: center;" type="date" :value="formatarDataHora(item.dtTermino)" disabled>
+                                <td style="vertical-align: middle;">
+                                    <input v-if="item.dtTermino" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtTermino)" disabled>
                                     <span v-if="!item.dtTermino">-</span>
                                 </td>
-                                <td>{{ item.gerente_name }}</td>
-                                <td>{{ item.setor_nome }}</td>
-                                <td>
+                                <td style="vertical-align: middle;">{{ item.gerente_name }}</td>
+                                <td style="vertical-align: middle;">{{ item.setor_nome }}</td>
+                                <td style="vertical-align: middle;">
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(planosAcao) && planosAcao.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                        <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                            class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                            v-bind="props"></v-btn>
-</template>
+                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
+                                            </template>
 
                                             <v-list>
 
-                                                <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        @click="modalEditarPlano = true, this.planoEditado = item, this.planoEditado.dtTermino !== null ? this.planoEditado.dtTermino = this.planoEditado.dtTermino.slice(0, 10) : '', this.planoEditado.dtInicio !== null ? this.planoEditado.dtInicio = this.planoEditado.dtInicio.slice(0, 10) : ''">Editar
-                                                    </button><br />
-                                                    <button style="margin: 0.2rem;"
-                                                        @click="modalFinalizarPlano = true, this.planoEditado = item">Finalizar
-                                                    </button><br />
-                                                    <button style="margin: 0.2rem;"
-                                                        @click="modalExcluirPlano = true, this.planoEditado = item">Excluir
-                                                    </button><br />
+                                                <v-list-item
+                                                    @click="modalEditarPlano = true, this.planoEditado = item, this.planoEditado.dtTermino !== null ? this.planoEditado.dtTermino = this.planoEditado.dtTermino.slice(0, 10) : '', this.planoEditado.dtInicio !== null ? this.planoEditado.dtInicio = this.planoEditado.dtInicio.slice(0, 10) : ''">Editar
+                                                </v-list-item>
+                                                <v-list-item
+                                                    @click="modalFinalizarPlano = true, this.planoEditado = item">
+                                                    Finalizar
+                                                </v-list-item>
+                                                <v-list-item
+                                                    @click="modalExcluirPlano = true, this.planoEditado = item">
+                                                    Excluir
                                                 </v-list-item>
 
                                             </v-list>
@@ -109,8 +119,8 @@
             <div style="width: 100%;">
                 <div>
                     <label>Data de término do plano de ação:</label>
-                    <input :class="{ shake: disabled }" v-model="dataTerminoPlano" id="dataTermino"
-                        class="form-control" type="date">
+                    <input :class="{ shake: disabled }" v-model="dataTerminoPlano" id="dataTermino" class="form-control"
+                        type="date">
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="finalizarPlano()">
@@ -132,8 +142,7 @@
                     <h6 class="titulo">Deseja excluir o plano de ação {{ planoEditado.nome }}?</h6>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn button-cancel"
-                        @click="fecharModalExcluirPlano">Cancelar</button>
+                    <button type="button" class="btn button-cancel" @click="fecharModalExcluirPlano">Cancelar</button>
                     &nbsp;&nbsp;
                     <button type="button" class="btn btn-primary" @click="excluirPlano"
                         data-bs-dismiss="modal">Confirmar</button>
@@ -168,23 +177,25 @@
 
                         <div class="form-group">
                             <label for="gerente">Gerente Responsável</label>
-                            <select id="gerente" v-model="planoEditado.gerente_id" class="form-select" @change="editarPlano('gerente_id',$event.target.value)">
+                            <select id="gerente" v-model="planoEditado.gerente_id" class="form-select"
+                                @change="editarPlano('gerente_id', $event.target.value)">
                                 <option v-for="item in gerente" :key="item.nome" :value="item.id">
                                     {{ item.nomeCompleto }}
                                 </option>
                             </select>
                         </div>
                         <div class="form-group">
-                        <label for="programa">Programa</label>
-                        <select id="programa" v-model="planoEditado.programa_id" class="form-select" @change="editarPlano('programa_id',$event.target.value)">
-                            <option v-for="item in programas" :key="item.nome" :value="item.id">
-                                {{ item.nome }}
-                            </option>
-                        </select>
-              
+                            <label for="programa">Programa</label>
+                            <select id="programa" v-model="planoEditado.programa_id" class="form-select"
+                                @change="editarPlano('programa_id', $event.target.value)">
+                                <option v-for="item in programas" :key="item.nome" :value="item.id">
+                                    {{ item.nome }}
+                                </option>
+                            </select>
+
                         </div>
                     </div>
-                   
+
                     <div style="display: flex; flex-flow: column; width: 50%;">
 
                         <div class="form-group" style="width: 20rem; margin-left: 2rem;">
@@ -200,7 +211,8 @@
 
                         <div class="form-group" style="width: 20rem; margin-left: 2rem;">
                             <label for="setor">Setor Beneficiado</label>
-                            <select v-model="planoEditado.setor_nome" class="form-select" @change="editarPlano('setor_id',$event.target.value)">
+                            <select v-model="planoEditado.setor_nome" class="form-select"
+                                @change="editarPlano('setor_id', $event.target.value)">
                                 <option v-for="setor in setores" :key="setor.id" :value="setor.nome">{{ setor.nome }}
                                 </option>
                             </select>
@@ -241,7 +253,7 @@
                 <div style="display: flex;">
                     <div class="form-group" style="width: 30rem;">
                         <label for="gerente">Gerente Responsável</label>
-                        <select id="gerente" v-model="novoPlanoAcao.gerente_id"  class="form-select">
+                        <select id="gerente" v-model="novoPlanoAcao.gerente_id" class="form-select">
                             <option v-for="item in gerente" :key="item.nomeCompleto" :value="item.id">
                                 {{ item.nomeCompleto }}
                             </option>
@@ -257,16 +269,16 @@
                         </select>
                     </div>
 
-                   
+
                 </div>
                 <div class="form-group" style="width: 30rem;">
-                        <label for="programa">Programa</label>
-                        <select id="programa" v-model="novoPlanoAcao.programa_id" class="form-select">
-                            <option v-for="item in programas" :key="item.id" :value="item.id">
-                                {{ item.nome }}
-                            </option>
-                        </select>
-                    </div>
+                    <label for="programa">Programa</label>
+                    <select id="programa" v-model="novoPlanoAcao.programa_id" class="form-select">
+                        <option v-for="item in programas" :key="item.id" :value="item.id">
+                            {{ item.nome }}
+                        </option>
+                    </select>
+                </div>
 
                 <div style="display: flex; justify-content: right;">
                     <button @click="adicionarPlanoAcao" style="height: 2.5rem;"
@@ -371,8 +383,8 @@ export default {
             const userId = localStorage.getItem('id')
 
             axios.put(`${this.prodURL}/planoAcao/excluir/${this.planoEditado.id}`, {
-                    usuario_id: userId
-                })
+                usuario_id: userId
+            })
                 .then(() => {
                     this.getPlanoAcao();
                     this.modalExcluirPlano = false;
@@ -399,9 +411,9 @@ export default {
 
 
                 axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
-                        [itemAlterado]: novoValor,
-                        dtTermino: null
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: null
+                })
                     .then(() => {
                         this.getPlanoAcao()
                     })
@@ -410,9 +422,9 @@ export default {
                 var dataAtual = new Date().toISOString().split('T')[0];
                 axios.put(`${this.prodURL}/planoAcao/atualizar/${idProjeto}`, {
 
-                        [itemAlterado]: novoValor,
-                        dtTermino: dataAtual
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: dataAtual
+                })
                     .then(() => {
                         this.getPlanoAcao()
                     })
@@ -442,14 +454,14 @@ export default {
         adicionarPlanoAcao() {
             axios.post(`${this.prodURL}/planoAcao/cadastrar`, {
 
-                    nome: this.novoPlanoAcao.nome,
-                    dtInicio: this.novoPlanoAcao.dtInicio,
-                    gerente_id: this.novoPlanoAcao.gerente_id,
-                    setor_id: this.novoPlanoAcao.setor_id,
-                    programa_id: this.novoPlanoAcao.programa_id,
-                    usuario_id: localStorage.getItem('id'),
-                    status: "Proposto"
-                })
+                nome: this.novoPlanoAcao.nome,
+                dtInicio: this.novoPlanoAcao.dtInicio,
+                gerente_id: this.novoPlanoAcao.gerente_id,
+                setor_id: this.novoPlanoAcao.setor_id,
+                programa_id: this.novoPlanoAcao.programa_id,
+                usuario_id: localStorage.getItem('id'),
+                status: "Proposto"
+            })
 
                 .then((response) => {
                     this.getPlanoAcao();
@@ -472,7 +484,7 @@ export default {
         getGerenteseSetor() {
             axios.get(`${this.prodURL}/usuario`, {
 
-                })
+            })
                 .then((response) => {
                     this.gerente = response.data
                     this.gerente = this.gerente.map(item => ({
@@ -486,7 +498,7 @@ export default {
 
             axios.get(`${this.prodURL}/setor`, {
 
-                })
+            })
                 .then((response) => {
                     this.setores = response.data
                 })
@@ -498,7 +510,7 @@ export default {
         getPlanoAcao() {
             axios.get(`${this.prodURL}/planoAcao/listar`, {
 
-                })
+            })
                 .then((response) => {
                     this.planosAcao = response.data;
                     this.filtrarPlanosdeAção()
@@ -537,6 +549,26 @@ export default {
 </script>
 
 <style scoped>
+input:disabled{
+    color:black
+}
+select:disabled{
+    color:black
+}
+@media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem !important;
+        max-width: 1100px !important;
+    }
+
+    .botaoHome {
+        font-size: 30px;
+        margin-left: 6rem !important;
+        cursor: pointer;
+        position: absolute;
+    }
+}
+
 .fa-solid {
     margin-left: 0rem !important;
 }
@@ -552,5 +584,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.modal-container {
+    max-height: 80%;
+    width: 70%;
+    padding: 3rem;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 20px;
 }
 </style>

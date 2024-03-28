@@ -2,23 +2,26 @@
     <br>
     <br><br><br>
     <div style="padding: 1rem;">
-        <div class="container" style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
-    
+        <div class="container"
+            style="border: 1px solid black; border-radius: 15px ; background-color: rgb(255, 255, 255); margin-bottom: 1rem; padding: 0.5rem; width: 100%; ">
+
             <div class="col-sm-12" style="text-align: center;">
                 <div style="display: flex;">
-    
+
                     <div class="input-group mb-3" style="width: 20rem; position: absolute;">
                         <span class="input-group-text" id="basic-addon1"><i
-                                            class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control" placeholder="Pesquisar Programa" aria-label="Username" aria-describedby="basic-addon1" v-model="programaSelecionado" @input="filtrarProgramas()">
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar Programa" aria-label="Username"
+                            aria-describedby="basic-addon1" v-model="programaSelecionado" @input="filtrarProgramas()">
                     </div>
-    
+
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin: 0;">Programas</h3>
                     </div>
-                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;" @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
-                                    <i class="bi bi-plus-circle"></i>
-                                </button>
+                    <button :title="'Adicionar Programa'" style="width: max-content; font-size: 30px;"
+                        @click="this.modalNovoPrograma = true" class="botaoAdicionarSprint">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
                 </div>
             </div>
             <br>
@@ -36,20 +39,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in listaProgramasFiltrada" style="text-align: center;" :key="item.id" @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)" @mouseleave="mostrarBotao(item.id, false)">
-                                <td>{{ item.nome }}</td>
-                                <td><select v-model="item.status" class="form-select" :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
-                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; " @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
-                                                    <option style="color: red;">Proposto</option>
-                                                    <option style="color: rgb(255, 145, 0);">Pendente</option>
-                                                    <option style="color: rgb(0, 47, 255);">Em andamento</option>
-                                                    <option style="color: rgb(0, 192, 0);">Concluído</option>
-                                                </select></td>
-                                <td>
-                                    <input v-if="item.dtInicio" style="text-align: center;" type="date" :value="formatarDataHora(item.dtInicio)" disabled>
+                            <tr v-for="item in listaProgramasFiltrada" style="text-align: center;" :key="item.id"
+                                @mouseover="mostrarBotao(item.id, true)" @click="programasAssociados(item.id)"
+                                @mouseleave="mostrarBotao(item.id, false)">
+                                <td style="vertical-align: middle;">{{ item.nome }}</td>
+                                <td style="vertical-align: middle;"><select v-model="item.status" class="form-select"
+                                        :style="{ 'color': (item.status == 'Pendente') ? 'rgb(255, 145, 0)' : (item.status == 'Em andamento') ? 'rgb(0, 47, 255)' : (item.status == 'Concluído') ? 'rgb(0, 192, 0)' : 'red', }"
+                                        style="width: 10rem; outline: none; text-align: center; border: none; background-color: transparent; "
+                                        @click.stop @change="editarProgramaInline(item.id, 'status', item.status)">
+                                        <option style="color: red;">Proposto</option>
+                                        <option style="color: rgb(255, 145, 0);">Pendente</option>
+                                        <option style="color: rgb(0, 47, 255);">Em andamento</option>
+                                        <option style="color: rgb(0, 192, 0);">Concluído</option>
+                                    </select></td>
+                                <td style="vertical-align: middle;">
+                                    <input v-if="item.dtInicio" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtInicio)" disabled>
                                 </td>
-                                <td>
-                                    <input v-if="item.dtFim" style="text-align: center;" type="date" :value="formatarDataHora(item.dtFim)" disabled>
+                                <td style="vertical-align: middle;">
+                                    <input v-if="item.dtFim" style="text-align: center;" type="date"
+                                        :value="formatarDataHora(item.dtFim)" disabled>
                                     <strong v-if="!item.dtFim">-</strong>
                                 </td>
                                 <td style="vertical-align: middle;">{{ item.gerente_nome }}</td>
@@ -57,24 +66,23 @@
                                     <div style="width: max-content; visibility: hidden;" :id="'botaoEdicao' + item.id">
                                         <v-menu v-if="Array.isArray(programas) && programas.length > 0">
                                             <template v-slot:activator="{ props }">
-                                                            <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
-                                                                class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
-                                                                v-bind="props"></v-btn>
-</template>
+                                                <v-btn style="width: 1.6rem; height: 1.6rem; border: 1px solid black;"
+                                                    class="botaoAdicionarSprint" icon="mdi-dots-horizontal"
+                                                    v-bind="props"></v-btn>
+                                            </template>
 
                                             <v-list>
-                                                <v-list-item>
-                                                    <button style="margin: 0.2rem;"
-                                                        @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0, 10) : '', this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0, 10) : ''">Editar
-
-                                                    </button><br />
-                                                    <button style="margin: 0.2rem;"
-                                                    @click="modalFinalizarPrograma = true, this.programaEditado = item">Finalizar
-
-                                                    </button><br />
-                                                    <button style="margin: 0.2rem;"
-                                                        @click="modalExcluirPrograma = true, this.programaEditado = item">Excluir
-                                                    </button><br />
+                                                <v-list-item
+                                                    @click="modalEditarPrograma = true, this.programaEditado = item, this.programaEditado.dtFim !== null ? this.programaEditado.dtFim = this.programaEditado.dtFim.slice(0, 10) : '', this.programaEditado.dtInicio !== null ? this.programaEditado.dtInicio = this.programaEditado.dtInicio.slice(0, 10) : ''">
+                                                    Editar
+                                                </v-list-item>
+                                                <v-list-item
+                                                    @click="modalFinalizarPrograma = true, this.programaEditado = item">
+                                                    Finalizar
+                                                </v-list-item>
+                                                <v-list-item
+                                                    @click="modalExcluirPrograma = true, this.programaEditado = item">
+                                                    Excluir
                                                 </v-list-item>
                                             </v-list>
                                         </v-menu>
@@ -201,11 +209,14 @@
                         <br>
                         <h5>Projetos associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
-                    <!-- <li    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;"  -->
-              <li  v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{ projeto.projeto_nome }}
-                        <span @click="desassociarPlano('projeto', projeto.associacao_id)" style="cursor: pointer; color: red; text-align: right;" class="bi bi-dash-circle"></span>
-                        </li>
-                </ul>
+                            <!-- <li    style="display: flex; border: 1px solid black; align-items: center; justify-content: space-between; padding: 5px; border-radius: 10px; width: 90%;"  -->
+                            <li v-for="(projeto, index) in programaEditado.projeto" :key="index"> {{
+                                projeto.projeto_nome }}
+                                <span @click="desassociarPlano('projeto', projeto.associacao_id)"
+                                    style="cursor: pointer; color: red; text-align: right;"
+                                    class="bi bi-dash-circle"></span>
+                            </li>
+                        </ul>
                         <br><br>
                     </div>
                     <div v-else>
@@ -229,8 +240,11 @@
                         <br>
                         <h5>Planos de Ação associados:</h5>
                         <ul style="height: 5rem; list-style: none;">
-                            <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> {{ plano.planoAcao_nome
-                                }}    <span @click="desassociarPlano('plano', plano.associacao_id)" class="bi bi-dash-circle" style="cursor: pointer; color: red; text-align: right;"></span>
+                            <li v-for="(plano, index) in programaEditado.planoAcao" :key="index"> {{
+                                plano.planoAcao_nome
+                            }} <span @click="desassociarPlano('plano', plano.associacao_id)"
+                                    class="bi bi-dash-circle"
+                                    style="cursor: pointer; color: red; text-align: right;"></span>
                             </li>
                         </ul>
                     </div>
@@ -390,8 +404,8 @@ export default {
             const userId = localStorage.getItem('id')
 
             axios.put(`${this.prodURL}/programa/excluir/${this.programaEditado.id}`, {
-                    usuario_id: userId
-                })
+                usuario_id: userId
+            })
                 .then(() => {
                     this.getProgramas();
                     this.modalExcluirPrograma = false;
@@ -405,9 +419,9 @@ export default {
         associarProjeto(event) {
             const projetoId = event.target.value;
             axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-                    id: projetoId,
-                    projeto: 1
-                })
+                id: projetoId,
+                projeto: 1
+            })
                 .then((response) => {
                     this.programaEditado.projeto.push({
                         associacao_id: response.data.associacao_id,
@@ -427,14 +441,14 @@ export default {
         associarPlanoAcao(event) {
             const planoAcaoId = event.target.value;
             axios.post(`${this.prodURL}/programa/associar/${this.programaEditado.id}`, {
-                    id: planoAcaoId,
-                    projeto: 0
-                })
+                id: planoAcaoId,
+                projeto: 0
+            })
                 .then((response) => {
                     this.programaEditado.planoAcao.push({
                         associacao_id: response.data.associacao_id,
                         planoAcao_nome: event.target.options[event.target.selectedIndex].text
-                    });             
+                    });
                     this.getProjetosPlanoAcao()
 
 
@@ -447,9 +461,9 @@ export default {
 
         desassociarPlano(tipo, id) {
             axios.post(`${this.prodURL}/programa/associar/excluir/${this.programaEditado.id}`, {
-                    id: id,
-                    projeto: tipo === 'projeto' ? 1 : 0
-                })
+                id: id,
+                projeto: tipo === 'projeto' ? 1 : 0
+            })
                 .then(() => {
                     if (tipo === 'projeto') {
                         this.programaEditado.projeto = this.programaEditado.projeto.filter(plano => plano.associacao_id !== id);
@@ -465,7 +479,7 @@ export default {
                     console.error(`Erro ao desassociar ${tipo === 'projeto' ? 'projeto' : 'plano de ação'}:`, error);
                 });
 
-                this.getProjetosPlanoAcao()
+            this.getProjetosPlanoAcao()
         },
 
 
@@ -513,9 +527,9 @@ export default {
 
             if (novoValor !== "Concluído") {
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
-                        [itemAlterado]: novoValor,
-                        dtTermino: null
-                    })
+                    [itemAlterado]: novoValor,
+                    dtTermino: null
+                })
                     .then(() => {
                         this.getProgramas()
                     })
@@ -524,9 +538,9 @@ export default {
                 var dataAtual = new Date().toISOString().split('T')[0];
                 axios.put(`${this.prodURL}/programa/atualizar/${idProjeto}`, {
 
-                        [itemAlterado]: novoValor,
-                        dtFim: dataAtual
-                    })
+                    [itemAlterado]: novoValor,
+                    dtFim: dataAtual
+                })
                     .then(() => {
                         this.getProgramas()
                     })
@@ -535,13 +549,13 @@ export default {
 
         adicionarPrograma() {
             axios.post(`${this.prodURL}/programa/cadastrar`, {
-                    nome: this.novoPrograma.nome,
-                    dtInicio: this.novoPrograma.dtInicio,
-                    dtFim: this.novoPrograma.dtFim,
-                    gerente_id: this.novoPrograma.gerente_id,
-                    setor_id: this.novoPrograma.setor_id,
-                    status: "Proposto"
-                })
+                nome: this.novoPrograma.nome,
+                dtInicio: this.novoPrograma.dtInicio,
+                dtFim: this.novoPrograma.dtFim,
+                gerente_id: this.novoPrograma.gerente_id,
+                setor_id: this.novoPrograma.setor_id,
+                status: "Proposto"
+            })
 
                 .then((response) => {
                     this.getProgramas();
@@ -575,7 +589,7 @@ export default {
         getGerente() {
             axios.get(`${this.prodURL}/usuario`, {
 
-                })
+            })
                 .then((response) => {
                     this.gerente = response.data
                     this.gerente = this.gerente.map(item => ({
@@ -609,7 +623,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+input:disabled{
+    color:black
+}
+select:disabled{
+    color:black
+}
 .fa-solid {
     margin-left: 0rem !important;
 }
@@ -619,6 +639,7 @@ export default {
         margin-left: 12rem !important;
         max-width: 1100px !important;
     }
+
     .botaoHome {
         font-size: 30px;
         margin-left: 6rem !important;
@@ -632,6 +653,8 @@ export default {
     width: 70%;
     padding: 3rem;
     overflow-y: auto;
+    background-color: white;
+    border-radius: 20px;
 }
 
 .modal-mask {
