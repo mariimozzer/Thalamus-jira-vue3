@@ -21,11 +21,17 @@ import ValidarSenhaView from "@/views/Senha/ValidarSenhaView"
 import AlterarSenhaView from "@/views/Senha/AlterarSenhaView"
 import ConfiguracaoUsuario from '@/views/Senha/ConfiguracaoUsuario.vue'
 import axios from 'axios'
+
+//PCM
 import VisualizaçãoCriaçãoPCM from '@/views/PCM/VisualizaçãoCriaçãoPCM.vue'
 import ControlePCM from '@/views/PCM/ControlePCM'
-import CadastroPCM from '@/views/PCM/CadastroPCM.vue'
+// import CadastroPCM from '@/views/PCM/CadastroPCM.vue'
+
+//Plano de Ação
 import ControledePlanodeAção from '@/views/PA/ControleDePlanodeAção.vue'
 import VisualizaçãoPlanodeAção from '@/views/PA/VisualizaçãoPlanodeAção.vue'
+
+//Programas
 import controleProgramas from '@/views/Programas/ControleProgramas'
 import homeGestãoDeProjetos from '../views/Home/HomeGestãoDeProjetos.vue'
 
@@ -110,11 +116,11 @@ const routes = [
     component: ControlePCM,
   },
 
-  {
-    path: '/PCM/Cadastro',
-    name: 'PCMv',
-    component: CadastroPCM,
-  },
+  // {
+  //   path: '/PCM/Cadastro',
+  //   name: 'PCMv',
+  //   component: CadastroPCM,
+  // },
 
   //Plano de Ação
 

@@ -268,7 +268,7 @@ select:disabled{
 
 .button-reprovar:disabled {
     width: 10rem;
-    background-color: #e02131a9 !important;
+    background-color: #e0213171 !important;
     color: rgb(255, 255, 255) !important;
     padding: 5px !important;
     /* margin: 6px 0 !important; */
@@ -290,7 +290,7 @@ select:disabled{
 
 .button-aprovar:disabled {
     width: 10rem;
-    background-color: #429867c2 !important;
+    background-color: #4298677e !important;
     color: rgb(255, 255, 255) !important;
     padding: 5px !important;
     /* margin: 6px 0 !important; */

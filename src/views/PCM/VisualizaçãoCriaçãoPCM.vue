@@ -6,7 +6,7 @@
       class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
 
     <i @click="verPCMs" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
-      :title="'Ir para tela de projetos'"></i>
+      :title="'Ir para tela de inicial'"></i>
     <h2>
       <input type="text" v-model="codigo" @change="atualizarPCM('codigo', codigo)" style="text-align: center" />
     </h2>
