@@ -2,20 +2,22 @@
     <br><br><br>
     <div
         style="width: 100%;margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
-        <i @click="verProjetos" style="font-size: 30px; margin-left: 3rem; cursor: pointer;"
+        
+        <i @click="verProjetos" style="font-size: 30px; margin-left: 2cap; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela de projetos'"></i>
 
         <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
             :title="'Ir para tela de projetos'"></i>
+            
         <h2>{{ nomeDoProjeto }}</h2>
-        <i @click="verPainel" style="font-size: 30px; margin-right: 2rem; cursor: pointer;"
+        <i @click="verPainel" style="font-size: 30px; margin-right: 3rem; cursor: pointer;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
     </div>
     <br><br><br>
     <div style="width: 100%; padding: 1rem;" class="container">
         <!-- TABELA 1 -->
         <h3 style="text-align: center; margin-top: 1rem;">
-            Plano de Ação</h3>
+            Backlogs</h3>
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
             <div class="divFundoTabela">
                 <div class="row">
@@ -42,7 +44,7 @@
                         </button>
                     </div>
                     <div style="width: 60%; text-align: center;">
-                        <h3><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
+                        <h3><input v-if="item.nome != 'Backlogs'" type="text" v-model="item.nome"
                                 style="width: max-content; margin-left: 0.5rem; text-align: center;" disabled>
                         </h3>
                     </div>
@@ -326,7 +328,7 @@
                 </div>
             </div>
 
-            <div v-if="item.nome == 'Plano de ação'"
+            <div v-if="item.nome == 'Backlogs'"
                 style="margin-top: 1rem; width: 100%;display: flex;flex-flow: row; align-items: center; justify-content: space-between;">
                 <button style="width: 5rem;font-size: 30px;padding-left: 2rem; visibility: hidden"
                     @click="criarNovaSprint" class="botaoAdicionarSprint">
@@ -350,7 +352,8 @@
                 <div>
                     <label>Data prevista de termino:</label>
                     <input :class="{ shake: disabled }" v-model="dataTerminoSprint" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                        <!-- :min="new Date().toISOString().split('T')[0]"  -->
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="iniciarSprint()"><i
@@ -375,13 +378,15 @@
                 <div>
                     <label>Data prevista de inicio:</label>
                     <input :class="{ shake: disabled }" v-model="sprintEditada.dtInicio" id="dataInicio"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                    <!-- :min="new Date().toISOString().split('T')[0]" -->
                 </div>
                 <br>
                 <div>
                     <label>Data prevista de termino:</label>
                     <input :class="{ shake: disabled }" v-model="sprintEditada.dtTermino" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
+                    class="form-control" type="date">
+                        <!-- :min="new Date().toISOString().split('T')[0]"  -->
                 </div>
                 <div style="margin-top: 1rem;">
                     <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint, true)"><i
@@ -761,9 +766,9 @@ export default {
 
                 .then((response) => {
                     function compararSprints(a, b) {
-                        if (a.nome === "Plano de ação") {
+                        if (a.nome === "Backlogs") {
                             return -1;
-                        } else if (b.nome === "Plano de ação") {
+                        } else if (b.nome === "Backlogs") {
                             return 1;
                         }
                         return b.id - a.id;
@@ -1052,7 +1057,7 @@ export default {
 
             var nomeSprint = "Sprint - 1";
 
-            if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
+            if (this.sprints[this.sprints.length - 1].nome != "Backlogs") {
                 nomeSprint = 'Sprint - ' + (parseInt((this.sprints[1].nome).match(/\d+$/)[0]) + 1);
             } else {
                 nomeSprint = 'Sprint - 1';
@@ -1158,31 +1163,24 @@ export default {
 </script>
 
 <style scoped>
-.fa-solid {
-    margin-left: 3rem;
-}
+
 @media (max-width: 1800px) {
+    .container {
+        margin-left: 12rem ;
+        max-width: 1100px ;
+    }
+
     .botaoHome {
-    font-size: 30px;
-    margin-left: 14rem !important;
-    cursor: pointer;
-    position: absolute;
+    margin-left: 200px !important;
 }
 
-.container {
-    margin-left: 13.5rem !important;
-}
-
-.fa-solid {
-    margin-left: 13.5rem !important;
-}
 }
 
 .botaoHome {
-    font-size: 30px;
-    margin-left: 260px;
-    cursor: pointer;
-    position: absolute;
+    font-size: 30px ;
+    margin-left: 250px;
+    cursor: pointer ;
+    position: absolute ;
 }
 
 .hPoints {
@@ -1203,7 +1201,7 @@ export default {
 }
 
 .divFundoTabela {
-    border: 2px solid black;
+    border: 1px solid black !important;
     border-radius: 15px;
     background-color: rgb(255, 255, 255);
     margin-bottom: 2rem;

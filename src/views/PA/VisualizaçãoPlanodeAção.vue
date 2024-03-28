@@ -1,18 +1,23 @@
 <template>
     <br><br><br>
+
     <div
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6;">
-        <i @click="verProjetos" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
+        style="width: 100%;margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; position: fixed; background-color: #FAF9F6; z-index: 1;">
+        <i @click="verProjetos" style="font-size: 30px; margin-left: 3rem; cursor: pointer;"
             class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
+
+        <i @click="verProjetos" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
+            :title="'Ir para tela inicial'"></i>
+
         <h2>{{ nomeDoProjeto }}</h2>
-        <i style="font-size: 30px; margin-right: 2rem; cursor: pointer; visibility: hidden;"
+        <i style="font-size: 30px; margin-right: 3rem; cursor: pointer;visibility: hidden;"
             class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
     </div>
+
     <br><br><br>
     <div style="width: 100%; padding: 1rem;" class="container">
-        <!-- TABELA 1 -->
         <div v-for="(item, index) in  sprints " :key="item" class="divPaiTabela">
-            <div class="divFundoTabela">
+            <div class="divFundoTabela" v-if="Array.isArray(sprints)">
                 <div class="row">
                     <div style="width: 20%;">
                         <div style="width: 10rem;">
@@ -30,16 +35,6 @@
                                 </span>
                             </h5>
                         </div>
-                        <button @click="ocultarPlano(item.nome)" class="botaoAdicionarSprint" :title="'Ocultar Sprint'"
-                            style=" width: 2rem; margin-left: ">
-                            <i style="font-size: 20px;" class="bi bi-eye-slash ocultar"
-                                :id="'botaoOcultar' + item.nome"></i>
-                        </button>
-                    </div>
-                    <div style="width: 60%; text-align: center;">
-                        <h3><input v-if="item.nome != 'Plano de ação'" type="text" v-model="item.nome"
-                                style="width: max-content; margin-left: 0.5rem; text-align: center;" disabled>
-                        </h3>
                     </div>
 
                     <div style="width: 20%; display: flex; text-align: right; justify-content: right;"
@@ -184,7 +179,7 @@
                         </div>
 
                     </div>
-                    <div v-for="element in item.backlogs" :key="element.id">
+                    <div v-for="element in item.tarefas" :key="element.id">
                         <div @mouseover="mostrarBotao(element.id, true)" @mouseleave="mostrarBotao(element.id, false)"
                             style="width: 100%;display: flex ;border-bottom: 1px solid black; margin-bottom: 0.5rem; padding-bottom: 0.5rem ;align-items: center;">
 
@@ -311,63 +306,9 @@
                     <i class="bi bi-grip-horizontal"></i>
                 </div>
             </div>
+            <div v-else>{{ sprints }}</div>
         </div>
     </div>
-    <!-- MODAL INICIAR SPRINT-->
-    <div class="modal-mask" v-if="showIniciarSprint" @click="fecharModalFora">
-        <div class="modal-container" style="height: min-content; width: 50rem;">
-            <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close"
-                    @click="this.showIniciarSprint = false"></button>
-            </div>
-
-            <div style="width: 100%;">
-                <div>
-                    <label>Data prevista de termino:</label>
-                    <input :class="{ shake: disabled }" v-model="dataTerminoSprint" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
-                </div>
-                <div style="margin-top: 1rem;">
-                    <button class="button-default" @click="iniciarSprint()"><i
-                            class="fa-solid fa-circle-plus"></i>&nbsp;
-                        Iniciar Sprint</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!--END MODAL SPRINT-->
-
-    <!-- MODAL INICIAR SPRINT-->
-    <div class="modal-mask" v-if="showEditarSprint" @click="fecharModalFora">
-        <div class="modal-container" style="height: min-content; width: 50rem;">
-            <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn-close" aria-label="Close"
-                    @click="this.showEditarSprint = false"></button>
-            </div>
-
-            <div style="width: 100%;">
-                <div>
-                    <label>Data prevista de inicio:</label>
-                    <input :class="{ shake: disabled }" v-model="sprintEditada.dtInicio" id="dataInicio"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
-                </div>
-                <br>
-                <div>
-                    <label>Data prevista de termino:</label>
-                    <input :class="{ shake: disabled }" v-model="sprintEditada.dtTermino" id="dataTermino"
-                        :min="new Date().toISOString().split('T')[0]" class="form-control" type="date">
-                </div>
-                <div style="margin-top: 1rem;">
-                    <button class="button-default" @click="abrirModaeEditarSprint(this.idSprint, true)"><i
-                            class="fa-solid fa-circle-plus"></i>&nbsp;
-                        Salvar</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!--END MODAL SPRINT-->
 
     <!-- MODAL EDITAR BACKLOG-->
     <div class="modal-mask" v-if="showEditarBacklog" @click="fecharModalFora">
@@ -429,7 +370,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 1rem;margin-left: 1rem ;width: 100%">
+                <div style="margin-top: 1rem;margin-left: 1rem ;width: 100%; display: none;">
                     <div style="width: 100%; justify-content: space-between; display: flex;">
                         <label>
                             Anexos:
@@ -579,7 +520,7 @@ export default {
 
         somenteBacklogs() {
             if (this.sprints !== null) {
-                var teste = this.sprints.map((item) => item.backlogs).flat()
+                var teste = this.sprints.map((item) => item.tarefas).flat()
                 teste.sort((a, b) => b.id - a.id);
                 return teste
             }
@@ -628,39 +569,6 @@ export default {
                 return `${dia}/${mesAbreviado}./${ano}`;
             } else {
                 return `${dia}/${mesAbreviado}.`;
-            }
-
-        },
-
-        moverBacklog() {
-            if (this.sprints !== null) {
-                var data = this.sprints;
-                var itemProcurado = JSON.parse(sessionStorage.getItem('tarefaMovida'));
-                if (itemProcurado != null) {
-                    var idBacklog = itemProcurado.id;
-                }
-
-                for (let i = 0; i < data.length; i++) {
-                    const projeto = data[i];
-                    const backlogs = projeto.backlogs;
-
-                    for (let j = 0; j < backlogs.length; j++) {
-                        const backlog = backlogs[j];
-                        if (JSON.stringify(backlog) === JSON.stringify(itemProcurado)) {
-                            var idSprint = this.sprints[i].id
-                        }
-                    }
-                }
-
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
-                    sprint_id: idSprint,
-                })
-                    .then(() => {
-                        this.getBacklogs
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
             }
 
         },
@@ -717,25 +625,17 @@ export default {
         },
 
         getBacklogs() {
-            axios.get(`http://192.168.0.5:8000/api/sprint/buscar/${this.idProjeto}`, {})
+            axios.get(`http://192.168.0.5:8000/api/planoAcao/buscar/${this.idProjeto}`)
                 .then((response) => {
-                    function compararSprints(a, b) {
-                        if (a.nome === "Plano de ação") {
-                            return -1;
-                        } else if (b.nome === "Plano de ação") {
-                            return 1;
-                        }
-                        return b.id - a.id;
-                    }
-                    this.sprints = response.data.sort(compararSprints);
+                    this.sprints = response.data;
 
-                    var id = localStorage.getItem('ultimaSprintEditada')
-                    if (id) {
-                        setTimeout(() => {
-                            document.getElementById('inputNovaTarefa' + id).focus();
-                            localStorage.removeItem('ultimaSprintEditada')
-                        }, 250)
-                    }
+                    // var id = localStorage.getItem('ultimaSprintEditada')
+                    // if (id) {
+                    //     setTimeout(() => {
+                    //         document.getElementById('inputNovaTarefa' + id).focus();
+                    //         localStorage.removeItem('ultimaSprintEditada')
+                    //     }, 250)
+                    // }
 
                 })
                 .catch((error) => {
@@ -759,7 +659,7 @@ export default {
 
             if (status == 'Em andamento') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`http://192.168.0.5:8000/api/planoAcaoTarefa/atualizar/${idBacklog}`, {
                     usuario_id: this.idUsuario,
                     dtInicioReal: data
                 })
@@ -770,7 +670,7 @@ export default {
 
             } if (status == 'Concluído') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`http://192.168.0.5:8000/api/planoAcaoTarefa/atualizar/${idBacklog}`, {
                     usuario_id: this.idUsuario,
                     dtFimReal: data
 
@@ -781,7 +681,7 @@ export default {
 
             } if (status == 'Pendente') {
 
-                axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+                axios.put(`http://192.168.0.5:8000/api/planoAcaoTarefa/atualizar/${idBacklog}`, {
                     usuario_id: this.idUsuario,
                     dtInicioReal: null,
                     dtFimReal: null
@@ -798,14 +698,15 @@ export default {
         abrirModalEditarBacklog(idBacklog, idSprint) {
             this.showEditarBacklog = true;
 
-            let sprint = this.sprints.find(sprint => sprint.id === idSprint);
+            let sprint = this.sprints[0]
+            idSprint
 
-            this.backlogeditado = sprint.backlogs.find(backlog => backlog.id === idBacklog);
+            this.backlogeditado = sprint.tarefas.find(tarefa => tarefa.id === idBacklog);
         },
 
         editarBacklog(itemAlterado, idBacklog, novoValor) {
 
-            axios.put(`http://192.168.0.5:8000/api/sprintTarefa/atualizar/${idBacklog}`, {
+            axios.put(`http://192.168.0.5:8000/api/planoAcaoTarefa/atualizar/${idBacklog}`, {
                 usuario_id: this.idUsuario,
                 [itemAlterado]: novoValor
             })
@@ -819,40 +720,13 @@ export default {
                 });
         },
 
-        editarSprint(itemAlterado, idSprint, novoValor) {
-
-            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${idSprint}`, {
-                [itemAlterado]: novoValor,
-            })
-                .then(() => {
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        },
-
-        ocultarPlano(nome) {
-            var idBotao = 'botaoOcultar' + nome;
-            var idPontos = 'pontos' + nome
-
-            if (document.getElementById(nome).style.display !== "none") {
-                document.getElementById(idBotao).className = "bi bi-eye";
-                document.getElementById(nome).style.display = "none";
-                document.getElementById(idPontos).style.display = "";
-            } else {
-                document.getElementById(idBotao).className = "bi bi-eye-slash";
-                document.getElementById(nome).style.display = "";
-                document.getElementById(idPontos).style.display = "none";
-            }
-        },
-
         somarHP(dados) {
             let somaPendentes = 0;
             let somaEmAndamento = 0;
             let somaConcluidos = 0;
 
-            if (dados.backlogs) {
-                dados.backlogs.forEach(backlog => {
+            if (dados.tarefas) {
+                dados.tarefas.forEach(backlog => {
                     if (backlog.status == 'Pendente') {
                         if (backlog.HP) {
                             somaPendentes += parseInt(backlog.HP);
@@ -884,146 +758,22 @@ export default {
 
         },
 
-        abrirModalSprint() {
-            this.showCriarSprint = true
-        },
-
         fecharModal() {
             this.showIniciarSprint = false;
-        },
-
-        abrirModalIniciarSprint(id) {
-            this.idSprint = id
-            let data = new Date()
-            let ano = data.getFullYear();
-            let mes = (data.getMonth() + 1);
-            if (mes < 10) {
-                mes = "0" + mes
-            }
-            let dia = data.getDate();
-            if (dia < 10) {
-                dia = "0" + dia
-            }
-            data = ano + '-' + mes + '-' + dia
-
-            var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
-            if (sprint.dtTermino !== null) {
-
-                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
-                    dtInicio: null,
-                    dtTermino: data
-                })
-                    .then(() => {
-                        this.idSprint = null;
-                        this.getBacklogs();
-                        this.fecharModal()
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                this.showIniciarSprint = true;
-            }
-
-        },
-
-        abrirModaeEditarSprint(id, salvar) {
-            this.idSprint = id
-            var sprint = this.sprints.find(sprint => sprint.id === this.idSprint)
-            if (salvar == false) {
-                this.showEditarSprint = true;
-                this.sprintEditada = sprint
-            } else {
-                axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
-                    dtInicio: this.sprintEditada.dtInicio,
-                    dtTermino: this.sprintEditada.dtTermino
-                })
-                    .then(() => {
-                        this.idSprint = null;
-                        this.getBacklogs();
-                        this.showEditarSprint = false;
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-
-            }
-
-        },
-
-        iniciarSprint() {
-            let data = new Date()
-            let ano = data.getFullYear();
-            let mes = (data.getMonth() + 1);
-            if (mes < 10) {
-                mes = "0" + mes
-            }
-            let dia = data.getDate();
-            if (dia < 10) {
-                dia = "0" + dia
-            }
-            data = ano + '-' + mes + '-' + dia
-            this.teste = data
-
-            if (this.dataTerminoSprint == null) {
-                document.getElementById('dataTermino').style.border = '1px solid red';
-                this.disabled = true
-                setTimeout(() => {
-                    this.disabled = false
-                }, 1500)
-                return
-            }
-
-            axios.put(`http://192.168.0.5:8000/api/sprint/atualizar/${this.idSprint}`, {
-                dtInicio: data,
-                dtTermino: this.dataTerminoSprint,
-            })
-                .then(() => {
-                    this.idSprint = null;
-                    this.getBacklogs();
-                    this.fecharModal()
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-
-        },
-
-        criarNovaSprint() {
-
-            var nomeSprint = "Sprint - 1";
-
-            if (this.sprints[this.sprints.length - 1].nome != "Plano de ação") {
-                nomeSprint = 'Sprint - ' + (parseInt((this.sprints[1].nome).match(/\d+$/)[0]) + 1);
-            } else {
-                nomeSprint = 'Sprint - 1';
-            }
-
-            axios.post(`http://192.168.0.5:8000/api/sprint/cadastrar`, {
-                nome: nomeSprint,
-                projeto_id: this.idProjeto
-            })
-                .then(() => {
-                    this.getBacklogs()
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
         },
 
         criarBacklog(id, descricao) {
 
             if (this.somenteBacklogs().length !== 0) {
 
-                axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
-                    sprint_id: id,
+                axios.post(`http://192.168.0.5:8000/api/planoAcaoTarefa/cadastrar`, {
+
+                    planoAcao_id: id,
                     codigo: 'Tarefa - ' + (parseInt((this.somenteBacklogs()[0].codigo).match(/\d+$/)[0]) + 1),
                     descricao: descricao
                 })
                     .then((response) => {
                         localStorage.setItem('ultimaSprintEditada', id)
-                        // this.getBacklogs();
-
                         var novoItem = {
                             "id": response.data.id,
                             "sprint_id": id,
@@ -1041,14 +791,15 @@ export default {
                         };
 
                         const sprint = this.sprints.find(item => item.id === id)
-                        sprint.backlogs.push(novoItem)
+                        sprint.tarefas.push(novoItem)
                     })
                     .catch((error) => {
                         console.error(error);
                     });
             } else {
-                axios.post(`http://192.168.0.5:8000/api/sprintTarefa/cadastrar`, {
-                    sprint_id: id,
+                axios.post(`http://192.168.0.5:8000/api/planoAcaoTarefa/cadastrar`, {
+
+                    planoAcao_id: id,
                     codigo: 'Tarefa - 1',
                     descricao: descricao
                 })
@@ -1065,7 +816,7 @@ export default {
 
         apagarBacklog(idBacklog) {
 
-            axios.put(`http://192.168.0.5:8000/api/sprintTarefa/excluir/${idBacklog}`, {
+            axios.put(`http://192.168.0.5:8000/api/planoAcaoTarefa/excluir/${idBacklog}`, {
                 usuario_id: this.idUsuario
             })
                 .then(() => {
@@ -1075,26 +826,31 @@ export default {
                     console.error(error);
                 });
         },
-
-        apagarSprint(id) {
-            axios.put(`http://192.168.0.5:8000/api/sprint/excluir/${id}`, {
-                usuario_id: this.idUsuario
-            })
-                .then(() => {
-                    this.getBacklogs()
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        },
-
-
 
     }
 }
 </script>
 
-<style>
+<style scoped>
+@media (max-width: 1800px) {
+    .container {
+        margin-left: 13rem ;
+        max-width: 1100px ;
+    }
+
+    .botaoHome {
+    margin-left: 200px !important;
+}
+
+}
+
+.botaoHome {
+    font-size: 30px ;
+    margin-left: 250px;
+    cursor: pointer ;
+    position: absolute ;
+}
+
 .hPoints {
     display: flex;
     border-radius: 50%;
@@ -1113,7 +869,7 @@ export default {
 }
 
 .divFundoTabela {
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 15px;
     background-color: rgb(255, 255, 255);
     margin-bottom: 2rem;

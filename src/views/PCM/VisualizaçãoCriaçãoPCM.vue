@@ -1,254 +1,505 @@
 <template>
-    <div>
-    <br><br><br><br>
-    <!-- <div
-        style="width: 100%; margin-top: 1rem; margin-bottom: none; border-bottom: 2px solid rgb(0, 0, 0); align-items: center; text-align: center;">
-        <h1>PCM - Nº 240181</h1>
-        Data de abertura: 14/11/2023
-    </div> -->
-    <div class="Header"
-        style="width: 100%; margin-top: 1rem; justify-content: space-between; display: flex; margin-bottom: none; align-items: center; ">
-        <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
-            <i @click="verPCMs" style="font-size: 30px; margin-left: 2rem; cursor: pointer;"
-            class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome" :title="'Ir para tela inicial'"></i>
-            <h2>PCM - Nº 240181</h2>
-        <i style="font-size: 30px; margin-right: 2rem; visibility: hidden;"
-            class="bi bi-kanban botaoAdicionarSprint"></i>
+  <br /><br /><br />
+  <div
+    style="width: 100%;margin-top: 1rem;justify-content: space-between;display: flex;margin-bottom: none;border-bottom: 2px solid rgb(0, 0, 0);align-items: center;position: fixed;background-color: #faf9f6;z-index: 1;">
+    <i @click="verPCMs" style="font-size: 30px; margin-left: 3rem; cursor: pointer"
+      class="fa-solid fa-house-chimney botaoAdicionarSprint" :title="'Ir para tela inicial'"></i>
+
+    <i @click="verPCMs" class="fa-solid fa-house-chimney botaoAdicionarSprint botaoHome"
+      :title="'Ir para tela de inicial'"></i>
+    <h2>
+      <input type="text" v-model="codigo" @change="atualizarPCM('codigo', codigo)" style="text-align: center" />
+    </h2>
+    <i style="font-size: 30px; margin-right: 3rem; cursor: pointer; visibility: hidden"
+      class="bi bi-kanban botaoAdicionarSprint" :title="'Ir para painel KanBan'"></i>
+  </div>
+  <br /><br /><br />
+  <div class="container" style="padding: 2rem 0rem 0rem 0rem">
+    <div style="text-align: center">
+      <h5><b>Área do Solicitante</b></h5>
     </div>
-    <div style="text-align: center;" class="HeaderData">
-        Data de abertura: 14/11/2023
-    </div>
-    <div class="container" style="padding: 2rem 0rem 0rem 0rem;">
-        <div style="text-align: center;">
-            <h5><b>Área do Solicitante</b></h5>
+    <div style="border: 1px black solid; padding: 20px; border-radius: 20px">
+      <div style="
+          display: flex;
+          align-content: center;
+          justify-content: center;
+          margin-left: 5rem;
+        ">
+        <div style="
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            flex-flow: column;
+          ">
+          <strong>
+            <br />
+            Finalidade
+            <br />
+          </strong>
+          <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="finalidade"
+            @change="atualizarPCM('finalidade', finalidade)">
+            <option>Criação</option>
+            <option>Mudança</option>
+          </select>
         </div>
-        <div style="border: 1px black solid; padding: 20px; border-radius: 10px;">
-            <div style="display: flex; align-content: center; justify-content: center;">
-                <div style="display: flex; align-items: center; width: fit-content;">
-                    <strong>
-                        Finalidade:
-                    </strong>
-                    <select class="form-select" style="margin-left: 0.5rem;">
-                        <option>Criação</option>
-                        <option>Mudança</option>
-                    </select>
-                </div>
-                <div style="display: flex; align-items: center; width: fit-content; margin-left: 1rem;">
-                    <strong>
-                        Área:
-                    </strong>
-                    <select class="form-select" style="margin-left: 0.5rem;">
-                        <option>Processo</option>
-                        <option>Produto</option>
-                    </select>
-                </div>
-                <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                    <strong style="width: 21rem;">
-                        Setor para encaminhamento da demanda :
-                    </strong>
-                    <select class="form-select" style="margin-left: 0.5rem; width: 9rem;">
-                        <option>P&D</option>
-                        <option>Comercial</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="input-group" style="margin-top: 1rem;">
-                <span class="input-group-text"><b>Descrição do Problema:</b> </span>
-                <textarea class="form-control" style="height: 8rem;">
-O objetivo principal da Roboflex é soluções em hardware e software, em complemento, seu portfólio é através de produtos manufaturados. Em nossa linha histórica, existem eventualmente atrasos na conclusão e entrega ou problemas como vícios de qualidade e não conformidades, bem como a imprecisão dos dados alimentados através da extensa lista de documentos e arquivos criados para controle, nos quais mitigaram erros maiores, mas ainda sim ressalta-sa erros minuciosos que impactam em um cadeia contínua de produção e fluxo. Problemas de desempenho, qualidade, custos desnecessários também podem decorrer da inexistência de meios computacionais para gestão rápida e automatizada do processo produtivo.  A demanda de mercado, exige cada vez mais a otimização do processo produtivo com flexibilidade para mudanças de processos internos e consequetemente uma sistemática mais enxuta.</textarea>
-            </div>
-            <div class="input-group" style="margin-top: 1rem;">
-                <span class="input-group-text" style="width: 13rem;"><b>Possível solução: </b> </span>
-                <textarea class="form-control"
-                    style="height: 6rem;">Desenvolvimento de um sistema de informações, com enfoque em sistema de controle de execução de manufatura (MES), com funcionalidades necessárias de ERP e gestão de projetos ágeis, de uma concepção modularizada, através de um diagnóstico contínuo de necessidades na indústria alvo.</textarea>
-            </div>
-            <div class="input-group" style="margin-top: 1rem;">
-                <span class="input-group-text" style="width: 13rem;"><b>Propósito da mudança:</b> </span>
-                <textarea
-                    class="form-control">Aumentar o desempenho, promover a redução de custos diretos/indiretos, qualidade e tempo de processos ponta a ponta.</textarea>
-            </div>
-
-            <div style="display: flex ;align-content: center; justify-content: center;; margin-top: 1rem;">
-                <div style="display: flex; align-items: center;">
-                    <strong>Data limite de implementação:</strong> <input type="date" value="2024-12-31"
-                        class="form-control" style="width: 9rem; margin-left: 0.5rem;">
-                </div>
-                <div style="display: flex; align-items: center; margin-left: 1rem;">
-                    <strong>Responsável pela solicitação:</strong> <input type="text" placeholder="Fernando Lopes"
-                        class="form-control" style="width: 10rem; margin-left: 0.5rem;">
-                </div>
-            </div>
+        <div style="
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            margin-left: 1rem;
+            flex-flow: column;
+          ">
+          <strong>
+            <br />
+            Área
+            <br />
+          </strong>
+          <select class="form-select" style="margin-left: 0.5rem; margin-top: 0.5rem" v-model="area"
+            @change="atualizarPCM('area', area)">
+            <option>Processo</option>
+            <option>Produto</option>
+          </select>
         </div>
-    </div>
-
-
-
-    <div class="container" style="padding: 2rem 0rem 0rem 0rem;">
-        <div style="text-align: center;">
-            <h5><b>Área do Responsável</b></h5>
+        <div style="
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            margin-left: 1rem;
+            flex-flow: column;
+          ">
+          <strong style="width: 15rem; text-align: center">
+            Setor para encaminhamento da demanda
+          </strong>
+          <select class="form-select" style="margin-left: 0.5rem; width: 15rem; margin-top: 0.5rem"
+            @change="atualizarPCM('setor_id', setor_id)" v-model="setor_id">
+            <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+              {{ setor.nome }}
+            </option>
+          </select>
         </div>
-        <div>
-            <div>
-                <div
-                    style="border: 1px solid black;padding-bottom: 10px;border-bottom-left-radius: 20px; border-bottom-right-radius: 10px; padding-bottom: 10px">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Análise de impactos e viabilidade da proposta</th>
-                                <th scope="col"></th>
-                                <th scope="col">Justificativa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <div style="
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            margin-left: 1rem;
+            flex-flow: column;
+          ">
+          <strong>
+            <br />
+            Data de abertura
+            <br />
+          </strong>
+          <input v-model="dtInicio" type="date" class="form-control" style="margin-top: 0.5rem"
+            @focusout="atualizarPCM('dtInicio', dtInicio)" />
+        </div>
+      </div>
 
-                            <tr v-for="item, index in itensDaAnalise" :key="index">
-                                <th style="border: 1px solid black; border-left: none ;vertical-align: middle;">{{ index
-                + 1 }}.</th>
-                                <td style="border: 1px solid black; vertical-align: middle;">
-                                    <div>
-                                        {{ item }}
-                                    </div>
-                                </td>
+      <div class="input-group" style="margin-top: 1rem">
+        <span class="input-group-text"><b>Descrição do Problema:</b> </span>
+        <textarea class="form-control" v-model="descricao_problema" style="height: 8rem"
+          @focusout="atualizarPCM('descricao_problema', descricao_problema)"></textarea>
+      </div>
+      <div class="input-group" style="margin-top: 1rem">
+        <span class="input-group-text" style="width: 13rem"><b>Possível solução: </b>
+        </span>
+        <textarea class="form-control" v-model="possivel_solucao" style="height: 6rem"
+          @focusout="atualizarPCM('possivel_solucao', possivel_solucao)"></textarea>
+      </div>
+      <div class="input-group" style="margin-top: 1rem">
+        <span class="input-group-text" style="width: 13rem"><b>Propósito da mudança:</b>
+        </span>
+        <textarea class="form-control" v-model="proposito_mudanca"
+          @focusout="atualizarPCM('proposito_mudanca', proposito_mudanca)">
+        </textarea>
+      </div>
 
-                                <td style="border: 1px solid black;vertical-align: middle;">
-                                    <div style="display: flex;" v-if="item !== 'Estimativa de Custo da Mudança'">
-                                        <input type="radio" class="btn-check" :name="'options' + index"
-                                            :id="'optionSim' + index" autocomplete="off" checked>
-                                        <label class="btn" :for="'optionSim' + index">Sim</label>
+      <div style="
+          display: flex;
+          align-content: center;
+          justify-content: center;
+          margin-top: 1rem;
+        ">
+        <div style="display: flex; align-items: center; flex-flow: column">
+          <strong>Data limite de implementação</strong>
+          <input v-model="dtLimiteImplementacao" @change="atualizarPCM('dtLimiteImplementacao', dtLimiteImplementacao)"
+            type="date" class="form-control" style="width: 9rem; margin-left: 0.5rem; margin-top: 0.5rem" />
+        </div>
+        <div style="display: flex; align-items: center; margin-left: 1rem; flex-flow: column">
+          <strong>Responsável pela solicitação</strong>
+          <select class="form-select" style="margin-left: 0.5rem; width: 15rem; margin-top: 0.5rem"
+            v-model="solicitante_id" @change="atualizarPCM('solicitante_id', solicitante_id)">
+            <option v-for="item in usuarios" :key="item.id" :value="item.id">
+              {{ nomeEsobrenome(item.nomeCompleto) }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                                        <input type="radio" class="btn-check" :name="'options' + index"
-                                            :id="'optionNão' + index" autocomplete="off">
-                                        <label class="btn" :for="'optionNão' + index">Não</label>
-                                    </div>
-                                    <div v-if="item == 'Estimativa de Custo da Mudança'">
-                                        <strong>
-                                            R$ 600.000,00
-                                        </strong>
-                                    </div>
-                                </td>
+  <div class="container" style="padding: 2rem 0rem 0rem 0rem">
+    <div style="text-align: center">
+      <h5><b>Área do Responsável</b></h5>
+    </div>
+    <div style="border: 1px black solid; padding: 20px; border-radius: 20px">
+      <div>
+        <div style="
+            border: 1px solid black;
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+          ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Análise de impactos e viabilidade da proposta</th>
+                <th scope="col"></th>
+                <th scope="col">Justificativa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in impacto_viabilidade" :key="index">
+                <th style="
+                    border: 1px solid black;
+                    border-left: none;
+                    vertical-align: middle;
+                  ">
+                  {{ index + 1 }}.
+                </th>
+                <td style="border: 1px solid black; vertical-align: middle">
+                  <div>
+                    {{ item.descricao }}
+                  </div>
+                </td>
 
-                                <td style="border: 1px solid black; border-right: none;">
-                                    <textarea class="form-control"></textarea>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <td style="border: 1px solid black; vertical-align: middle">
+                  <div style="display: flex" v-if="item !== 'Estimativa de Custo da Mudança'">
+                    <input type="radio" class="btn-check" :name="'options' + index" :id="'optionSim' + index"
+                      autocomplete="off" v-model="item.concordo"
+                      @change="atualizarPCM('impacto_viabilidade', objetoSemIndiceDescricao(item))" value="1" />
+                    <label class="btn" :for="'optionSim' + index">Sim</label>
+                    <input type="radio" class="btn-check" :name="'options' + index" :id="'optionNão' + index"
+                      autocomplete="off" v-model="item.concordo"
+                      @change="atualizarPCM('impacto_viabilidade', objetoSemIndiceDescricao(item))" value="0" />
+                    <label class="btn" :for="'optionNão' + index">Não</label>
+                  </div>
+                </td>
 
-                    <div style="display: flex; align-content: center; justify-content: center;">
-                        <div style="display: flex; align-items: center; width: fit-content;">
-                            <strong>
-                                Parecer do Responsável:
-                            </strong>
-                            <div style="display: flex; margin-left: 0.5rem;">
-                                <select class="form-select" style="margin-left: 0.5rem; color: green;">
-                                    <option style="color: green;">Proposta viável</option>
-                                    <option style="color: red;">Proposta inviável</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; width: fit-content; margin-left: 1rem;">
-                            <strong>
-                                Nome:
-                            </strong>
-                            <input type="text" placeholder="Darley Dias" class="form-control"
-                                style="width: 10rem; margin-left: 0.5rem;">
-                        </div>
-                    </div>
+                <td style="border: 1px solid black; border-right: none">
+                  <textarea class="form-control" v-model="item.justificativa"
+                    @change="atualizarPCM('impacto_viabilidade', objetoSemIndiceDescricao(item))"></textarea>
+                </td>
+              </tr>
 
-                    <div class="input-group" style="margin-top: 1rem; padding-inline: 10px;">
-                        <span class="input-group-text" style="width: 13rem;"><b>Justificativa:</b> </span>
-                        <textarea class="form-control"></textarea>
-                    </div>
+              <tr>
+                <th style="
+                    border: 1px solid black;
+                    border-left: none;
+                    vertical-align: middle;
+                  ">
+                  10.
+                </th>
+                <td style="border: 1px solid black; vertical-align: middle">
+                  <div>Estimativa de Custo da Mudança</div>
+                </td>
 
-                </div>
+                <td style="border: 1px solid black; vertical-align: middle">
+                  <strong>
+                    <money3 v-bind="config" v-model="estimativa_custo"
+                      @focusout="atualizarPCM('estimativa_custo', estimativa_custo)"
+                      style="width: 8rem; border: none; outline: none">
+                    </money3>
+                  </strong>
+                </td>
 
-                <div style="border: 1px solid black; padding: 5px; border-radius: 10px; margin-top: 1rem;">
+                <td style="border: 1px solid black; border-right: none">
+                  <textarea v-model="custo_justificativa"
+                    @change="atualizarPCM('custo_justificativa', custo_justificativa)" class="form-control"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                    <div style="display: flex; align-content: center; justify-content: center;">
-                        <div style="display: flex; align-items: center; width: fit-content;">
-                            <strong style="width: 15rem;">
-                                Meio da mudança:
-                            </strong>
-                            <select class="form-select" style="margin-left: 0.5rem;">
-                                <option>Plano de Ação</option>
-                                <option selected>Projeto</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                            <strong style="width: 10rem;">
-                                Necessidade de Cadastro no Omie?
-                            </strong>
-                            <select v-model="cadastroNoSistema" class="form-select"
-                                style="margin-left: 0.5rem; width: 5rem;">
-                                <option>Sim</option>
-                                <option>Não</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div v-if="cadastroNoSistema == 'Sim'"
-                        style="display: flex; align-content: center; justify-content: center; margin-top: 1rem;">
-                        <div style="display: flex; align-items: center; margin-left: 1rem;">
-                            <strong>Responsável pelo cadastro no sistema:</strong> <input type="text"
-                                placeholder="Raiane Baldez" class="form-control"
-                                style="width: 10rem; margin-left: 0.5rem;">
-                        </div>
-                        <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                            <strong>
-                                Data:
-                            </strong>
-                            <input type="date" value="2024-11-14" class="form-control"
-                                style="width: 9rem; margin-left: 0.5rem;">
-                        </div>
-                        <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                            <strong>Código:</strong>
-                            <input type="text" placeholder="PCM240181" class="form-control"
-                                style="width: 10rem; margin-left: 0.5rem;">
-                        </div>
-
-                        <div style="display: flex; align-items: center; width: fit-content ;  margin-left: 1rem;">
-                            <strong>Nome:</strong>
-                            <input type="text" placeholder="THALAMUS" class="form-control"
-                                style="width: 10rem; margin-left: 0.5rem;">
-                        </div>
-                    </div>
-                </div>
-
+          <div style="display: flex; align-content: center; justify-content: center">
+            <div style="display: flex;align-items: center;width: fit-content;flex-flow: column;">
+              <strong> Parecer do Responsável </strong>
+              <select v-model="parecer_responsavel" class="form-select"
+                @change="atualizarPCM('parecer_responsavel', parecer_responsavel)"
+                style="margin-left: 0.5rem; margin-top: 0.5rem" :style="{
+        color: parecer_responsavel == 'Proposta viável' ? 'green' : 'red',
+      }">
+                <option style="color: green">Proposta viável</option>
+                <option style="color: red">Proposta inviável</option>
+              </select>
             </div>
+            <div style="display: flex;align-items: center;width: fit-content;margin-left: 1rem;flex-flow: column;">
+              <strong> Nome </strong>
+              <select class="form-select" style="margin-left: 0.5rem; width: 13rem; margin-top: 0.5rem"
+                v-model="responsavel_id" @change="atualizarPCM('responsavel_id', responsavel_id)">
+                <option v-for="item in usuarios" :key="item.id" :value="item.id">
+                  {{ nomeEsobrenome(item.nomeCompleto) }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-top: 1rem; padding-inline: 10px">
+            <span class="input-group-text" style="width: 13rem"><b>Justificativa:</b>
+            </span>
+            <textarea v-model="responsavel_justificativa" @focusout="
+        atualizarPCM('responsavel_justificativa', responsavel_justificativa)
+        " class="form-control"></textarea>
+          </div>
         </div>
+
+        <div style="border: 1px solid black;padding: 5px;border-radius: 10px;margin-top: 1rem;">
+          <div style="display: flex; align-content: center; justify-content: center">
+            <div style="display: flex; align-items: center; width: 10rem; flex-flow: column">
+              <strong> Meio da mudança </strong>
+              <select v-model="meio_mudanca" @change="atualizarPCM('meio_mudanca', meio_mudanca)" class="form-select"
+                style="margin-top: 0.5rem">
+                <option>Plano de Ação</option>
+                <option>Projeto</option>
+              </select>
+            </div>
+            <div
+              style="  display: flex;  align-items: center;  width: fit-content;  margin-left: 2rem;  flex-flow: column;">
+              <strong> Necessidade de Cadastro no Omie? </strong>
+              <div style="display: flex; margin-top: 0.5rem">
+                <input type="radio" class="btn-check" name="cadastroOmie" id="omieSim" autocomplete="off"
+                  v-model="cadastro_omie" @change="atualizarPCM('cadastro_omie', cadastro_omie)" value="1" />
+                <label class="btn" for="omieSim">Sim</label>
+
+                <input type="radio" class="btn-check" name="cadastroOmie" id="omieNão" autocomplete="off"
+                  v-model="cadastro_omie" @change="atualizarPCM('cadastro_omie', cadastro_omie)" value="0" />
+                <label class="btn" for="omieNão">Não</label>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="cadastro_omie == '1'"
+            style="display: flex;align-content: center;justify-content: center;margin-top: 1rem;">
+            <div style="display: flex;align-items: center;margin-left: 1rem;flex-flow: column;">
+              <strong>Responsável pelo cadastro no sistema</strong>
+              <select class="form-select" style="margin-left: 0.5rem; width: 15rem; margin-top: 0.5rem"
+                v-model="responsavelCadastro_id"
+                @change="atualizarPCM('responsavelCadastro_id', responsavelCadastro_id)">
+                <option v-for="item in usuarios" :key="item.id" :value="item.id">
+                  {{ nomeEsobrenome(item.nomeCompleto) }}
+                </option>
+              </select>
+            </div>
+            <div
+              style=" display: flex; align-items: center; width: fit-content;  margin-left: 1rem;  flex-flow: column; ">
+              <strong> Data </strong>
+              <input type="date" class="form-control" style="width: 9rem; margin-left: 0.5rem" v-model="dtCadastro"
+                @change="atualizarPCM('dtCadastro', dtCadastro)" />
+            </div>
+            <div
+              style="  display: flex; align-items: center; width: fit-content; margin-left: 1rem; flex-flow: column;">
+              <strong>Código</strong>
+              <input type="text" v-model="codigo_cadastro" @change="atualizarPCM('codigo_cadastro', codigo_cadastro)"
+                class="form-control" style="width: 10rem; margin-left: 0.5rem" />
+            </div>
+
+            <div style="display: flex;align-items: center;width: fit-content;margin-left: 1rem;flex-flow: column;">
+              <strong>Nome</strong>
+              <input v-model="nome" @focusout="atualizarPCM('nome', nome)" type="text" class="form-control"
+                style="width: 10rem; margin-left: 0.5rem" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <br><br><br>
-    </div>
+  </div>
+  <br /><br /><br />
 </template>
 <script>
-export default {
-    name: "VisualizaçãoCriaçãoPCM",
+import { devURL } from "../../services/api";
+import { prodURL } from "../../services/api";
+import axios from "axios";
+import { Money3Component } from "v-money3";
 
-    data() {
-        return {
-            cadastroNoSistema: 'Não',
-            itensDaAnalise: [
-                'Afetará a documentação de produtos já existentes? (B.O.M, Roteiro de Produção, Esquema elétrico, Estrutura, etc.)',
-                'Irá impactar o estoque? (inativação de um item ou chegada de algum código novo)',
-                'Afeta a infraestrutura do local? (remanejamento de móveis, inclusão de maquinário, etc)',
-                'Demanda treinamento operacional ou nova contratação?',
-                'A mudança pode afetar o impacto ambiental? (emissão de gases, geração de resíduos, geração de afluentes)',
-                'O produto a ser alterado/criado possui ou deve possuir certificação? Se positivo, comunicar mudança à certificadora e aguardar a autorização da mesma.',
-                'O cenário geral do mercado é viável à proposta?',
-                'A empresa possui capacidade interna para implementação da proposta?',
-                'A implementação da proposta será rentável à empresa?',
-                'Estimativa de Custo da Mudança'
-            ]
-        }
+export default {
+  name: "VisualizaçãoCriaçãoPCM",
+  components: { money3: Money3Component },
+
+  data() {
+    return {
+      idPCM: localStorage.getItem("idPCM"),
+
+      codigo: "PCM - Nº 99999",
+      finalidade: "",
+      area: "",
+      setor_id: 0,
+      nome: "",
+      dtInicio: null,
+      descricao_problema: null,
+      possivel_solucao: null,
+      proposito_mudanca: null,
+      dtLimiteImplementacao: null,
+      solicitante_id: 0,
+      solicitante_nome: "",
+      estimativa_custo: 0,
+      custo_justificativa: "",
+      parecer_responsavel: "",
+      responsavel_id: 0,
+      responsavel_nome: "",
+      responsavel_justificativa: null,
+      meio_mudanca: null,
+      cadastro_omie: null,
+
+      responsavelCadastro_id: null,
+      responsavelCadastro_nome: null,
+      dtCadastro: null,
+      codigo_cadastro: null,
+
+      impacto_viabilidade: [],
+
+      setores: null,
+      usuarios: null,
+
+      devURL: devURL,
+      prodURL: prodURL,
+
+      teste: "teste",
+
+      config: {
+        masked: false,
+        prefix: "R$ ",
+        thousands: ".",
+        decimal: ",",
+        precision: 2,
+      },
+    };
+  },
+
+  created() {
+    this.getSetores(), this.getPCM();
+  },
+
+  methods: {
+    objetoSemIndiceDescricao(item) {
+      if (item) {
+        const { indice, descricao, ...resto } = item;
+        indice
+        descricao
+        return [resto];
+      }
     },
 
-    methods: {
-        verPCMs(){
-            this.$router.push({ name: "ControlePCM" })
+    nomeEsobrenome(nome) {
+      const nomeESobrenome = nome.split(" ");
+
+      if (nomeESobrenome.length >= 2) {
+        const primeiroNome = nomeESobrenome[0];
+        const segundoNome = nomeESobrenome[1];
+
+        if (segundoNome.length <= 3 || segundoNome == "Paula") {
+          return `${primeiroNome} ${segundoNome} ${nomeESobrenome[2] || ""}`;
+        } else {
+          return `${primeiroNome} ${segundoNome}`;
         }
-    }
-}
+      } else {
+        return nome;
+      }
+    },
+
+    atualizarPCM(itemEditado, valor) {
+      axios
+        .put(`${this.prodURL}/pcm/atualizar/${this.idPCM}`, {
+          [itemEditado]: valor,
+        })
+        .then(() => { })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    getSetores() {
+      axios
+        .get(`${this.prodURL}/usuario`, {})
+        .then((response) => {
+          this.usuarios = response.data;
+          this.usuarios = this.usuarios.map((item) => ({
+            id: item.id,
+            nomeCompleto: item.name,
+          }));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      axios
+        .get(`${this.prodURL}/setor`, {})
+        .then((response) => {
+          this.setores = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    getPCM() {
+      axios
+        .get(`${this.prodURL}/pcm/buscar/${this.idPCM}`, {})
+        .then((response) => {
+          this.codigo = response.data.codigo;
+          this.finalidade = response.data.finalidade;
+          this.area = response.data.area;
+          this.setor_id = response.data.setor_id;
+          this.nome = response.data.nome;
+          this.dtInicio = response.data.dtInicio;
+          this.descricao_problema = response.data.descricao_problema;
+          this.possivel_solucao = response.data.possivel_solucao;
+          this.proposito_mudanca = response.data.proposito_mudanca;
+          this.dtLimiteImplementacao = response.data.dtLimiteImplementacao;
+          this.solicitante_id = response.data.solicitante_id;
+          this.solicitante_nome = response.data.solicitante_nome;
+          this.estimativa_custo = response.data.estimativa_custo;
+          this.custo_justificativa = response.data.custo_justificativa;
+          this.parecer_responsavel = response.data.parecer_responsavel;
+          this.responsavel_id = response.data.responsavel_id;
+          this.responsavel_nome = response.data.responsavel_nome;
+          this.responsavel_justificativa = response.data.responsavel_justificativa;
+          this.meio_mudanca = response.data.meio_mudanca;
+          this.cadastro_omie = response.data.cadastro_omie;
+          this.impacto_viabilidade = response.data.impacto_viabilidade
+          this.responsavelCadastro_id = response.data.responsavelCadastro_id;
+          this.responsavelCadastro_nome = response.data.responsavelCadastro_nome;
+          this.dtCadastro = response.data.dtCadastro;
+          this.codigo_cadastro = response.data.codigo_cadastro;
+        })
+
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    verPCMs() {
+      this.$router.push({ name: "ControlePCM" });
+    },
+  },
+};
 </script>
+<style scoped>
+@media (max-width: 1800px) {
+  .container {
+    margin-left: 13rem;
+    max-width: 1100px;
+  }
+
+  .botaoHome {
+    margin-left: 200px !important;
+  }
+
+}
+
+.botaoHome {
+  font-size: 30px;
+  margin-left: 250px;
+  cursor: pointer;
+  position: absolute;
+}
+</style>

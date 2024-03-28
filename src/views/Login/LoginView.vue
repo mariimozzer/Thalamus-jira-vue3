@@ -168,6 +168,9 @@ export default {
 </script>
 
 <style scoped>
+.fa-solid {
+    margin-left: 0rem !important;
+}
 /* .reset-margin {
   margin-left: 0px !important;
   margin-bottom: 0px;
